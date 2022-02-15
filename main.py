@@ -5,10 +5,24 @@ from amazon.page import ama_doc
 from neobyte.page import neo_doc
 from casemod.page import cas_doc
 from pccomponentes.page import pcc_doc
+import requests
 
+def return_requests(URL):
+    s = requests.Session()
+    s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36'})
+    r = s.get(URL)
+    cookies = dict(r.cookies)
+    print("cookies -", cookies)
+    r = s.post(URL, verify=False, cookies=cookies)
+    return r
 
-def get_from_pccomponentes():
-    soup = BeautifulSoup(pcc_doc, 'html.parser')
+def get_from_pccomponentes(URL):
+    r = return_requests(URL)
+    # r = requests.get(URL)
+    with open("neobyte.html", "wb") as f:
+        f.write(r.content)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
 
     product_name = soup.h1.strong.get_text()
     product_price = soup.findAll(id="precio-main")[0].get("data-price")
@@ -20,8 +34,13 @@ def get_from_pccomponentes():
         "product_img_link":product_img_link
     }
 
-def get_from_neobyte():
-    soup = BeautifulSoup(neo_doc, 'html.parser')
+def get_from_neobyte(URL):
+    r = return_requests(URL)
+    # r = requests.get(URL)
+    with open("neobyte.html", "wb") as f:
+        f.write(r.content)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
 
     product_name = soup.title.get_text()
     product_price = soup.findAll(itemprop="price")[0].get('content')
@@ -33,8 +52,13 @@ def get_from_neobyte():
         "product_img_link": product_img_link
     }
 
-def get_from_casemod():
-    soup = BeautifulSoup(cas_doc, 'html.parser')
+def get_from_casemod(URL):
+    r = return_requests(URL)
+    # r = requests.get(URL)
+    with open("neobyte.html", "wb") as f:
+        f.write(r.content)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
 
     product_name = soup.title.get_text()
     product_price = soup.findAll(itemprop="price")[0].get('content')
@@ -46,8 +70,13 @@ def get_from_casemod():
         "product_img_link": product_img_link
     }
 
-def get_from_amazon():
-    soup = BeautifulSoup(ama_doc, 'html.parser')
+def get_from_amazon(URL):
+    r = return_requests(URL)
+    # r = requests.get(URL)
+    with open("neobyte.html", "wb") as f:
+        f.write(r.content)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
     
     product_name = ' '.join([word for word in (soup.findAll(id="productTitle")[0].get_text()).split() if word != " "])
     product_price = soup.findAll("span", {"data-a-color":"price"})[0].get_text()[:6]
@@ -62,4 +91,4 @@ def get_from_amazon():
 
 
 if __name__ == "__main__":
-    print(get_from_amazon())
+    print(get_from_casemod("https://casemod.es/pc-portatiles-/57494-pc-case-11-intel-astrobee-intel-i5-11400-rtx-3060.html"))
