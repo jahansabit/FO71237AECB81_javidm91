@@ -91,4 +91,4 @@ def get_from_amazon(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_casemod("https://casemod.es/pc-portatiles-/57494-pc-case-11-intel-astrobee-intel-i5-11400-rtx-3060.html"))
+    print(get_from_amazon("https://www.amazon.com/AMD-Ryzen-5950X-32-Thread-Processor/dp/B0815Y8J9N"))
