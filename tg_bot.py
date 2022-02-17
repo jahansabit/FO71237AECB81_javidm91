@@ -3,6 +3,7 @@ import os
 import time
 import json
 import telepot
+from pprint import pprint
 
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
@@ -13,13 +14,15 @@ from bot_helpers import *
 
 if os.path.isfile(DATA_JSON_FILE_PATH) == False:
     main_dict = {}
+    main_dict["chat_ids"] = []
+    main_dict["chat_ids"].append(USER_CHAT_ID)
     main_dict["products"] = []
     main_dict["channels"] = []
     save_to_json(main_dict)
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    print(msg["text"])
+    print(content_type, chat_type, chat_id, msg["text"])
 
     if "help" in msg["text"]:
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -52,7 +55,8 @@ def on_chat_message(msg):
     elif "/add_channel" in msg["text"]:
         response = add_channel_to_file(msg["text"])
         if response == True:
-            bot.sendMessage(chat_id, "Channel added successfully")
+            sent = bot.sendMessage(chat_id, "Channel added successfully")
+            pprint(sent)
         else:
             bot.sendMessage(chat_id, "Error adding channel!\n" + response)
 
@@ -66,7 +70,9 @@ def on_chat_message(msg):
     elif "/show_channels" in msg["text"]:
         response = show_channels_from_file()
         bot.sendMessage(chat_id, response)
-    
+    # else:
+    #     msg = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
+    #     telepot.message_identifier(msg)
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
@@ -92,6 +98,13 @@ bot = telepot.Bot(BOT_TOKEN)
 MessageLoop(bot, {'chat': on_chat_message,
                   'callback_query': on_callback_query}).run_as_thread()
 print('Listening ...')
+data = {
+    "chat": {
+        "id": 718057913,
+    },
+    "message_id": 16567
+}
+pprint(telepot.message_identifier(data))
 
 while 1:
     time.sleep(10)

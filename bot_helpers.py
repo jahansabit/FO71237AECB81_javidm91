@@ -3,8 +3,16 @@ import string
 
 from bot_vars import *
 
-all=string.maketrans('','')
-nodigs=all.translate(all, string.digits)
+
+def website_name_provider(link):
+    if link.find("amazon.com") != -1:
+        return "Amazon"
+    elif link.find("pccomponentes.com") != -1:
+        return "PcComponentes"
+    elif link.find("neobyte.es") != -1:
+        return "Neobyte"
+    elif link.find("casemod.es") != -1:
+        return "Casemod"
 
 def load_from_json():
     with open(DATA_JSON_FILE_PATH, 'r') as f:
@@ -12,7 +20,7 @@ def load_from_json():
         return data
 
 def save_to_json(data):
-    with open(DATA_JSON_FILE_PATH, 'a+') as f: 
+    with open(DATA_JSON_FILE_PATH, 'w') as f: 
         json.dump(data, f, indent=4, sort_keys=True)
 
 def add_product_to_file(text):
@@ -21,8 +29,11 @@ def add_product_to_file(text):
         stripped = text.split(",").strip()
         try:
             link, price = stripped
-            price = str(price.translate(all, nodigs))
+            price = ''.join(i for i in price if i.isdigit())
         except ValueError:
+            return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
+
+        if price == '' or link == '':
             return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
 
         JSON_DATA = load_from_json()
@@ -48,6 +59,9 @@ def delete_product_from_file(text):
     try:
         text = text.replace("/delete_product", "").strip()
         PRODUCT_ID_TO_DELETE = text
+
+        if PRODUCT_ID_TO_DELETE == '':
+            return "Wrong input format. Example: /delete_product 1"
 
         JSON_DATA = load_from_json()
         PRODUCTS_DATA = JSON_DATA["products"]
@@ -83,6 +97,9 @@ def add_channel_to_file(text):
         text = text.replace("/add_channel", "").strip()
         CHANNEL_NAME = text
 
+        if CHANNEL_NAME == '':
+            return "Wrong input format. Example: /add_channel @channel_name"
+
         JSON_DATA = load_from_json()
         CHANNELS_DATA = JSON_DATA["channels"]
         NEXT_ID = len(CHANNELS_DATA) + 1
@@ -105,6 +122,9 @@ def remove_channel_from_file(text):
     try:
         text = text.replace("/remove_channel", "").strip()
         CHANNEL_NAME_TO_DELETE = text
+        
+        if CHANNEL_NAME_TO_DELETE == '':
+            return "Wrong input format. Example: /remove_channel @channel_name"
 
         JSON_DATA = load_from_json()
         CHANNELS_DATA = JSON_DATA["channels"]
