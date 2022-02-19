@@ -3,14 +3,22 @@ from scraper_funcs import *
 from bot_helpers import *
 from bot_vars import *
 
+import os
+import json
 import telepot
 bot = telepot.Bot(BOT_TOKEN)
 
 def check_product_and_send():
+    if os.path.isfile(SENT_MSG_DATA_JSON_FILE_PATH) == False:
+        main_dict = {}
+        main_dict["sent_messages"] = []
+        save_sent_msg_to_json(main_dict)
+
     JSON_DATA = load_from_json()
     CHAT_IDS = JSON_DATA["chat_ids"]
     PRODUCTS = JSON_DATA["products"]
     CHANNELS = JSON_DATA["channels"]
+    SENT_MSG_DATA = load_sent_msg_from_json()
 
     SCRAPPED_PRODUCTS = []
 
@@ -35,7 +43,11 @@ def check_product_and_send():
             if website_name_provider(scrapped_product['link'] == "PcComponentes"):
                 for channel in CHANNELS:
                     # SEND Customized message to each channel, will be customized later
-                    bot.sendMessage(channel["name"], "The price of {} has dropped to {}".format(scrapped_product['name'], scrapped_product['price']))
-
+                    result = bot.sendMessage(channel["name"], "The price of {} has dropped to {}".format(scrapped_product['name'], scrapped_product['price']))
+                    temp_dict = {}
+                    temp_dict["product_from"] = website_name_provider(scrapped_product['link'])
+                    temp_dict["message_data"] = result
+                    SENT_MSG_DATA.append(temp_dict)
+                    save_sent_msg_to_json(SENT_MSG_DATA)
 
         

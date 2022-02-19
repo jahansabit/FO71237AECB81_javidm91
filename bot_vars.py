@@ -14,3 +14,5 @@ USER_CHAT_ID = ""
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_JSON_FILE_PATH = joinpath("data", "data.json")
+SENT_MSG_DATA_JSON_FILE_PATH = joinpath("data", "sent_msg_data.json")
+TIME_TO_CHECK_PRODUCTS = 60

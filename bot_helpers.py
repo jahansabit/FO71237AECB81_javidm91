@@ -23,6 +23,15 @@ def save_to_json(data):
     with open(DATA_JSON_FILE_PATH, 'w') as f: 
         json.dump(data, f, indent=4, sort_keys=True)
 
+def load_sent_msg_from_json():
+    with open(SENT_MSG_DATA_JSON_FILE_PATH, 'r') as f:
+        data = json.load(f)
+        return data
+
+def save_sent_msg_to_json(data):
+    with open(SENT_MSG_DATA_JSON_FILE_PATH, 'w') as f: 
+        json.dump(data, f, indent=4, sort_keys=True)
+
 def add_product_to_file(text):
     try:
         text = text.replace("/add_product", "").strip()

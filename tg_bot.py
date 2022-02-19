@@ -30,6 +30,7 @@ def on_chat_message(msg):
             [InlineKeyboardButton(text='Show Products', callback_data='show_products')],
             [InlineKeyboardButton(text='Delete Products', callback_data='del_product')],
             [InlineKeyboardButton(text='Add/Remove/Show Channels', callback_data='add_rem_chnl')],
+            [InlineKeyboardButton(text='Remove Previous Messages', callback_data='rem_prev_msg')],
         ])
 
         bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
@@ -91,6 +92,8 @@ def on_callback_query(msg):
         bot.sendMessage(from_id, "To add a channel, send me the channel name like this:\n\n/add_channel channel_name")
         bot.sendMessage(from_id, "To remove a channel, send me the channel name like this:\n\n/remove_channel channel_name")
         bot.sendMessage(from_id, "To show channels, send me this command:\n\n/show_channels")
+    elif query_data == "rem_prev_msg":
+        bot.sendMessage(from_id, "Removing previous messages.\nPlease wait...")
 
 # TOKEN = sys.argv[1]  # get token from command-line
 
