@@ -98,13 +98,13 @@ bot = telepot.Bot(BOT_TOKEN)
 MessageLoop(bot, {'chat': on_chat_message,
                   'callback_query': on_callback_query}).run_as_thread()
 print('Listening ...')
-data = {
-    "chat": {
-        "id": 718057913,
-    },
-    "message_id": 16567
-}
-pprint(telepot.message_identifier(data))
+# data = {
+#     "chat": {
+#         "id": 718057913,
+#     },
+#     "message_id": 16567
+# }
+# pprint(telepot.message_identifier(data))
 
 while 1:
     time.sleep(10)
