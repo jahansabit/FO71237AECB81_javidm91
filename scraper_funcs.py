@@ -16,13 +16,16 @@ def return_requests(URL):
     r = s.post(URL, verify=False, cookies=cookies)
     return r
 
-def get_from_pccomponentes(URL):
-    r = return_requests(URL)
-    # r = requests.get(URL)
-    with open("neobyte.html", "wb") as f:
-        f.write(r.content)
+def get_from_pccomponentes(URL, html_data=None):
+    if html_data is None:
+        r = return_requests(URL)
+        # r = requests.get(URL)
+        with open("neobyte.html", "wb") as f:
+            f.write(r.content)
+        
+        html_data = r.content
 
-    soup = BeautifulSoup(r.content, 'html.parser')
+    soup = BeautifulSoup(html_data, 'html.parser')
 
     product_name = soup.h1.strong.get_text()
     product_price = soup.findAll(id="precio-main")[0].get("data-price")
@@ -89,6 +92,8 @@ def get_from_amazon(URL):
     }
 
 
+def scrape_from_all_links():
+    pass
 
 if __name__ == "__main__":
     print(get_from_amazon("https://www.amazon.com/AMD-Ryzen-5950X-32-Thread-Processor/dp/B0815Y8J9N"))

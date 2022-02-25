@@ -10,6 +10,7 @@ def joinpath(path="", *args):
 ########## TOKENS ##########
 BOT_TOKEN = "946671094:AAHO4Egu_TsYPaEIy2d389CiDUGMrg0e7-s"
 USER_CHAT_ID = ""
+DEBUG_CHAT_ID = ""
 ########## TOKENS ##########
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -1,0 +1,16 @@
+{
+    "channels": [
+        "id": "1",
+        "name": "CHANNEL_NAME"
+    ],
+    "chat_ids": [
+        2134134,1234234,2345234
+    ],
+    "products": [
+        {
+            "id": "1",
+            "link": "https://www.google.com/asdasd./asdasd",
+            "price": "23234"
+        }
+    ]
+}
