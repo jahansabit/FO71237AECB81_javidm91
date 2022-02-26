@@ -14,9 +14,16 @@ def main():
     if "cloudflare" in main_data["title"].lower():
         pass
     else:
-        response = get_from_pccomponentes("", main_data["html"])
-        pprint(response)
+        try:
+            # response = get_from_pccomponentes("", main_data["html"])
+            # pprint(response)
+            print(main_data["title"].lower())
+            with open('data.json', 'w') as f:
+                json.dump(main_data, f)
+        except Exception as e:
+            print(e)
     
     return "Received"
 
-app.run(host="127.0.0.1", port=int(5699))
+def start_server():
+    app.run(host="127.0.0.1", port=int(5699))
