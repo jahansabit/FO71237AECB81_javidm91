@@ -36,7 +36,7 @@ def check_product_and_send():
 
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
         scrapped_product['price'] = ''.join(i for i in scrapped_product['price'] if (i.isdigit() or i == "."))
-        if scrapped_product['price'] <= PRODUCTS[i]['price']:
+        if float(scrapped_product['price']) <= float(PRODUCTS[i]['price']):
             for chat_id in CHAT_IDS:
                 # SEND Customized message to each user, will be customized later
                 bot.sendMessage(channel["name"], "The price of {} has dropped to {}".format(scrapped_product['name'], scrapped_product['price']))

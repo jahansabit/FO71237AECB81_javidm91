@@ -1,5 +1,6 @@
 #import requests
 #import cfscrape
+import webbrowser
 from bs4 import BeautifulSoup
 from amazon.page import ama_doc
 from neobyte.page import neo_doc
@@ -29,11 +30,20 @@ def get_from_pccomponentes(URL, html_data=None):
 
         server = Process(target=start_server)
         server.start()
-
+        webbrowser.open(URL)
+        time.sleep(1)
         while os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
-
+            time.sleep(3)
         
-            html_data = r.content
+        time.sleep(1)
+        server.terminate()
+        server.join()
+        
+        with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
+            data = json.load(f)
+        
+        os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
+        html_data = data['html']
 
     soup = BeautifulSoup(html_data, 'html.parser')
 

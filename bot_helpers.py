@@ -41,6 +41,8 @@ def add_product_to_file(text):
             price = ''.join(i for i in price if (i.isdigit() or i == '.'))
         except ValueError:
             return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
+        except Exception as e:
+            return str(e)
 
         if price == '' or link == '':
             return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
