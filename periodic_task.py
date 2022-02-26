@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 import os
+from scraper import check_product_and_send
 
 
 LAST_CHECK_FILE_PATH = "last_check.txt"
@@ -63,6 +64,7 @@ def periodic_task(time_string, timezone_string=None):
                 else:
                     # Work will be done here
                     # send_bulk_messages())
+                    check_product_and_send()
                     print(":")
 
                     with open(LAST_CHECK_FILE_PATH, "w", encoding="utf-8") as f:

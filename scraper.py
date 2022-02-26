@@ -35,7 +35,7 @@ def check_product_and_send():
         SCRAPPED_PRODUCTS.append(result)
 
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
-        scrapped_product['price'] = ''.join(i for i in scrapped_product['price'] if i.isdigit())
+        scrapped_product['price'] = ''.join(i for i in scrapped_product['price'] if (i.isdigit() or i == "."))
         if scrapped_product['price'] <= PRODUCTS[i]['price']:
             for chat_id in CHAT_IDS:
                 # SEND Customized message to each user, will be customized later

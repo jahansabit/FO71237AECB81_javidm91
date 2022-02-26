@@ -6,6 +6,10 @@ from neobyte.page import neo_doc
 from casemod.page import cas_doc
 from pccomponentes.page import pcc_doc
 import requests
+import os
+from multiprocessing import Process
+from flask_server import *
+from bot_vars import *
 
 def return_requests(URL):
     s = requests.Session()
@@ -18,12 +22,18 @@ def return_requests(URL):
 
 def get_from_pccomponentes(URL, html_data=None):
     if html_data is None:
-        r = return_requests(URL)
-        # r = requests.get(URL)
-        with open("neobyte.html", "wb") as f:
-            f.write(r.content)
+        # r = return_requests(URL)
+        # # r = requests.get(URL)
+        # with open("neobyte.html", "wb") as f:
+        #     f.write(r.content)
+
+        server = Process(target=start_server)
+        server.start()
+
+        while os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
+
         
-        html_data = r.content
+            html_data = r.content
 
     soup = BeautifulSoup(html_data, 'html.parser')
 

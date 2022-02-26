@@ -38,7 +38,7 @@ def add_product_to_file(text):
         stripped = text.split(",").strip()
         try:
             link, price = stripped
-            price = ''.join(i for i in price if i.isdigit())
+            price = ''.join(i for i in price if (i.isdigit() or i == '.'))
         except ValueError:
             return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
 
