@@ -31,6 +31,8 @@ def check_product_and_send():
             result = get_from_casemod(PRODUCTS['link'])
         elif website_name_provider(PRODUCTS['link'] == "Amazon"):
             result = get_from_amazon(PRODUCTS['link'])
+        elif website_name_provider(PRODUCTS['link'] == "Coolmod"):
+            result = get_from_coolmod(PRODUCTS['link'])
         
         SCRAPPED_PRODUCTS.append(result)
 
@@ -47,7 +49,7 @@ def check_product_and_send():
                     temp_dict = {}
                     temp_dict["product_from"] = website_name_provider(scrapped_product['link'])
                     temp_dict["message_data"] = result
-                    SENT_MSG_DATA.append(temp_dict)
+                    SENT_MSG_DATA["sent_messages"].append(temp_dict)
                     save_sent_msg_to_json(SENT_MSG_DATA)
 
         

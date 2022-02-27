@@ -13,6 +13,8 @@ def website_name_provider(link):
         return "Neobyte"
     elif link.find("casemod.es") != -1:
         return "Casemod"
+    elif link.find("coolmod.com") != -1:
+        return "Coolmod"
 
 def load_from_json():
     with open(DATA_JSON_FILE_PATH, 'r') as f:
@@ -165,3 +167,6 @@ def show_channels_from_file():
     else:
         CHANNELS_DATA = "No channels has been added yet!"
     return CHANNELS_DATA
+
+def delete_pccomponentes_messages():
+    pass

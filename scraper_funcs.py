@@ -27,6 +27,11 @@ def get_from_pccomponentes(URL, html_data=None):
         # # r = requests.get(URL)
         # with open("neobyte.html", "wb") as f:
         #     f.write(r.content)
+        
+        try:
+            os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
+        except:
+            pass
 
         server = Process(target=start_server)
         server.start()
@@ -111,9 +116,27 @@ def get_from_amazon(URL):
         "product_img_link": product_img_link
     }
 
+def get_from_coolmod(URL):
+    r = return_requests(URL)
+    # r = requests.get(URL)
+    with open("coolmod.html", "wb") as f:
+        f.write(r.content)
+
+    soup = BeautifulSoup(r.content, 'html.parser')
+    
+    product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
+    product_price = soup.findAll("span", {"id":"normalpricenumber"})[0].get_text()
+    product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
+
+    return {
+        "product_name": product_name,
+        "product_price": product_price,
+        "product_img_link": product_img_link
+    }
+
 
 def scrape_from_all_links():
     pass
 
 if __name__ == "__main__":
-    print(get_from_amazon("https://www.amazon.com/AMD-Ryzen-5950X-32-Thread-Processor/dp/B0815Y8J9N"))
+    print(get_from_coolmod("https://www.coolmod.com/razer-blade-17-d17-7nt-i7-11800h-rtx-3070-16gb-1tb-17-3/"))
