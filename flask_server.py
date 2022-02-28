@@ -2,8 +2,8 @@ import time
 import json
 import datetime
 from flask import Flask, request
-from scraper_funcs import get_from_pccomponentes
 from pprint import pprint
+from bot_vars import *
 
 app = Flask('TEST')
 
@@ -15,10 +15,8 @@ def main():
         pass
     else:
         try:
-            # response = get_from_pccomponentes("", main_data["html"])
-            # pprint(response)
             print(main_data["title"].lower())
-            with open('data.json', 'w') as f:
+            with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
                 json.dump(main_data, f)
         except Exception as e:
             print(e)

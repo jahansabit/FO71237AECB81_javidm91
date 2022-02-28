@@ -1,8 +1,9 @@
 import json
 import string
+import telepot
+import time
 
 from bot_vars import *
-
 
 def website_name_provider(link):
     if link.find("amazon.com") != -1:
@@ -37,7 +38,7 @@ def save_sent_msg_to_json(data):
 def add_product_to_file(text):
     try:
         text = text.replace("/add_product", "").strip()
-        stripped = text.split(",").strip()
+        stripped = text.split(",")
         try:
             link, price = stripped
             price = ''.join(i for i in price if (i.isdigit() or i == '.'))
@@ -168,5 +169,21 @@ def show_channels_from_file():
         CHANNELS_DATA = "No channels has been added yet!"
     return CHANNELS_DATA
 
-def delete_pccomponentes_messages():
-    pass
+def delete_pccomponentes_messages(bot):
+    sent_messages = load_sent_msg_from_json()
+    for message in sent_messages["sent_messages"]:
+        if message["product_from"] == "PcComponentes":
+            msg_identifier = telepot.message_identifier(message["message_data"])
+            try:
+                bot.deleteMessage(msg_identifier)
+            except Exception as e:
+                print(e)
+                print("msg_identifier:", msg_identifier)
+            time.sleep(1)
+            bot.sendPhoto(message["message_data"]['chat']['id'],
+                        message['image_link'],
+                        caption=message['message_text'], 
+                        parse_mode="markdown")
+        time.sleep(5)
+            
+        

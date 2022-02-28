@@ -7,9 +7,11 @@ from pprint import pprint
 
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+import threading
 
 from bot_vars import *
 from bot_helpers import *
+from scraper import *
 
 
 if os.path.isfile(DATA_JSON_FILE_PATH) == False:
@@ -22,58 +24,62 @@ if os.path.isfile(DATA_JSON_FILE_PATH) == False:
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    print(content_type, chat_type, chat_id, msg["text"])
-
-    if "help" in msg["text"]:
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text='Add Product', callback_data='add_product')],
-            [InlineKeyboardButton(text='Show Products', callback_data='show_products')],
-            [InlineKeyboardButton(text='Delete Products', callback_data='del_product')],
-            [InlineKeyboardButton(text='Add/Remove/Show Channels', callback_data='add_rem_chnl')],
-            [InlineKeyboardButton(text='Remove Previous Messages', callback_data='rem_prev_msg')],
-        ])
-
-        bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
+    try:
+        print(content_type, chat_type, chat_id, msg["text"])
+    except:
+        print(content_type, chat_type, chat_id)
     
-    elif "/add_product" in msg["text"]:
-        response = add_product_to_file(msg["text"])
-        if response == True:
-            bot.sendMessage(chat_id, "Product added successfully")
-        else:
-            bot.sendMessage(chat_id, "Error adding product!\n" + response)
-    
-    elif "/delete_product" in msg["text"]:
-        response = delete_product_from_file(msg["text"])
-        if response == True:
-            bot.sendMessage(chat_id, "Product deleted successfully")
-        else:
-            bot.sendMessage(chat_id, "Error deleting product!\n" + response)
-    
-    elif "/show_products" in msg["text"]:
-        response = show_products_from_file()
-        bot.sendMessage(chat_id, response)
+    if content_type == 'text':
+        if "help" in msg["text"]:
+            keyboard = InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text='Add Product', callback_data='add_product')],
+                [InlineKeyboardButton(text='Show Products', callback_data='show_products')],
+                [InlineKeyboardButton(text='Delete Products', callback_data='del_product')],
+                [InlineKeyboardButton(text='Add/Remove/Show Channels', callback_data='add_rem_chnl')],
+                [InlineKeyboardButton(text='Remove Previous Messages', callback_data='rem_prev_msg')],
+            ])
 
-    elif "/add_channel" in msg["text"]:
-        response = add_channel_to_file(msg["text"])
-        if response == True:
-            sent = bot.sendMessage(chat_id, "Channel added successfully")
-            pprint(sent)
-        else:
-            bot.sendMessage(chat_id, "Error adding channel!\n" + response)
+            bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
+        
+        elif "/add_product" in msg["text"]:
+            response = add_product_to_file(msg["text"])
+            if response == True:
+                bot.sendMessage(chat_id, "Product added successfully")
+            else:
+                bot.sendMessage(chat_id, "Error adding product!\n" + response)
+        
+        elif "/delete_product" in msg["text"]:
+            response = delete_product_from_file(msg["text"])
+            if response == True:
+                bot.sendMessage(chat_id, "Product deleted successfully")
+            else:
+                bot.sendMessage(chat_id, "Error deleting product!\n" + response)
+        
+        elif "/show_products" in msg["text"]:
+            response = show_products_from_file()
+            bot.sendMessage(chat_id, response)
 
-    elif "/remove_channel" in msg["text"]:
-        response = remove_channel_from_file(msg["text"])
-        if response == True:
-            bot.sendMessage(chat_id, "Channel removed successfully")
+        elif "/add_channel" in msg["text"]:
+            response = add_channel_to_file(msg["text"])
+            if response == True:
+                sent = bot.sendMessage(chat_id, "Channel added successfully")
+                pprint(sent)
+            else:
+                bot.sendMessage(chat_id, "Error adding channel!\n" + response)
+
+        elif "/remove_channel" in msg["text"]:
+            response = remove_channel_from_file(msg["text"])
+            if response == True:
+                bot.sendMessage(chat_id, "Channel removed successfully")
+            else:
+                bot.sendMessage(chat_id, "Error removing channel!\n" + response)
+        
+        elif "/show_channels" in msg["text"]:
+            response = show_channels_from_file()
+            bot.sendMessage(chat_id, response)
         else:
-            bot.sendMessage(chat_id, "Error removing channel!\n" + response)
-    
-    elif "/show_channels" in msg["text"]:
-        response = show_channels_from_file()
-        bot.sendMessage(chat_id, response)
-    # else:
-    #     msg = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
-    #     telepot.message_identifier(msg)
+            msg = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
+            telepot.message_identifier(msg)
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
@@ -93,7 +99,9 @@ def on_callback_query(msg):
         bot.sendMessage(from_id, "To remove a channel, send me the channel name like this:\n\n/remove_channel channel_name")
         bot.sendMessage(from_id, "To show channels, send me this command:\n\n/show_channels")
     elif query_data == "rem_prev_msg":
-        bot.sendMessage(from_id, "Removing previous messages.\nPlease wait...")
+        bot.sendMessage(from_id, "Removing and re-sending previous Pccomponentes messages.\nPlease wait...")
+        delete_pccomponentes_messages(bot)
+        bot.sendMessage(from_id, "Removing and re-sending previous Pccomponentes messages is completed!")
 
 # TOKEN = sys.argv[1]  # get token from command-line
 
@@ -101,13 +109,10 @@ bot = telepot.Bot(BOT_TOKEN)
 MessageLoop(bot, {'chat': on_chat_message,
                   'callback_query': on_callback_query}).run_as_thread()
 print('Listening ...')
-# data = {
-#     "chat": {
-#         "id": 718057913,
-#     },
-#     "message_id": 16567
-# }
-# pprint(telepot.message_identifier(data))
+
+# Keep scraper thread running.
+scraper_thread = threading.Thread(target=periodic_task_thread)
+scraper_thread.start()
 
 while 1:
     time.sleep(10)

@@ -1,4 +1,6 @@
 import os
+import telepot
+from pprint import pprint
 
 def create_folders(path):
     if not os.path.exists(path):
@@ -9,8 +11,8 @@ def joinpath(path="", *args):
 
 ########## TOKENS ##########
 BOT_TOKEN = "946671094:AAHO4Egu_TsYPaEIy2d389CiDUGMrg0e7-s"
-USER_CHAT_ID = ""
-DEBUG_CHAT_ID = ""
+USER_CHAT_ID = 718057913
+DEBUG_CHAT_ID = -744965364
 ########## TOKENS ##########
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,3 +20,30 @@ DATA_JSON_FILE_PATH = joinpath("data", "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = joinpath("data", "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = joinpath("data", "scrapped_data.json")
 TIME_TO_CHECK_PRODUCTS = 60
+CHECK_FOR_PRODUCTS_EVERY_X_MINUTES = 5
+MAX_BROWSER_TABS = 5
+SCRAPING_MAX_RETRIES = 3
+
+def message_template(title, link, current_price, prev_price):
+    current_price = float(current_price)
+    prev_price = float(prev_price)
+    percentage = prev_price - current_price
+    percentage = 100 / prev_price * percentage
+
+    if "pccomponentes" in link:
+        link = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued=" + link
+
+    text = f'''🔥 *DISCOUNT* 🔥
+
+[{title}]({link})
+
+✅ *NOW: {current_price} 🔥-{round(percentage, 2)}%🔥*
+❌ Before: {prev_price}
+    '''
+
+    return text
+
+# bot = telepot.Bot(BOT_TOKEN)
+# result = bot.sendMessage(USER_CHAT_ID, message_template("asdasd", "https://pccomponentes.com", 23, 30), parse_mode="markdown")
+
+# pprint(result)
