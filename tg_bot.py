@@ -82,8 +82,8 @@ def on_chat_message(msg):
                 response = show_channels_from_file()
                 bot.sendMessage(chat_id, response)
             else:
-                msg = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
-                telepot.message_identifier(msg)
+                response = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
+                bot.sendMessage(chat_id, response)
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
@@ -109,6 +109,9 @@ def on_callback_query(msg):
             bot.sendMessage(from_id, "Removing and re-sending previous Pccomponentes messages.\nPlease wait...")
             delete_pccomponentes_messages(bot)
             bot.sendMessage(from_id, "Removing and re-sending previous Pccomponentes messages is completed!")
+        else:
+            response = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
+            bot.sendMessage(from_id, response)
 
 # TOKEN = sys.argv[1]  # get token from command-line
 
