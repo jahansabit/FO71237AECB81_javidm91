@@ -176,7 +176,7 @@ def get_from_coolmod(URL):
             soup = BeautifulSoup(r.content, 'html.parser')
             
             product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
-            product_price = soup.findAll("span", {"id":"normalpricenumber"})[0].get_text()
+            product_price = str(soup.findAll("span", {"id":"normalpricenumber"})[0].get_text()).replace(",", ".")
             product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
 
             return {
@@ -190,4 +190,4 @@ def get_from_coolmod(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_pccomponentes("https://www.pccomponentes.com/msi-rx-6600-xt-mech-2x-ocv1-8gb-gddr6"))
+    print(get_from_coolmod("https://www.coolmod.com/msi-geforce-gtx-1660-super-ventus-xs-oc-6gb-gddr6-tarjeta-grafica/"))
