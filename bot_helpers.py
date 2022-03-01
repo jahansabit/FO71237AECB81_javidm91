@@ -137,6 +137,9 @@ def add_channel_to_file(text):
         if CHANNEL_NAME == '':
             return "Wrong input format. Example: /add_channel @channel_name"
 
+        CHANNEL_NAME = CHANNEL_NAME.replace("https://t.me/", "")
+        CHANNEL_NAME = "@" + CHANNEL_NAME.replace("@", "")
+
         JSON_DATA = load_from_json()
         CHANNELS_DATA = JSON_DATA["channels"]
         NEXT_ID = len(CHANNELS_DATA) + 1
@@ -168,7 +171,7 @@ def remove_channel_from_file(text):
 
         channel_found = False
         for channel in CHANNELS_DATA:
-            if str(channel["name"]) == CHANNEL_NAME_TO_DELETE:
+            if str(channel["name"]) == CHANNEL_NAME_TO_DELETE or str(channel["name"]) in CHANNEL_NAME_TO_DELETE:
                 CHANNELS_DATA.remove(channel)
                 channel_found = True
                 break
