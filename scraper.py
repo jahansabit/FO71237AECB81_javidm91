@@ -33,6 +33,7 @@ def check_product_and_send():
             if browser_tabs > MAX_BROWSER_TABS:
                 print("[*] Reached max browser tabs. Closing Chrome...")
                 kill_chrome()
+                time.sleep(1)
         elif website_name_provider(product['link']) == "Neobyte":
             result = get_from_neobyte(product['link'])
         elif website_name_provider(product['link']) == "Casemod":
