@@ -1,11 +1,49 @@
 {
     "channels": [
-
+        {
+            "id": 1,
+            "name": "https://t.me/Objetivo_Gaming"
+        }
     ],
     "chat_ids": [
-        "718057913", "528470695"
+        "718057913",
+        "528470695"
     ],
     "products": [
-
+        {
+            "id": 1,
+            "link": "https://www.pccomponentes.com/asus-geforce-gtx-1660-super-oc-dual-6gb-gddr6",
+            "price": "400"
+        },
+        {
+            "id": 2,
+            "link": "https://www.coolmod.com/msi-geforce-gtx-1660-super-ventus-xs-oc-6gb-gddr6-tarjeta-grafica/",
+            "price": "390"
+        },
+        {
+            "id": 3,
+            "link": "https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-ti-evo-oc-edition-6gb-gddr6?utm_source=686319&utm_medium=afi&utm_campaign=www.youtube.com&awc=20982_1646120142_973183ca38191c6da78381fd1edbf046&utm_term=deeplink&utm_content=Aviso_FRIKIdelBOT",
+            "price": "400"
+        },
+        {
+            "id": 4,
+            "link": "https://www.pccomponentes.com/acer-predator-orion-3000-po3-630-intel-core-i7-11700f-32gb-1tb-ssd-rtx-3070?utm_source=686319&utm_medium=afi&utm_campaign=www.youtube.com&awc=20982_1646120173_35dda6f569a01b4a56bfae732703ed31&utm_term=deeplink&utm_content=Aviso_FRIKIdelBOT",
+            "price": "1200"
+        },
+        {
+            "id": 5,
+            "link": "https://www.pccomponentes.com/asus-tuf-gaming-gtx-1660ti-evo-gaming-oc-6gb-gddr6?utm_source=686319&utm_medium=afi&utm_campaign=www.youtube.com&awc=20982_1646120223_2156977f0a847173b38570d6d62a31e0&utm_term=deeplink&utm_content=Aviso_FRIKIdelBOT",
+            "price": "400"
+        },
+        {
+            "id": 6,
+            "link": "https://www.pccomponentes.com/gigabyte-geforce-gtx-1660-ti-oc-6gb?utm_source=686319&utm_medium=afi&utm_campaign=www.youtube.com&awc=20982_1646120264_3ee7e30cd28652dd27ad7c776b731df6&utm_term=deeplink&utm_content=Aviso_FRIKIdelBOT",
+            "price": "400"
+        },
+        {
+            "id": 7,
+            "link": "https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-ti-evo-top-edition-6gb-gddr6?utm_source=686319&utm_medium=afi&utm_campaign=www.youtube.com&awc=20982_1646120314_9c926f0ecb7783ab322344b8c4beb6fd&utm_term=deeplink&utm_content=Aviso_FRIKIdelBOT",
+            "price": "400"
+        }
     ]
 }

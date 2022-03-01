@@ -41,11 +41,15 @@ def get_from_pccomponentes(URL):
 
             server = Process(target=start_server)
             server.start()
-            # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
-            os.system("google-chrome --no-sandbox '" + URL + "'")
             time.sleep(1)
-            while os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
-                time.sleep(3)
+            # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
+            os.system("google-chrome-stable --no-sandbox '" + URL + "'")
+            time.sleep(1)
+            while 1:
+                if os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
+                    time.sleep(3)
+                else:
+                    break
             
             time.sleep(1)
             server.terminate()

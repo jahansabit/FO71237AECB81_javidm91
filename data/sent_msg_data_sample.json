@@ -1,31 +1,4 @@
 {
   "sent_messages": [
-    {
-      "chat": {
-        "first_name": "- + sabit + -",
-        "id": 718057913,
-        "type": "private",
-        "username": "sa61t"
-      },
-      "date": 1646049749,
-      "entities": [
-        { "length": 8, "offset": 3, "type": "bold" },
-        {
-          "length": 6,
-          "offset": 16,
-          "type": "text_link",
-          "url": "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued=https://pccomponentes.com"
-        },
-        { "length": 18, "offset": 26, "type": "bold" }
-      ],
-      "from": {
-        "first_name": "techSMSBD Visitor Tracking Bot",
-        "id": 946671094,
-        "is_bot": True,
-        "username": "tsb_visitor_bot"
-      },
-      "message_id": 16576,
-      "text": "🔥 DISCOUNT 🔥\n\nasdasd\n\n✅ NOW: 23.0 🔥-23%🔥\n❌ Before: 30.0"
-    }
   ]
 }
