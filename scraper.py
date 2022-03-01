@@ -69,6 +69,8 @@ def check_product_and_send():
             print(website_name_provider(PRODUCTS[i]['link']) == "PcComponentes")
             if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
                 for channel in CHANNELS:
+                    channel['name'] = channel['name'].replace("https://t.me/", "")
+                    channel['name'] = "@" + channel['name'].replace("@", "")
                     # SEND Customized message to each channel, will be customized later
                     print(scrapped_product['product_img_link'], channel['name'])
                     caption = message_template(scrapped_product["product_name"], 
