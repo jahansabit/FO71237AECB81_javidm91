@@ -38,8 +38,8 @@ def message_template(title, link, current_price, prev_price):
 
 [{title}]({link})
 
-✅ *AHORA: {current_price.replace(".", ",")} 🔥-{round(percentage, 2)}%🔥*
-❌ Antes: {prev_price.replace(".", ",")}
+✅ *AHORA: {str(current_price).replace(".", ",")} 🔥-{round(percentage, 2)}%🔥*
+❌ Antes: {str(prev_price).replace(".", ",")}
     '''
 
     return text
