@@ -94,6 +94,8 @@ def on_callback_query(msg):
             bot.sendMessage(from_id, "To add a product, send me the product name and price like this:\n\n/add_product product_link, price\n\nExample:\n\n/add_product https://www.amazon.com/product_name, price")
         elif query_data == "show_products":
             bot.sendMessage(from_id, "Sending you list of products:")
+            response = show_products_from_file()
+            bot.sendMessage(from_id, response)
             ## Send Product List
         elif query_data == "del_product":
             bot.sendMessage(from_id, "To delete a product, send me the product name like this:\n\n/delete_product product_id\n\nExample:\n\n/delete_product 10\n\nTo know the product id, check the product list first: /show_products")
