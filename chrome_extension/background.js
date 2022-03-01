@@ -55,7 +55,7 @@ function sendChangeServerResponse(response) {
             // 'Content-Type': 'application/json'
           },
           // body: JSON.stringify({a: 1, b: 'Textual content'})
-          body: JSON.stringify({message: "response"})
+          body: JSON.stringify({message: response})
         })
         .then(function(data) {
             console.log('succeeded', data)
