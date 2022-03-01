@@ -1,6 +1,5 @@
 #import requests
 #import cfscrape
-from tkinter.messagebox import RETRY
 import webbrowser
 from bs4 import BeautifulSoup
 from amazon.page import ama_doc
