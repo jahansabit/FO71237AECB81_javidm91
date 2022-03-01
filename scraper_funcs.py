@@ -8,6 +8,7 @@ from casemod.page import cas_doc
 from pccomponentes.page import pcc_doc
 import requests
 import os
+import subprocess
 from multiprocessing import Process
 from flask_server import *
 from bot_vars import *
