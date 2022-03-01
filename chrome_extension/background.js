@@ -29,21 +29,44 @@ function sendChangeServerResponse(response) {
       
       // alert("SafeSearch is on");
 
-      (async () => {
-        const rawResponse = await fetch(url, {
+
+      // (async () => {
+      //   const rawResponse = await fetch(url, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Accept': '*/*',
+      //       // 'Content-Type': 'application/json'
+      //     },
+      //     // body: JSON.stringify({a: 1, b: 'Textual content'})
+      //     body: JSON.stringify({message: response})
+      //   });
+      //   const content = await rawResponse;
+      
+      //   // console.log(content);
+      // })();
+    
+
+      function f() {
+        console.log("Trying...")
+        fetch(url, {
           method: 'POST',
           headers: {
             'Accept': '*/*',
             // 'Content-Type': 'application/json'
           },
           // body: JSON.stringify({a: 1, b: 'Textual content'})
-          body: JSON.stringify({message: response})
+          body: JSON.stringify({message: "response"})
+        })
+        .then(function(data) {
+            console.log('succeeded', data)
+        }).catch(function(error) {
+            console.log('request failed', error)
+            setTimeout(f, 3000);
         });
-        const content = await rawResponse;
-      
-        // console.log(content);
-      })();
-      
+      }
+
+      f();
+
     });
   }
 }
