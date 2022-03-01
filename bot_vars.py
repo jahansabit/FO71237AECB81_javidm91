@@ -24,6 +24,7 @@ TIME_TO_CHECK_PRODUCTS = 60
 CHECK_FOR_PRODUCTS_EVERY_X_MINUTES = 5
 MAX_BROWSER_TABS = 5
 SCRAPING_MAX_RETRIES = 3
+MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
 
 def message_template(title, link, current_price, prev_price):
     current_price = float(current_price)

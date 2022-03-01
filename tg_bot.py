@@ -60,7 +60,8 @@ def on_chat_message(msg):
             
             elif "/show_products" in msg["text"]:
                 response = show_products_from_file()
-                bot.sendMessage(chat_id, response)
+                for msg in response:
+                    bot.sendMessage(chat_id, msg)
 
             elif "/add_channel" in msg["text"]:
                 response = add_channel_to_file(msg["text"])
@@ -95,8 +96,9 @@ def on_callback_query(msg):
         elif query_data == "show_products":
             bot.sendMessage(from_id, "Sending you list of products:")
             response = show_products_from_file()
-            bot.sendMessage(from_id, response)
             ## Send Product List
+            for msg in response:
+                bot.sendMessage(from_id, msg)
         elif query_data == "del_product":
             bot.sendMessage(from_id, "To delete a product, send me the product name like this:\n\n/delete_product product_id\n\nExample:\n\n/delete_product 10\n\nTo know the product id, check the product list first: /show_products")
         elif query_data == "add_rem_chnl":

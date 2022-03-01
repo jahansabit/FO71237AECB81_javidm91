@@ -1,5 +1,6 @@
 import json
 import string
+from pprint import pprint
 import telepot
 import time
 
@@ -100,11 +101,33 @@ def delete_product_from_file(text):
 def show_products_from_file():
     JSON_DATA = load_from_json()
     PRODUCTS_DATA = JSON_DATA["products"]
+    result_array = []
     if len(PRODUCTS_DATA) != 0:
-        PRODUCTS_DATA = "Products:\n" + "\n".join(map(lambda x: str(x["id"]) + ": " + str(x["link"]) + ", " + str(x["price"]), PRODUCTS_DATA))
+        # PRODUCTS_DATA = "Products:\n" + "\n".join(map(lambda x: str(x["id"]) + ": " + str(x["link"]) + ", " + str(x["price"]), PRODUCTS_DATA))
+        i = 0
+        upper_limit = 0
+        while 1:
+            PRODUCTS_DATA_STRING = ""
+            i = upper_limit
+            upper_limit = i + MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE
+            if upper_limit > len(PRODUCTS_DATA):
+                upper_limit = len(PRODUCTS_DATA)
+            # print(i, upper_limit, len(PRODUCTS_DATA))
+
+            if i == 0:
+                PRODUCTS_DATA_STRING += "Products:\nID\tLink\tPrice\n"
+
+            for i in range(i, upper_limit):
+                # print(str(PRODUCTS_DATA[i]["id"]).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip())
+                PRODUCTS_DATA_STRING += "\n\n" + str(PRODUCTS_DATA[i]["id"]).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip()
+            result_array.append(PRODUCTS_DATA_STRING)
+            if upper_limit == len(PRODUCTS_DATA):
+                break
+        # print(len(result_array))
+        return result_array   
     else:
-        PRODUCTS_DATA = "No products has been added yet!"
-    return PRODUCTS_DATA
+        PRODUCTS_DATA = ["No products has been added yet!"]
+        return PRODUCTS_DATA
 
 def add_channel_to_file(text):
     try:
@@ -186,4 +209,4 @@ def delete_pccomponentes_messages(bot):
                         parse_mode="markdown")
         time.sleep(5)
             
-        
+pprint(len(show_products_from_file()))
