@@ -1,6 +1,6 @@
 {
-  "name": "NorVPN Server Changer",
-  "description": "Changes NordVPN server detecting specified string on a webpage!",
+  "name": "HTML Grabber",
+  "description": "Grabs whole html of a webpage and sends to local flask server",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
