@@ -89,8 +89,8 @@ def get_from_neobyte(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            with open("neobyte.html", "wb") as f:
-                f.write(r.content)
+            # with open("neobyte.html", "wb") as f:
+            #     f.write(r.content)
 
             soup = BeautifulSoup(r.content, 'html.parser')
 
@@ -116,8 +116,8 @@ def get_from_casemod(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            with open("neobyte.html", "wb") as f:
-                f.write(r.content)
+            # with open("neobyte.html", "wb") as f:
+            #     f.write(r.content)
 
             soup = BeautifulSoup(r.content, 'html.parser')
 
@@ -143,8 +143,8 @@ def get_from_amazon(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            with open("neobyte.html", "wb") as f:
-                f.write(r.content)
+            # with open("neobyte.html", "wb") as f:
+            #     f.write(r.content)
 
             soup = BeautifulSoup(r.content, 'html.parser')
             
@@ -170,8 +170,8 @@ def get_from_coolmod(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            with open("coolmod.html", "wb") as f:
-                f.write(r.content)
+            # with open("coolmod.html", "wb") as f:
+            #     f.write(r.content)
 
             soup = BeautifulSoup(r.content, 'html.parser')
             
