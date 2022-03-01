@@ -62,6 +62,8 @@ def get_from_pccomponentes(URL):
                     break
             
             if retry_scraping:
+                kill_chrome()
+                time.sleep(1)
                 continue
             
             time.sleep(1)
