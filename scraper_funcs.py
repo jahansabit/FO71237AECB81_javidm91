@@ -47,12 +47,22 @@ def get_from_pccomponentes(URL):
             # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
             subprocess.Popen(str("google-chrome-stable --no-sandbox " + URL).split(" "))
             time.sleep(1)
+
+            seconds_spent = 0
+            retry_scraping = False
             while 1:
                 print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
                 if os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
                     time.sleep(3)
+                    seconds_spent += 3
+                    if seconds_spent > SCRAPPING_MAX_TIMEOUT:
+                        retry_scraping = True
+                        break
                 else:
                     break
+            
+            if retry_scraping:
+                continue
             
             time.sleep(1)
             server.terminate()
