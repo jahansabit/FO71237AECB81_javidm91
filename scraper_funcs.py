@@ -46,6 +46,7 @@ def get_from_pccomponentes(URL):
             os.system("google-chrome-stable --no-sandbox '" + URL + "'")
             time.sleep(1)
             while 1:
+                print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
                 if os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
                     time.sleep(3)
                 else:

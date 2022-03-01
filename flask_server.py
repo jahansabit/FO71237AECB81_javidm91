@@ -12,16 +12,17 @@ def main():
     print(time.strftime('%X %x %Z'))
     main_data = json.loads(request.data)['message']
     if "cloudflare" in main_data["title"].lower():
-        pass
-    else:
+        return "Got Captcha"
+    elif "pccomponentes.com" in main_data["title"].lower():
         try:
             print(main_data["title"].lower())
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
                 json.dump(main_data, f)
         except Exception as e:
             print(e)
-    
-    return "Received"
+        return "Received"
+    else:
+        return "Not received"
 
 def start_server():
     app.run(host="127.0.0.1", port=int(5699))
