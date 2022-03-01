@@ -1,4 +1,5 @@
 
+import traceback
 from scraper_funcs import *
 from bot_helpers import *
 from bot_vars import *
@@ -92,7 +93,11 @@ def check_product_and_send():
 def periodic_task_thread():
     while True:
         print("[*] Checking for products... | " + str(time.ctime()))
-        check_product_and_send()
+        try:
+            check_product_and_send()
+        except:
+            print("[*] Error occurred. Skipping...")
+            bot.sendMessage(DEBUG_CHAT_ID, "Error occurred. \n" + str(traceback.format_exc()))
         print("[*] Product checking is finished... | " + str(time.ctime()))
         time.sleep(CHECK_FOR_PRODUCTS_EVERY_X_MINUTES * 60)
         # time.sleep(60)
