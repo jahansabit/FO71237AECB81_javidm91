@@ -1,6 +1,7 @@
 import json
 import string
 from pprint import pprint
+import traceback
 import telepot
 import time
 
@@ -55,6 +56,10 @@ def add_product_to_file(text):
         PRODUCTS_DATA = JSON_DATA["products"]
         NEXT_ID = len(PRODUCTS_DATA) + 1
 
+        for product in PRODUCTS_DATA:
+            if product["link"] in link or link in product["link"]:
+                return "Product already in list."
+
         PRODUCTS_DATA.append(
             {
                 "id": NEXT_ID,
@@ -82,12 +87,18 @@ def delete_product_from_file(text):
         PRODUCTS_DATA = JSON_DATA["products"]
 
         product_found = False
-        for product in PRODUCTS_DATA:
-            if str(product["id"]) == PRODUCT_ID_TO_DELETE:
-                PRODUCTS_DATA.remove(product)
-                product_found = True
-                break
+        # for product in PRODUCTS_DATA:
+        #     if str(product["id"]) == PRODUCT_ID_TO_DELETE:
+        #         PRODUCTS_DATA.remove(product)
+        #         product_found = True
+        #         break
         
+        try:
+            PRODUCTS_DATA.pop(int(PRODUCT_ID_TO_DELETE)-1)
+            product_found = True
+        except:
+            print(traceback.format_exc())
+
         if product_found == False:
             return "Product not found"
         
@@ -119,7 +130,7 @@ def show_products_from_file():
 
             for i in range(i, upper_limit):
                 # print(str(PRODUCTS_DATA[i]["id"]).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip())
-                PRODUCTS_DATA_STRING += "\n\n" + str(PRODUCTS_DATA[i]["id"]).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip()
+                PRODUCTS_DATA_STRING += "\n\n" + str(i+1).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip()
             result_array.append(PRODUCTS_DATA_STRING)
             if upper_limit == len(PRODUCTS_DATA):
                 break
@@ -135,7 +146,7 @@ def add_channel_to_file(text):
         CHANNEL_NAME = text
 
         if CHANNEL_NAME == '':
-            return "Wrong input format. Example: /add_channel @channel_name"
+            return "Wrong input format. Example: /add_channel @channel_name\nor,   /add_channel https://t.me/channel_name"
 
         CHANNEL_NAME = CHANNEL_NAME.replace("https://t.me/", "")
         CHANNEL_NAME = "@" + CHANNEL_NAME.replace("@", "")
@@ -143,6 +154,10 @@ def add_channel_to_file(text):
         JSON_DATA = load_from_json()
         CHANNELS_DATA = JSON_DATA["channels"]
         NEXT_ID = len(CHANNELS_DATA) + 1
+
+        for channel in CHANNELS_DATA:
+            if channel["name"] in CHANNEL_NAME or CHANNEL_NAME in channel["name"]:
+                return "Channel already in list."
 
         CHANNELS_DATA.append(
             {
@@ -164,7 +179,10 @@ def remove_channel_from_file(text):
         CHANNEL_NAME_TO_DELETE = text
         
         if CHANNEL_NAME_TO_DELETE == '':
-            return "Wrong input format. Example: /remove_channel @channel_name"
+            return "Wrong input format. Example: /remove_channel @channel_name\nor,  /remove_channel https://t.me/channel_name"
+
+        CHANNEL_NAME_TO_DELETE = CHANNEL_NAME_TO_DELETE.replace("https://t.me/", "")
+        CHANNEL_NAME_TO_DELETE = "@" + CHANNEL_NAME_TO_DELETE.replace("@", "")
 
         JSON_DATA = load_from_json()
         CHANNELS_DATA = JSON_DATA["channels"]
