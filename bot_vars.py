@@ -34,12 +34,12 @@ def message_template(title, link, current_price, prev_price):
     if "pccomponentes" in link:
         link = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued=" + link
 
-    text = f'''🔥 *DISCOUNT* 🔥
+    text = f'''🔥 *Descuento* 🔥
 
 [{title}]({link})
 
-✅ *NOW: {current_price} 🔥-{round(percentage, 2)}%🔥*
-❌ Before: {prev_price}
+✅ *AHORA: {current_price.replace(".", ",")} 🔥-{round(percentage, 2)}%🔥*
+❌ Antes: {prev_price.replace(".", ",")}
     '''
 
     return text
