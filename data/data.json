@@ -1,33 +1,11 @@
 {
     "channels": [
-        {
-            "id": 1,
-            "name": "@lolol123jani"
-        }
+
     ],
     "chat_ids": [
         "718057913"
     ],
     "products": [
-        {
-            "id": 1,
-            "link": "https://www.neobyte.es/disco-duro-easystore-desktop-8tb-9355.html",
-            "price": 134.88
-        },
-        {
-            "id": 2,
-            "link": "https://www.pccomponentes.com/msi-rx-6600-xt-mech-2x-ocv1-8gb-gddr6",
-            "price": 510.66
-        },
-        {
-            "id": 3,
-            "link": "https://www.pccomponentes.com/msi-geforce-rtx-3060-ti-gaming-x-lhr-8gb-gddr6",
-            "price": 745.2
-        },
-        {
-            "id": 4,
-            "link": "https://www.pccomponentes.com/msi-geforce-rtx-3070-ti-ventus-3x-oc-8gb-gddr6x",
-            "price": 949.89
-        }
+        
     ]
 }
