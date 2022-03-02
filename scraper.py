@@ -56,6 +56,10 @@ def check_product_and_send():
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
             if "https:" not in scrapped_product['product_img_link']:
                 scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
+            try:
+                category = scrapped_product['product_caterory']
+            except:
+                category = ""
             for chat_id in CHAT_IDS:
                 # SEND Customized message to each user, will be customized later
                 bot.sendPhoto(int(chat_id),
@@ -64,8 +68,9 @@ def check_product_and_send():
                                 PRODUCTS[i]['link'],
                                 website_name_provider(PRODUCTS[i]['link']),
                                 scrapped_product['product_price'], 
-                                PRODUCTS[i]['price']), 
-                            parse_mode="markdown")
+                                PRODUCTS[i]['price'],
+                                category=category), 
+                            parse_mode="html")
                 time.sleep(5)
             print(website_name_provider(PRODUCTS[i]['link']) == "PcComponentes")
             if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
@@ -79,11 +84,11 @@ def check_product_and_send():
                                             website_name_provider(PRODUCTS[i]['link']),
                                             scrapped_product['product_price'], 
                                             PRODUCTS[i]['price'],
-                                            category=scrapped_product['product_caterory'])
+                                            category=category)
                     result = bot.sendPhoto(channel['name'],
                                             scrapped_product['product_img_link'],
                                             caption=caption, 
-                                            parse_mode="markdown")
+                                            parse_mode="html")
                     temp_dict = {}
                     temp_dict["product_from"] = website_name_provider(PRODUCTS[i]['link'])
                     temp_dict["message_data"] = result

@@ -2,7 +2,6 @@ import os
 import telepot
 from pprint import pprint
 from datetime import datetime
-from bot_helpers import *
 
 def create_folders(path):
     if not os.path.exists(path):
@@ -41,19 +40,16 @@ def message_template(title, link, website_name, current_price, prev_price, categ
     if category == None or category == "":
         category = ""
     else:
-        category = "#" + category.replace(" ", "_")
+        category = "\n<i>#" + category.replace(" ", "_") + "</i>"
 
-    text = f'''📉 *Precio MÍNIMO histórico* ❗❗
-  *Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})_
-#{website_name}
-💥 *{title}*
-{category}
+    text = f'''📉 <b><a href="{link}">Precio MÍNIMO histórico</a></b> ‼️
+       <i>Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})</i>
+<i>#{website_name}</i>
+💥 <b>{title}</b>{category}
 
-🛒 [{title}]({link})
+🛒 <a href="{link}">COMPRAR AHORA</a>
 
-*[COMPRAR AHORA]({link})*
-
-✅ PRECIO: {str(current_price).replace(".", ",")}
+✅ <b>PRECIO: {str(current_price).replace(".", ",")} €</b>
 
 ⭐⭐⭐⭐⭐ 5 de 5
 
@@ -65,3 +61,5 @@ def message_template(title, link, website_name, current_price, prev_price, categ
 # result = bot.sendMessage(USER_CHAT_ID, message_template("asdasd", "https://pccomponentes.com", 23, 30), parse_mode="markdown")
 
 # pprint(result)
+
+# print(message_template("title", "https://link", "website_name", "123", "435", category="asasdad"))
