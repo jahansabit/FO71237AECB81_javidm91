@@ -42,8 +42,7 @@ def message_template(title, link, website_name, current_price, prev_price, categ
     else:
         category = "\n<i>#" + category.replace(" ", "_") + "</i>"
 
-    text = f'''📉 <b><a href="{link}">Precio MÍNIMO histórico</a></b> ‼️
-       <i>Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})</i>
+    text = f'''
 <i>#{website_name}</i>
 💥 <b>{title}</b>{category}
 
@@ -63,3 +62,5 @@ def message_template(title, link, website_name, current_price, prev_price, categ
 # pprint(result)
 
 # print(message_template("title", "https://link", "website_name", "123", "435", category="asasdad"))
+# 📉 <b><a href="{link}">Precio MÍNIMO histórico</a></b> ‼️
+# <i>Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})</i>
