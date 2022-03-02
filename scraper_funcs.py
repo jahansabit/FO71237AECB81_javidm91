@@ -9,6 +9,7 @@ from pccomponentes.page import pcc_doc
 import requests
 import os
 import subprocess
+import traceback
 from multiprocessing import Process
 from flask_server import *
 from bot_vars import *
@@ -81,11 +82,17 @@ def get_from_pccomponentes(URL):
             product_name = soup.h1.strong.get_text()
             product_price = soup.findAll(id="precio-main")[0].get("data-price")
             product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
+            try:
+                product_caterory = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
+            except:
+                traceback.print_exc()
+                product_caterory = ""
 
             return {
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link":product_img_link
+                "product_img_link": product_img_link,
+                "product_caterory": product_caterory
             }
         except Exception as e:
             print(e)
@@ -202,4 +209,4 @@ def get_from_coolmod(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_coolmod("https://www.coolmod.com/msi-geforce-gtx-1660-super-ventus-xs-oc-6gb-gddr6-tarjeta-grafica/"))
+    print(get_from_pccomponentes("https://www.pccomponentes.com/msi-rx-6600-xt-mech-2x-ocv1-8gb-gddr6"))

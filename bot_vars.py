@@ -1,6 +1,8 @@
 import os
 import telepot
 from pprint import pprint
+from datetime import datetime
+from bot_helpers import *
 
 def create_folders(path):
     if not os.path.exists(path):
@@ -27,21 +29,34 @@ SCRAPING_MAX_RETRIES = 3
 SCRAPPING_MAX_TIMEOUT = 30                  # in seconds
 MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
 
-def message_template(title, link, current_price, prev_price):
+def message_template(title, link, website_name, current_price, prev_price, category=None):
     current_price = float(current_price)
     prev_price = float(prev_price)
     percentage = prev_price - current_price
     percentage = 100 / prev_price * percentage
-
+    original_link = link
     if "pccomponentes" in link:
         link = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued=" + link
+    
+    if category == None or category == "":
+        category = ""
+    else:
+        category = "#" + category.replace(" ", "_")
 
-    text = f'''🔥 *Descuento* 🔥
+    text = f'''📉 *Precio MÍNIMO histórico* ❗❗
+  *Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})_
+#{website_name}
+💥 *{title}*
+{category}
 
-[{title}]({link})
+🛒 [{title}]({link})
 
-✅ *AHORA: {str(current_price).replace(".", ",")} 🔥-{round(percentage, 2)}%🔥*
-❌ Antes: {str(prev_price).replace(".", ",")}
+*[COMPRAR AHORA]({link})*
+
+✅ PRECIO: {str(current_price).replace(".", ",")}
+
+⭐⭐⭐⭐⭐ 5 de 5
+
     '''
 
     return text

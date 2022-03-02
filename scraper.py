@@ -61,7 +61,8 @@ def check_product_and_send():
                 bot.sendPhoto(int(chat_id),
                             scrapped_product['product_img_link'],
                             caption=message_template(scrapped_product["product_name"], 
-                                PRODUCTS[i]['link'], 
+                                PRODUCTS[i]['link'],
+                                website_name_provider(PRODUCTS[i]['link']),
                                 scrapped_product['product_price'], 
                                 PRODUCTS[i]['price']), 
                             parse_mode="markdown")
@@ -74,9 +75,11 @@ def check_product_and_send():
                     # SEND Customized message to each channel, will be customized later
                     print(scrapped_product['product_img_link'], channel['name'])
                     caption = message_template(scrapped_product["product_name"], 
-                                            PRODUCTS[i]['link'], 
+                                            PRODUCTS[i]['link'],
+                                            website_name_provider(PRODUCTS[i]['link']),
                                             scrapped_product['product_price'], 
-                                            PRODUCTS[i]['price'])
+                                            PRODUCTS[i]['price'],
+                                            category=scrapped_product['product_caterory'])
                     result = bot.sendPhoto(channel['name'],
                                             scrapped_product['product_img_link'],
                                             caption=caption, 
