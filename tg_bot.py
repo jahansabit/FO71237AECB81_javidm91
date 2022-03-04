@@ -44,21 +44,21 @@ def on_chat_message(msg):
 
                 bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
             
-            elif "/add_product" in msg["text"]:
+            elif "/add" in msg["text"]:
                 response = add_product_to_file(msg["text"])
                 if response == True:
                     bot.sendMessage(chat_id, "Product added successfully")
                 else:
                     bot.sendMessage(chat_id, "Error adding product!\n" + response)
             
-            elif "/delete_product" in msg["text"]:
+            elif "/delete" in msg["text"]:
                 response = delete_product_from_file(msg["text"])
                 if response == True:
                     bot.sendMessage(chat_id, "Product deleted successfully")
                 else:
                     bot.sendMessage(chat_id, "Error deleting product!\n" + response)
             
-            elif "/show_products" in msg["text"]:
+            elif "/show" in msg["text"]:
                 response = show_products_from_file()
                 for msg in response:
                     bot.sendMessage(chat_id, msg)
@@ -92,7 +92,7 @@ def on_callback_query(msg):
     # bot.answerCallbackQuery(query_id, text='Got it')
     if str(from_id) in main_dict["chat_ids"]:
         if query_data == "add_product":
-            bot.sendMessage(from_id, "To add a product, send me the product name and price like this:\n\n/add_product product_link, price\n\nExample:\n\n/add_product https://www.amazon.com/product_name, price")
+            bot.sendMessage(from_id, "To add a product, send me the product name and price like this:\n\n/add product_link, price\n\nExample:\n\n/add https://www.amazon.com/product_name, price")
         elif query_data == "show_products":
             bot.sendMessage(from_id, "Sending you list of products:")
             response = show_products_from_file()
@@ -100,7 +100,7 @@ def on_callback_query(msg):
             for msg in response:
                 bot.sendMessage(from_id, msg)
         elif query_data == "del_product":
-            bot.sendMessage(from_id, "To delete a product, send me the product name like this:\n\n/delete_product product_id\n\nExample:\n\n/delete_product 10\n\nTo know the product id, check the product list first: /show_products")
+            bot.sendMessage(from_id, "To delete a product, send me the product name like this:\n\n/delete product_id\n\nExample:\n\n/delete 10\n\nTo know the product id, check the product list first: /show")
         elif query_data == "add_rem_chnl":
             bot.sendMessage(from_id, "To add a channel, send me the channel name like this:\n\n/add_channel channel_name")
             bot.sendMessage(from_id, "To remove a channel, send me the channel name like this:\n\n/remove_channel channel_name")

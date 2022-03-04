@@ -39,18 +39,18 @@ def save_sent_msg_to_json(data):
 
 def add_product_to_file(text):
     try:
-        text = text.replace("/add_product", "").strip()
+        text = text.replace("/add", "").strip()
         stripped = text.split(",")
         try:
             link, price = stripped
             price = ''.join(i for i in price if (i.isdigit() or i == '.'))
         except ValueError:
-            return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
+            return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
         except Exception as e:
             return str(e)
 
         if price == '' or link == '':
-            return "Wrong input format. Example: /add_product https://www.amazon.com/dp/B07JQVZQJF, 10"
+            return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
 
         JSON_DATA = load_from_json()
         PRODUCTS_DATA = JSON_DATA["products"]
@@ -77,11 +77,11 @@ def add_product_to_file(text):
 
 def delete_product_from_file(text):
     try:
-        text = text.replace("/delete_product", "").strip()
+        text = text.replace("/delete", "").strip()
         PRODUCT_ID_TO_DELETE = text
 
         if PRODUCT_ID_TO_DELETE == '':
-            return "Wrong input format. Example: /delete_product 1"
+            return "Wrong input format. Example: /delete 1"
 
         JSON_DATA = load_from_json()
         PRODUCTS_DATA = JSON_DATA["products"]
