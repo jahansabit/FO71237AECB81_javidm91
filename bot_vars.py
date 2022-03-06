@@ -11,7 +11,8 @@ def joinpath(path="", *args):
     return os.path.join(PROJECT_DIR, path, *args)
 
 ########## TOKENS ##########
-BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
+# BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
+BOT_TOKEN = "5155024321:AAHchDoEvXcBn-w18nDEHzfq787ckOv1QEc"
 USER_CHAT_ID = 718057913
 DEBUG_CHAT_ID = -744965364
 ########## TOKENS ##########

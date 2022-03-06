@@ -11,7 +11,7 @@
             "id": "1",
             "link": "https://www.google.com/asdasd./asdasd",
             "price": "400",
-            "product_price": "450",
+            "current_price": "450",
             "last_sent_price": "-1"
         }
     ]

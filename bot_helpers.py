@@ -18,11 +18,13 @@ def website_name_provider(link):
         return "Casemod"
     elif link.find("coolmod.com") != -1:
         return "Coolmod"
+    elif link.find("aussar.es") != -1:
+        return "Aussar"
 
 def load_from_json():
     with open(DATA_JSON_FILE_PATH, 'r') as f:
         data = json.load(f)
-        return data
+    return data
 
 def save_to_json(data):
     with open(DATA_JSON_FILE_PATH, 'w') as f: 
@@ -31,7 +33,7 @@ def save_to_json(data):
 def load_sent_msg_from_json():
     with open(SENT_MSG_DATA_JSON_FILE_PATH, 'r') as f:
         data = json.load(f)
-        return data
+    return data
 
 def save_sent_msg_to_json(data):
     with open(SENT_MSG_DATA_JSON_FILE_PATH, 'w') as f: 
@@ -40,7 +42,8 @@ def save_sent_msg_to_json(data):
 def add_product_to_file(text):
     try:
         text = text.replace("/add", "").strip()
-        stripped = text.split(",")
+        text = text.replace("  ", " ") # remove double spaces
+        stripped = text.split(" ")
         try:
             link, price = stripped
             price = ''.join(i for i in price if (i.isdigit() or i == '.'))

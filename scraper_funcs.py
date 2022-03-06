@@ -3,6 +3,7 @@
 import webbrowser
 from bs4 import BeautifulSoup
 from amazon.page import ama_doc
+from aussar.page import aus_doc
 from neobyte.page import neo_doc
 from casemod.page import cas_doc
 from pccomponentes.page import pcc_doc
@@ -18,7 +19,7 @@ def kill_chrome():
     try:
         os.system("pkill chrome")
     except:
-        pass
+        traceback.print_exc()
 
 def return_requests(URL):
     s = requests.Session()
@@ -196,7 +197,36 @@ def get_from_coolmod(URL):
             
             product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
             product_price = str(soup.findAll("span", {"id":"normalpricenumber"})[0].get_text()).replace(",", ".")
+            if product_price.count(".") <= 2:
+                product_price = product_price.replace(".", "", product_price.count(".") - 1)
             product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
+
+            return {
+                "product_name": product_name,
+                "product_price": product_price,
+                "product_img_link": product_img_link
+            }
+        except Exception as e:
+            print(e)
+            time.sleep(3)
+
+def get_from_aussar(URL):
+    RETRY_COUNT = -1
+    while 1:
+        RETRY_COUNT += 1
+        if RETRY_COUNT > SCRAPING_MAX_RETRIES:
+            return None
+        try:
+            r = return_requests(URL)
+            # r = requests.get(URL)
+            # with open("coolmod.html", "wb") as f:
+            #     f.write(r.content)
+
+            soup = BeautifulSoup(r.content, 'html.parser')
+            
+            product_name = soup.findAll("h1", {"class": "product-detail-name"})[0].get_text()
+            product_price = str(soup.findAll("div", {"class":"current-price"})[0].span.get("content"))
+            product_img_link = soup.find("img", {"class":"product-cover-modal"}).get('src')
 
             return {
                 "product_name": product_name,
@@ -209,4 +239,4 @@ def get_from_coolmod(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_pccomponentes("https://www.pccomponentes.com/msi-rx-6600-xt-mech-2x-ocv1-8gb-gddr6"))
+    print(get_from_aussar("https://www.aussar.es/equipos/asus-vivobook-f515ea-br785t-156-i5-1135g7-8gb-ssd512gb-w10.html"))
