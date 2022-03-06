@@ -113,6 +113,12 @@ def on_chat_message(msg):
             else:
                 response = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
                 bot.sendMessage(chat_id, response)
+        else:
+            links = get_url_from_string(msg["text"])
+            print(links)
+            for link in links:
+                if "pccomponentes.com" in link and "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275" not in link:
+                    pass
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')

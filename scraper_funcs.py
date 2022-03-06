@@ -83,6 +83,10 @@ def get_from_pccomponentes(URL):
             product_name = soup.h1.strong.get_text()
             product_price = soup.findAll(id="precio-main")[0].get("data-price")
             product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
+            product_micro_data = json.loads(str(soup.findAll('script',{"id":"microdata-product-script"})[0].get_text()))
+            # pprint(product_micro_data)
+            availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")
+
             try:
                 product_caterory = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
             except:
@@ -93,7 +97,8 @@ def get_from_pccomponentes(URL):
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link,
-                "product_caterory": product_caterory
+                "product_caterory": product_caterory,
+                "product_availability": availability
             }
         except Exception as e:
             print(e)
@@ -200,7 +205,7 @@ def get_from_coolmod(URL):
             if product_price.count(".") <= 2:
                 product_price = product_price.replace(".", "", product_price.count(".") - 1)
             product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
-
+            availability = soup.findAll("span", {"id":"messageStock"})[0].get_text()
             return {
                 "product_name": product_name,
                 "product_price": product_price,
@@ -239,4 +244,4 @@ def get_from_aussar(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_aussar("https://www.aussar.es/equipos/asus-vivobook-f515ea-br785t-156-i5-1135g7-8gb-ssd512gb-w10.html"))
+    print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
