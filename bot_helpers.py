@@ -4,6 +4,7 @@ from pprint import pprint
 import traceback
 import telepot
 import time
+from urllib.parse import urlparse
 
 from bot_vars import *
 
@@ -20,6 +21,15 @@ def website_name_provider(link):
         return "Coolmod"
     elif link.find("aussar.es") != -1:
         return "Aussar"
+
+def hostname_provider(link):
+    parsed_uri = urlparse(link)
+    # result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+    result = '{uri.netloc}'.format(uri=parsed_uri)
+    # print(result)
+    if result == '':
+        result = link
+    return result
 
 def load_from_json():
     with open(DATA_JSON_FILE_PATH, 'r') as f:
@@ -215,6 +225,76 @@ def show_channels_from_file():
     else:
         CHANNELS_DATA = "No channels has been added yet!"
     return CHANNELS_DATA
+
+def add_website_to_file(text):
+    try:
+        text = text.replace("/add_website", "").strip()
+        WEBSITE_NAME = text
+
+        if WEBSITE_NAME == '':
+            return "Wrong input format. Example: /add_website https://website.com"
+
+        JSON_DATA = load_from_json()
+        WEBSITES_DATA = JSON_DATA["shareable_websites"]
+        # NEXT_ID = len(WEBSITES_DATA) + 1
+
+        WEBSITE_NAME = hostname_provider(WEBSITE_NAME)
+
+        for website in WEBSITES_DATA:
+            if website in WEBSITE_NAME or WEBSITE_NAME in website:
+                return "Website already in list."
+
+        WEBSITES_DATA.append(WEBSITE_NAME)
+        JSON_DATA["shareable_websites"] = WEBSITES_DATA
+            
+        save_to_json(JSON_DATA)
+        return True
+    except Exception as e:
+        traceback.print_exc()
+        print(e)
+        return str(e)
+
+def remove_website_from_file(text):
+    try:
+        text = text.replace("/remove_website", "").strip()
+        print("text", text)
+        WEBSITE_NAME_TO_DELETE = text
+        print("WEBSITE_NAME_TO_DELETE", WEBSITE_NAME_TO_DELETE)
+        
+        if WEBSITE_NAME_TO_DELETE == '':
+            return "Wrong input format. Example: /remove_website website.com"
+
+        JSON_DATA = load_from_json()
+        WEBSITES_DATA = JSON_DATA["shareable_websites"]
+
+        WEBSITE_NAME_TO_DELETE = hostname_provider(WEBSITE_NAME_TO_DELETE)
+
+        website_found = False
+        for website in WEBSITES_DATA:
+            print(WEBSITE_NAME_TO_DELETE, website)
+            if WEBSITE_NAME_TO_DELETE in website or website in WEBSITE_NAME_TO_DELETE:
+                WEBSITES_DATA.remove(website)
+                website_found = True
+                break
+        
+        if website_found == False:
+            return "Website not found"
+        
+        JSON_DATA["shareable_websites"] = WEBSITES_DATA
+        save_to_json(JSON_DATA)
+        return True
+    except Exception as e:
+        print(e)
+        return str(e)
+
+def show_websites_from_file():
+    JSON_DATA = load_from_json()
+    WEBSITES_DATA = JSON_DATA["shareable_websites"]
+    if len(WEBSITES_DATA) != 0:
+        WEBSITES_DATA = "Websites:\n" + "\n".join(WEBSITES_DATA)
+    else:
+        WEBSITES_DATA = "No websites has been added yet!"
+    return WEBSITES_DATA
 
 def delete_pccomponentes_messages(bot):
     sent_messages = load_sent_msg_from_json()

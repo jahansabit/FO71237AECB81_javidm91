@@ -21,6 +21,14 @@ def check_product_and_send():
     CHANNELS = JSON_DATA["channels"]
     SENT_MSG_DATA = load_sent_msg_from_json()
 
+    try:
+        SHAREABLE_WEBSITES = JSON_DATA["shareable_websites"]
+    except:
+        SHAREABLE_WEBSITES = []
+        SHAREABLE_WEBSITES.append("pccomponentes.com")
+        JSON_DATA["shareable_websites"] = SHAREABLE_WEBSITES
+        save_to_json(JSON_DATA)
+
     SCRAPPED_PRODUCTS = []
 
     browser_tabs = 0
@@ -81,7 +89,8 @@ def check_product_and_send():
                                 parse_mode="html")
                     time.sleep(5)
                 print(website_name_provider(PRODUCTS[i]['link']) == "PcComponentes")
-                if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
+                # if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
+                if hostname_provider(PRODUCTS[i]['link']) in SHAREABLE_WEBSITES:
                     for channel in CHANNELS:
                         channel['name'] = channel['name'].replace("https://t.me/", "")
                         channel['name'] = "@" + channel['name'].replace("@", "")
