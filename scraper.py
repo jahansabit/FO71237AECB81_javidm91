@@ -60,6 +60,16 @@ def check_product_and_send():
                 last_sent_price = PRODUCTS[i]["last_sent_price"]
             except:
                 PRODUCTS[i]["last_sent_price"] = "-1"
+
+            try:
+                last_availability = PRODUCTS[i]['last_availability']
+            except:
+                PRODUCTS[i]['last_availability'] = "InStock"
+
+            try:
+                availability = PRODUCTS[i]['product_availability']
+            except:
+                PRODUCTS[i]['product_availability'] = "InStock"
         else:
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
@@ -68,8 +78,19 @@ def check_product_and_send():
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
         scrapped_product['product_price'] = ''.join(i for i in scrapped_product['product_price'] if (i.isdigit() or i == "."))
         print(scrapped_product['product_price'], PRODUCTS[i]['price'])
+        
+        try:
+            last_availability = PRODUCTS[i]['last_availability']
+        except:
+            PRODUCTS[i]['last_availability'] = "InStock"
+        try:
+            availability = scrapped_product['product_availability']
+        except:
+            scrapped_product['product_availability'] = "InStock"
+
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
-            if float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price']):
+            if (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) or\
+                (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability'] and scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY):
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
@@ -115,11 +136,25 @@ def check_product_and_send():
                         save_sent_msg_to_json(SENT_MSG_DATA)
                         time.sleep(5)
                 PRODUCTS[i]["last_sent_price"] = float(scrapped_product['product_price'])
+                PRODUCTS[i]["last_availability"] = scrapped_product['product_availability']
+            
     JSON_DATA["products"] = PRODUCTS
     save_to_json(JSON_DATA)
 
+
 def periodic_task_thread():
+    flask_server_waiting = 0
     while True:
+        while os.path.isfile(FLASK_SERVER_RUNNING_FILE_PATH):
+            print("FLASK_SERVER_RUNNING_FILE_PATH exists... waiting...")
+            time.sleep(3)
+            flask_server_waiting += 3
+            if flask_server_waiting > FLASK_SERVER_MAX_WAITING_TIME:
+                flask_server_waiting = 0
+                os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+        
+        with open(FLASK_SERVER_RUNNING_FILE_PATH, "w") as f:
+            f.write("True")
         print("[*] Checking for products... | " + str(time.ctime()))
         try:
             check_product_and_send()
@@ -127,5 +162,6 @@ def periodic_task_thread():
             print("[*] Error occurred. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Error occurred. \n" + str(traceback.format_exc()))
         print("[*] Product checking is finished... | " + str(time.ctime()))
+        os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
         time.sleep(CHECK_FOR_PRODUCTS_EVERY_X_MINUTES * 60)
         # time.sleep(60)

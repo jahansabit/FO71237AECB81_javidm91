@@ -14,6 +14,10 @@ from bot_vars import *
 from bot_helpers import *
 from scraper import *
 
+try:
+    os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+except:
+    pass
 
 if os.path.isfile(DATA_JSON_FILE_PATH) == False:
     main_dict = {}
@@ -121,29 +125,27 @@ def on_chat_message(msg):
             links = get_url_from_string(msg["text"])
             print(links)
             if type(links) == list:
-                for link in links:
-                    if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
-                        # scrape item details
-                        # delete user message
-                        # send item details
-                        # remove_and_send_affiliate_link(bot, msg, link)
-            threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, link,)).start()
-                        pass
-            entities = msg["entities"]
-
-            for entity in entities:
-                try:
-                    if entity["url"] not in links:
-                        if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
-                            # scrape item details
-                            # delete user message
-                            # send item details
-                            # remove_and_send_affiliate_link(bot, msg, entity["url"])
-                            threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, entity["url"],)).start()
-                            pass
-                except Exception as e:
-                    # traceback.print_exc()
-                    print(str(e))
+                task = multiprocessing.Process(target=remove_and_send_affiliate_link, args=(bot, msg, links,))
+                task.start()
+            
+            # try:
+            #     entities = msg["entities"]
+            
+            #     for entity in entities:
+            #         try:
+            #             if entity["url"] not in links:
+            #                 if "pccomponentes.com" in entity["url"] and PCCOMPONENTES_AFFILIATE_LINK not in entity["url"]:
+            #                     # scrape item details
+            #                     # delete user message
+            #                     # send item details
+            #                     # remove_and_send_affiliate_link(bot, msg, entity["url"])
+            #                     threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, entity["url"],)).start()
+            #                     pass
+            #         except Exception as e:
+            #             # traceback.print_exc()
+            #             print(str(e))
+            # except:
+            #     traceback.print_exc()
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
@@ -184,8 +186,8 @@ print("\n\n")
 print('Listening ...')
 
 # Keep scraper thread running.
-# scraper_thread = threading.Thread(target=periodic_task_thread)
-# scraper_thread.start()
+scraper_thread = threading.Thread(target=periodic_task_thread)
+scraper_thread.start()
 
 bot.sendMessage(DEBUG_CHAT_ID, "Bot started!")
 while 1:

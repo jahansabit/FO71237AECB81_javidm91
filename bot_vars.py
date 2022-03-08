@@ -10,9 +10,12 @@ def create_folders(path):
 def joinpath(path="", *args):
     return os.path.join(PROJECT_DIR, path, *args)
 
+DEBUG = False
+
 ########## TOKENS ##########
-# BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
-BOT_TOKEN = "5155024321:AAHchDoEvXcBn-w18nDEHzfq787ckOv1QEc"
+BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
+if DEBUG:
+    BOT_TOKEN = "5155024321:AAHchDoEvXcBn-w18nDEHzfq787ckOv1QEc"
 USER_CHAT_ID = 718057913
 DEBUG_CHAT_ID = -744965364
 ########## TOKENS ##########
@@ -22,14 +25,17 @@ DATA_DIR = os.path.normpath(os.path.join(PROJECT_DIR, "../tg_bot_data"))
 DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
+FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
 TIME_TO_CHECK_PRODUCTS = 60
 CHECK_FOR_PRODUCTS_EVERY_X_MINUTES = 5
 MAX_BROWSER_TABS = 5
 SCRAPING_MAX_RETRIES = 3
 SCRAPPING_MAX_TIMEOUT = 30                  # in seconds
+FLASK_SERVER_MAX_WAITING_TIME = 60*3          # in seconds
 MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
 PCCOMPONENTES_AFFILIATE_LINK = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued="
 TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
+OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
     print("message_template")

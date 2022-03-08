@@ -1,6 +1,8 @@
 #import requests
 #import cfscrape
+import datetime
 from inspect import trace
+import pytz
 import webbrowser
 from bs4 import BeautifulSoup
 from amazon.page import ama_doc
@@ -64,7 +66,7 @@ def get_from_pccomponentes(URL):
                 else:
                     break
             
-            if retry_scraping:
+            if retry_scraping == True:
                 kill_chrome()
                 try:
                     r = requests.get("http://127.0.0.1:5699/shutdown")
@@ -96,19 +98,25 @@ def get_from_pccomponentes(URL):
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
                 data = json.load(f)
             
-            os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
+            # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             html_data = data['html']
 
             soup = BeautifulSoup(html_data, 'html.parser')
 
-            product_name = soup.h1.strong.get_text()
+            try:
+                product_name = soup.h1.strong.get_text()
+            except:
+                product_name = str(soup.find('title').get_text()).replace("| PcComponentes.com", "").strip()
             product_price = soup.findAll(id="precio-main")[0].get("data-price")
             product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
             if "https:" not in product_img_link:
                 product_img_link = "https:" + product_img_link
             product_micro_data = json.loads(str(soup.findAll('script',{"id":"microdata-product-script"})[0].get_text()))
             # pprint(product_micro_data)
-            availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")
+            try:
+                availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")
+            except:
+                availability = str(product_micro_data['offers']['offers']['availability']).replace("http://schema.org/", "")
 
             try:
                 product_caterory = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
@@ -124,9 +132,13 @@ def get_from_pccomponentes(URL):
                 "product_availability": availability
             }
         except Exception as e:
+            print("\n\n")
+            traceback.print_exc()
+            print("\n\n")
             print(e)
             kill_chrome()
             time.sleep(3)
+            return None
 
 def get_from_neobyte(URL):
     RETRY_COUNT = -1
@@ -215,12 +227,14 @@ def get_from_coolmod(URL):
         RETRY_COUNT += 1
         if RETRY_COUNT > SCRAPING_MAX_RETRIES:
             return None
+        response_status = 404
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
             # with open("coolmod.html", "wb") as f:
             #     f.write(r.content)
-
+            response_status = r.status_code
+            print(response_status)
             soup = BeautifulSoup(r.content, 'html.parser')
             
             product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
@@ -228,15 +242,47 @@ def get_from_coolmod(URL):
             if product_price.count(".") <= 2:
                 product_price = product_price.replace(".", "", product_price.count(".") - 1)
             product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
-            availability = soup.findAll("span", {"id":"messageStock"})[0].get_text()
+            # availability = soup.findAll("span", {"id":"messageStock"})[0].get_text() # usable for selenium
+
+            # Avalability Checker
+            product_id = str(soup.findAll("div", {"class":"productextrainfotext"})[1].get_text()).strip()
+            CatId = soup.find("input", {"id":"subfamily"}).get('value')
+            TarId = 1
+            DayId = "AM"
+            
+            spain_timezone = pytz.timezone('Europe/Madrid')
+            datetime_obj = datetime.now(spain_timezone)
+            hour = datetime_obj.hour
+            if hour >= 12:
+                DayId = "PM"
+            
+            r = return_requests(f"https://www.coolmod.com/view/ajax/category/ajaxPricesForProducts.php?CatId={CatId}&TarId={TarId}&DayId={DayId}")
+            products_data = r.json()
+
+            for product in products_data:
+                if product['ProducCode'] == product_id: # Yeah, I know. It is ProducCode, without a 't'.
+                    if product['TextDelivered'].lower() == "agotado":
+                        availability = "OutOfStock"
+                    else:
+                        availability = "InStock"
+                    break
+            
+
             return {
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link": product_img_link
+                "product_img_link": product_img_link,
+                "product_availability": availability
             }
         except Exception as e:
+            traceback.print_exc()
             print(e)
             time.sleep(3)
+            print(f"Response Status: {response_status}")
+            if (response_status >= 200 and response_status < 300):
+                pass
+            else:
+                return None
 
 def get_from_aussar(URL):
     RETRY_COUNT = -1
@@ -267,4 +313,6 @@ def get_from_aussar(URL):
 
 
 if __name__ == "__main__":
-    print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
+    # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
+    # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
+    print(get_from_coolmod("https://www.coolmod.com/razer-blade-17-d17-7nt-i7-11800h-rtx-3070-16gb-1tb-17-3/"))
