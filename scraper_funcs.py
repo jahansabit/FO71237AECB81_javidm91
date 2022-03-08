@@ -1,5 +1,6 @@
 #import requests
 #import cfscrape
+from inspect import trace
 import webbrowser
 from bs4 import BeautifulSoup
 from amazon.page import ama_doc
@@ -65,12 +66,32 @@ def get_from_pccomponentes(URL):
             
             if retry_scraping:
                 kill_chrome()
-                time.sleep(1)
-                continue
+                try:
+                    r = requests.get("http://127.0.0.1:5699/shutdown")
+                    print(r.text)
+                except:
+                    traceback.print_exc()
+                try:
+                    time.sleep(1)
+                    # server.terminate()
+                    server.join()
+                except:
+                    traceback.print_exc()
+                    time.sleep(1)
+                    continue
             
-            time.sleep(1)
-            server.terminate()
-            server.join()
+            try:
+                r = requests.get("http://127.0.0.1:5699/shutdown")
+                print(r.text)
+            except:
+                traceback.print_exc()
+
+            try:
+                time.sleep(1)
+                # server.terminate()
+                server.join()
+            except:
+                traceback.print_exc()
             
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
                 data = json.load(f)
@@ -83,6 +104,8 @@ def get_from_pccomponentes(URL):
             product_name = soup.h1.strong.get_text()
             product_price = soup.findAll(id="precio-main")[0].get("data-price")
             product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
+            if "https:" not in product_img_link:
+                product_img_link = "https:" + product_img_link
             product_micro_data = json.loads(str(soup.findAll('script',{"id":"microdata-product-script"})[0].get_text()))
             # pprint(product_micro_data)
             availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")

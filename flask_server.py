@@ -7,6 +7,12 @@ from bot_vars import *
 
 app = Flask('TEST')
 
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
 @app.route('/', methods=['POST'])
 def main():
     print(time.strftime('%X %x %Z'))
@@ -21,6 +27,11 @@ def main():
         except Exception as e:
             print(e)
         return "Received"
+
+@app.get('/shutdown')
+def shutdown():
+    shutdown_server()
+    return 'Server shutting down...'
 
 def start_server():
     app.run(host="127.0.0.1", port=int(5699))

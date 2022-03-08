@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import re
 
 from bot_vars import *
+from scraper_funcs import *
 
 def get_url_from_string(text):
     # from https://stackoverflow.com/a/28552735
@@ -319,5 +320,50 @@ def delete_pccomponentes_messages(bot):
                         caption=message['message_text'], 
                         parse_mode="markdown")
         time.sleep(5)
-            
-pprint(get_url_from_string("asiufs8dfhse https://www.youtube.com/watch?v=dQw4w9WgXcQ sdvxcfsxscv"))
+
+def editMessageMedia(BOT_TOKEN, MSG_IDENTIFIER, MEDIA_URL):
+    media = json.dumps({
+        'type': 'photo',
+        'media': MEDIA_URL
+    })
+
+    message = f"https://api.telegram.org/bot{BOT_TOKEN}/editMessageMedia?chat_id={MSG_IDENTIFIER[0]}&message_id={MSG_IDENTIFIER[1]}&media={media}"
+
+    result = requests.post(message)
+    result = result.json()
+    try:
+        return result['result']
+    except Exception as e:
+        # print(str(e))
+        print(result)
+        return result
+
+def remove_and_send_affiliate_link(bot, msg, link):
+    try:
+        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=PCCOMPONENTES_AFFILIATE_LINK + link, reply_to_message_id=msg['message_id'])
+    except Exception as e:
+        print(str(e))
+        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=PCCOMPONENTES_AFFILIATE_LINK + link)
+    
+    # editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=PCCOMPONENTES_AFFILIATE_LINK + link)
+    try:
+        bot.deleteMessage(telepot.message_identifier(msg))
+    except Exception as e:
+        print(str(e))
+
+    scrapped_product = get_from_pccomponentes(link)
+    try:
+        category = scrapped_product['product_caterory']
+    except:
+        category = ""
+
+    caption = message_template(scrapped_product["product_name"], 
+                                link,
+                                website_name_provider(link),
+                                scrapped_product['product_price'], 
+                                None,
+                                category=category)
+    editMessageMedia(BOT_TOKEN, telepot.message_identifier(editable_message), scrapped_product['product_img_link'])
+    bot.editMessageCaption(telepot.message_identifier(editable_message), caption=caption, parse_mode="html")
+
+# pprint(get_url_from_string("asiufs8dfhse https://www.youtube.com/watch?v=dQw4w9WgXcQ sdvxcfsxscv"))

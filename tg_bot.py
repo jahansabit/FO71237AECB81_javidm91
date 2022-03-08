@@ -8,6 +8,7 @@ from pprint import pprint
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import threading
+import multiprocessing
 
 from bot_vars import *
 from bot_helpers import *
@@ -35,6 +36,8 @@ else:
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
+    msg_id = msg['message_id']
+    pprint(msg)
     try:
         print(content_type, chat_type, chat_id, msg["text"])
     except:
@@ -114,11 +117,33 @@ def on_chat_message(msg):
                 response = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
                 bot.sendMessage(chat_id, response)
         else:
+            print("Chat ID not found in main_dict")
             links = get_url_from_string(msg["text"])
             print(links)
-            for link in links:
-                if "pccomponentes.com" in link and "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275" not in link:
-                    pass
+            if type(links) == list:
+                for link in links:
+                    if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
+                        # scrape item details
+                        # delete user message
+                        # send item details
+                        # remove_and_send_affiliate_link(bot, msg, link)
+            threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, link,)).start()
+                        pass
+            entities = msg["entities"]
+
+            for entity in entities:
+                try:
+                    if entity["url"] not in links:
+                        if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
+                            # scrape item details
+                            # delete user message
+                            # send item details
+                            # remove_and_send_affiliate_link(bot, msg, entity["url"])
+                            threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, entity["url"],)).start()
+                            pass
+                except Exception as e:
+                    # traceback.print_exc()
+                    print(str(e))
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
@@ -153,11 +178,15 @@ def on_callback_query(msg):
 bot = telepot.Bot(BOT_TOKEN)
 MessageLoop(bot, {'chat': on_chat_message,
                   'callback_query': on_callback_query}).run_as_thread()
+
+print("\n\nBOT STARTED - " + str(time.ctime()))
+print("\n\n")
 print('Listening ...')
 
 # Keep scraper thread running.
-scraper_thread = threading.Thread(target=periodic_task_thread)
-scraper_thread.start()
+# scraper_thread = threading.Thread(target=periodic_task_thread)
+# scraper_thread.start()
 
+bot.sendMessage(DEBUG_CHAT_ID, "Bot started!")
 while 1:
     time.sleep(10)

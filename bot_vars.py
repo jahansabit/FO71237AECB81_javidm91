@@ -28,15 +28,20 @@ MAX_BROWSER_TABS = 5
 SCRAPING_MAX_RETRIES = 3
 SCRAPPING_MAX_TIMEOUT = 30                  # in seconds
 MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
+PCCOMPONENTES_AFFILIATE_LINK = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued="
+TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
+    print("message_template")
+    print(title, link, website_name, current_price, prev_price, category)
     current_price = float(current_price)
-    prev_price = float(prev_price)
-    percentage = prev_price - current_price
-    percentage = 100 / prev_price * percentage
+    if prev_price != None and prev_price != "":
+        prev_price = float(prev_price)
+        percentage = prev_price - current_price
+        percentage = 100 / prev_price * percentage
     original_link = link
     if "pccomponentes" in link:
-        link = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued=" + link
+        link = PCCOMPONENTES_AFFILIATE_LINK + link
     
     if category == None or category == "":
         category = ""
