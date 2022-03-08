@@ -39,7 +39,10 @@ OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
     print("message_template")
-    print(title, link, website_name, current_price, prev_price, category)
+    try:
+        print(title, link, website_name, current_price, prev_price, category)
+    except:
+        print("Can't print message_template")
     current_price = float(current_price)
     if prev_price != None and prev_price != "":
         prev_price = float(prev_price)
