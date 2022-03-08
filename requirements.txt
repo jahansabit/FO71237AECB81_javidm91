@@ -17,6 +17,7 @@ lxml
 MarkupSafe
 multidict
 pycryptodomex
+pytz
 requests
 soupsieve
 telepota
