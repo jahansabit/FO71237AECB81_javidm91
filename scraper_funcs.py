@@ -50,7 +50,7 @@ def get_from_pccomponentes(URL):
             time.sleep(1)
             # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
             # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
-            subprocess.Popen(str("google-chrome-stable --no-sandbox " + URL).split(" "))
+            subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3" + URL).split(" "))
             time.sleep(1)
 
             seconds_spent = 0
@@ -119,16 +119,17 @@ def get_from_pccomponentes(URL):
                 availability = str(product_micro_data['offers']['offers']['availability']).replace("http://schema.org/", "")
 
             try:
-                product_caterory = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
+                product_category = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
             except:
                 traceback.print_exc()
-                product_caterory = ""
+                product_category = ""
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link,
-                "product_caterory": product_caterory,
+                "product_category": product_category,
                 "product_availability": availability
             }
         except Exception as e:
@@ -159,6 +160,7 @@ def get_from_neobyte(URL):
             product_img_link = soup.findAll('div',{"class":"easyzoom easyzoom-product"})[0].a.get("href")
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link
@@ -186,6 +188,7 @@ def get_from_casemod(URL):
             product_img_link = soup.find("div", {"id": "product-images-large"}).img.get('content')
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link
@@ -213,6 +216,7 @@ def get_from_amazon(URL):
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link
@@ -269,6 +273,7 @@ def get_from_coolmod(URL):
             
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link,
@@ -303,6 +308,7 @@ def get_from_aussar(URL):
             product_img_link = soup.find("img", {"class":"product-cover-modal"}).get('src')
 
             return {
+                "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link

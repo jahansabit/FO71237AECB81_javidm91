@@ -94,7 +94,7 @@ def check_product_and_send():
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
-                    category = scrapped_product['product_caterory']
+                    category = scrapped_product['product_category']
                 except:
                     category = ""
                 for chat_id in CHAT_IDS:
@@ -102,8 +102,8 @@ def check_product_and_send():
                     bot.sendPhoto(int(chat_id),
                                 scrapped_product['product_img_link'],
                                 caption=message_template(scrapped_product["product_name"], 
-                                    PRODUCTS[i]['link'],
-                                    website_name_provider(PRODUCTS[i]['link']),
+                                    scrapped_product["product_link"],
+                                    website_name_provider(scrapped_product['product_link']),
                                     scrapped_product['product_price'], 
                                     PRODUCTS[i]['price'],
                                     category=category), 
@@ -118,8 +118,8 @@ def check_product_and_send():
                         # SEND Customized message to each channel, will be customized later
                         print(scrapped_product['product_img_link'], channel['name'])
                         caption = message_template(scrapped_product["product_name"], 
-                                                PRODUCTS[i]['link'],
-                                                website_name_provider(PRODUCTS[i]['link']),
+                                                scrapped_product['product_link'],
+                                                website_name_provider(scrapped_product['product_link']),
                                                 scrapped_product['product_price'], 
                                                 PRODUCTS[i]['price'],
                                                 category=category)

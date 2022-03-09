@@ -374,7 +374,7 @@ def remove_and_send_affiliate_link(bot, msg, links):
 
                 scrapped_product = get_from_pccomponentes(link)
                 try:
-                    category = scrapped_product['product_caterory']
+                    category = scrapped_product['product_category']
                 except:
                     category = ""
                 
