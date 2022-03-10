@@ -50,7 +50,8 @@ def get_from_pccomponentes(URL):
             time.sleep(1)
             # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
             # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
-            subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
+            # subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
+            subprocess.Popen(str("google-chrome-stable --no-sandbox " + URL).split(" "))
             time.sleep(1)
 
             seconds_spent = 0
