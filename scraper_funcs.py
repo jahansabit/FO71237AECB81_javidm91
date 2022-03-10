@@ -56,7 +56,7 @@ def get_from_pccomponentes(URL):
             seconds_spent = 0
             retry_scraping = False
             while 1:
-                print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
+                # print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
                 if os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
                     time.sleep(3)
                     seconds_spent += 3
