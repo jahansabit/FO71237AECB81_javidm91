@@ -36,6 +36,8 @@ MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
 PCCOMPONENTES_AFFILIATE_LINK = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued="
 TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
 OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
+z24_HOURS_IN_SECONDS = 60*60*24
+z12_HOURS_IN_SECONDS = 60*60*12
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
     print("message_template")

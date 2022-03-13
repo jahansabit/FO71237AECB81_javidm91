@@ -1,5 +1,7 @@
 
 import traceback
+import datetime
+from dateutil.parser import *
 from scraper_funcs import *
 from bot_helpers import *
 from bot_vars import *
@@ -70,6 +72,11 @@ def check_product_and_send():
                 availability = PRODUCTS[i]['product_availability']
             except:
                 PRODUCTS[i]['product_availability'] = "InStock"
+
+            try:
+                last_in_stock = PRODUCTS[i]['last_in_stock']
+            except:
+                PRODUCTS[i]['last_in_stock'] = "1971-1-1 1:1"  # datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         else:
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
@@ -87,10 +94,13 @@ def check_product_and_send():
             availability = scrapped_product['product_availability']
         except:
             scrapped_product['product_availability'] = "InStock"
+        
 
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
+            current_datetime_obj = datetime.datetime.now()
+            last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
             if (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) or\
-                (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability'] and scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY):
+                (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability'] and scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY and last_in_stock_datetime_difference.total_seconds() > z12_HOURS_IN_SECONDS):
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
