@@ -1,7 +1,7 @@
 import os
 import telepot
 from pprint import pprint
-from datetime import datetime
+import datetime
 
 def create_folders(path):
     if not os.path.exists(path):
@@ -80,4 +80,4 @@ def message_template(title, link, website_name, current_price, prev_price, categ
 
 # print(message_template("title", "https://link", "website_name", "123", "435", category="asasdad"))
 # 📉 <b><a href="{link}">Precio MÍNIMO histórico</a></b> ‼️
-# <i>Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.today().strftime('%d-%m-%Y'))})</i>
+# <i>Anterior: {str(prev_price).replace(".", ",")} € ({str(datetime.datetime.today().strftime('%d-%m-%Y'))})</i>
