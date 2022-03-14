@@ -76,7 +76,7 @@ def check_product_and_send():
             try:
                 last_in_stock = PRODUCTS[i]['last_in_stock']
             except:
-                PRODUCTS[i]['last_in_stock'] = "1971-1-1 1:1"  # datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                PRODUCTS[i]['last_in_stock'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")   # "1971-1-1 1:1"
         else:
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
