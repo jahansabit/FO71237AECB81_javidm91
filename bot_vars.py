@@ -26,6 +26,7 @@ DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
 FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
+SCRAPING_BY_CHROME_DONE_FILE_PATH = os.path.join(DATA_DIR, "scraping_by_chrome_done.txt")
 
 ######### REPORTS #########
 SCRAPPED_PRODUCTS_REPORT_FILE_PATH = os.path.join(DATA_DIR, "scrapped_products_report.json")

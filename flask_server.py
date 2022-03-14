@@ -23,10 +23,14 @@ def main():
     else:
         try:
             # print(main_data["title"].lower())
+            print("[*] Writing scrapped html to file...")
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
                 json.dump(main_data, f)
+            print("[*] Finished writing scrapped html to file...")
         except Exception as e:
             print(e)
+        with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
+            f.write("True")
         return "Received"
 
 @app.get('/shutdown')

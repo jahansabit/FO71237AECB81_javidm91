@@ -34,6 +34,11 @@ def return_requests(URL):
     return r
 
 def get_from_pccomponentes(URL):
+    try:
+        os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
+    except Exception as e:
+        print(str(e))
+
     RETRY_COUNT = -1
     while 1:
         RETRY_COUNT += 1
@@ -58,7 +63,7 @@ def get_from_pccomponentes(URL):
             retry_scraping = False
             while 1:
                 # print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
-                if os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH) == False:
+                if os.path.isfile(SCRAPING_BY_CHROME_DONE_FILE_PATH) == False:
                     time.sleep(3)
                     seconds_spent += 3
                     if seconds_spent > SCRAPPING_MAX_TIMEOUT:
@@ -99,10 +104,15 @@ def get_from_pccomponentes(URL):
             except:
                 traceback.print_exc()
             
-            time.sleep(1)
+            time.sleep(1)            
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
                 data = json.load(f)
             
+            try:
+                os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
+            except Exception as e:
+                print(str(e))
+
             # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             html_data = data['html']
 
