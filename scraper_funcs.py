@@ -74,7 +74,7 @@ def get_from_pccomponentes(URL):
                     r = requests.get("http://127.0.0.1:5699/shutdown")
                     print(r.text)
                 except Exception as e:
-                    print(e)
+                    print(str(e))
                     # traceback.print_exc()
                 try:
                     time.sleep(1)
@@ -88,8 +88,8 @@ def get_from_pccomponentes(URL):
             try:
                 r = requests.get("http://127.0.0.1:5699/shutdown")
                 print(r.text)
-            except:
-                print(e)
+            except Exception as e:
+                print(str(e))
                 # traceback.print_exc()
 
             try:
@@ -141,7 +141,7 @@ def get_from_pccomponentes(URL):
             print("\n\nError in get_from_pccomponentes()\n\n")
             traceback.print_exc()
             print("\n\n")
-            print(e)
+            print(str(e))
             kill_chrome()
             time.sleep(3)
             return None
@@ -173,7 +173,7 @@ def get_from_neobyte(URL):
         except Exception as e:
             print("\n\nError in get_from_neobyte \n\n")
             traceback.print_exc()
-            print(e)
+            print(str(e))
             time.sleep(3)
 
 def get_from_casemod(URL):
@@ -203,7 +203,7 @@ def get_from_casemod(URL):
         except Exception as e:
             print("\n\nError in get_from_casemod \n\n")
             traceback.print_exc()
-            print(e)
+            print(str(e))
             time.sleep(3)
 
 def get_from_amazon(URL):
@@ -233,7 +233,7 @@ def get_from_amazon(URL):
         except Exception as e:
             print("\n\nError in get_from_amazon \n\n")
             traceback.print_exc()
-            print(e)
+            print(str(e))
             time.sleep(3)
 
 def get_from_coolmod(URL):
@@ -293,7 +293,7 @@ def get_from_coolmod(URL):
         except Exception as e:
             print("\n\nError in get_from_coolmod \n\n")
             traceback.print_exc()
-            print(e)
+            print(str(e))
             time.sleep(3)
             print(f"Response Status: {response_status}")
             if (response_status >= 200 and response_status < 300):
@@ -328,7 +328,7 @@ def get_from_aussar(URL):
         except Exception as e:
             print("\n\nError in get_from_aussar \n\n")
             traceback.print_exc()
-            print(e)
+            print(str(e))
             time.sleep(3)
 
 
