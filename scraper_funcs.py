@@ -262,7 +262,7 @@ def get_from_coolmod(URL):
             DayId = "AM"
             
             spain_timezone = pytz.timezone('Europe/Madrid')
-            datetime_obj = datetime.now(spain_timezone)
+            datetime_obj = datetime.datetime.now(spain_timezone)
             hour = datetime_obj.hour
             if hour >= 12:
                 DayId = "PM"
