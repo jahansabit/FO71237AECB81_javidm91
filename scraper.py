@@ -100,7 +100,7 @@ def check_product_and_send():
             current_datetime_obj = datetime.datetime.now()
             last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
             if (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) or\
-                (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability'] and scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY and last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS):
+                ((PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) and (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
@@ -145,6 +145,7 @@ def check_product_and_send():
                         SENT_MSG_DATA["sent_messages"].append(temp_dict)
                         save_sent_msg_to_json(SENT_MSG_DATA)
                         time.sleep(5)
+                PRODUCTS[i]["last_in_stock"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
                 PRODUCTS[i]["last_sent_price"] = float(scrapped_product['product_price'])
                 PRODUCTS[i]["last_availability"] = scrapped_product['product_availability']
             
