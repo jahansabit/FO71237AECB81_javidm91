@@ -72,6 +72,11 @@ def save_and_send_current_products_report_file(bot, products_data):
         json.dump(products_data, f, indent=4, sort_keys=True)
     bot.sendDocument(DEBUG_CHAT_ID, open(CURRENT_PRODUCTS_REPORT_FILE_PATH, 'rb'), caption="Current Products Report", disable_notification=True)
 
+def save_and_send_string_logs(bot, text):
+    with open(LOGS_FILE_PATH, 'w') as f: 
+        f.write(text + "\n")
+    bot.sendDocument(DEBUG_CHAT_ID, open(LOGS_FILE_PATH, 'rb'), caption="Text Logs", disable_notification=True)
+
 def add_product_to_file(text):
     try:
         text = text.replace("/add", "").strip()

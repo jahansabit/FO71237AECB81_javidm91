@@ -86,6 +86,7 @@ def check_product_and_send():
     save_and_send_current_products_report_file(bot, PRODUCTS)
 
     kill_chrome()
+    LOG_SENT_MSG_DATA = ""
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
         scrapped_product['product_price'] = ''.join(i for i in scrapped_product['product_price'] if (i.isdigit() or i == "."))
         print(scrapped_product['product_price'], PRODUCTS[i]['price'])
@@ -102,7 +103,6 @@ def check_product_and_send():
         current_datetime_obj = datetime.datetime.now()
         last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
 
-        LOG_SENT_MSG_DATA = ""
         LOG_SENT_MSG_DATA += "- Scrapped Product: \n" + str(scrapped_product) + "\n\n"
         LOG_SENT_MSG_DATA += "- Current Product: \n" + str(PRODUCTS[i]) + "\n\n"
         LOG_SENT_MSG_DATA += "- PARENT_LOGIC (float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) : " + str(float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) + "\n\n"
@@ -110,8 +110,8 @@ def check_product_and_send():
         LOG_SENT_MSG_DATA += "- 2ND_1ST_CHILD (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) : " + str(PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) + "\n\n"
         LOG_SENT_MSG_DATA += "- 2ND_2ND_CHILD (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) : " + str((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) + "\n\n"
         LOG_SENT_MSG_DATA += "- 2ND_3RD_CHILD (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) : " + str(last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) + "\n\n"
-        bot.sendMessage(DEBUG_CHAT_ID, LOG_SENT_MSG_DATA, disable_web_page_preview=True, disable_notification=True)
-        time.sleep(2)
+        LOG_SENT_MSG_DATA += "======================================================================\n\n"
+        # bot.sendMessage(DEBUG_CHAT_ID, LOG_SENT_MSG_DATA, disable_web_page_preview=True, disable_notification=True)
 
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
             # current_datetime_obj = datetime.datetime.now()
@@ -166,6 +166,7 @@ def check_product_and_send():
                 PRODUCTS[i]["last_sent_price"] = float(scrapped_product['product_price'])
                 PRODUCTS[i]["last_availability"] = scrapped_product['product_availability']
             
+    save_and_send_string_logs(bot, LOG_SENT_MSG_DATA)
     JSON_DATA["products"] = PRODUCTS
     save_to_json(JSON_DATA)
 
