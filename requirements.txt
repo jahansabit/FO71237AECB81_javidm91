@@ -17,8 +17,10 @@ lxml
 MarkupSafe
 multidict
 pycryptodomex
+python-dateutil
 pytz
 requests
+six
 soupsieve
 telepota
 urllib3
