@@ -134,7 +134,7 @@ def get_from_pccomponentes(URL):
                 "product_availability": availability
             }
         except Exception as e:
-            print("\n\n")
+            print("\n\nError in get_from_pccomponentes()\n\n")
             traceback.print_exc()
             print("\n\n")
             print(e)
@@ -167,6 +167,8 @@ def get_from_neobyte(URL):
                 "product_img_link": product_img_link
             }
         except Exception as e:
+            print("\n\nError in get_from_neobyte \n\n")
+            traceback.print_exc()
             print(e)
             time.sleep(3)
 
@@ -195,6 +197,8 @@ def get_from_casemod(URL):
                 "product_img_link": product_img_link
             }
         except Exception as e:
+            print("\n\nError in get_from_casemod \n\n")
+            traceback.print_exc()
             print(e)
             time.sleep(3)
 
@@ -223,6 +227,8 @@ def get_from_amazon(URL):
                 "product_img_link": product_img_link
             }
         except Exception as e:
+            print("\n\nError in get_from_amazon \n\n")
+            traceback.print_exc()
             print(e)
             time.sleep(3)
 
@@ -281,6 +287,7 @@ def get_from_coolmod(URL):
                 "product_availability": availability
             }
         except Exception as e:
+            print("\n\nError in get_from_coolmod \n\n")
             traceback.print_exc()
             print(e)
             time.sleep(3)
@@ -315,6 +322,8 @@ def get_from_aussar(URL):
                 "product_img_link": product_img_link
             }
         except Exception as e:
+            print("\n\nError in get_from_aussar \n\n")
+            traceback.print_exc()
             print(e)
             time.sleep(3)
 

@@ -169,7 +169,8 @@ def periodic_task_thread():
         try:
             check_product_and_send()
         except:
-            print("[*] Error occurred. Skipping...")
+            print("\n\n[*] Error occurred. Skipping...\n\n")
+            traceback.print_exc()
             bot.sendMessage(DEBUG_CHAT_ID, "Error occurred. \n" + str(traceback.format_exc()))
         print("[*] Product checking is finished... | " + str(time.ctime()))
         os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
