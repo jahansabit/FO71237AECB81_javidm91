@@ -16,13 +16,13 @@ def shutdown_server():
 @app.route('/', methods=['POST'])
 def main():
     print(time.strftime('%X %x %Z'))
-    print(main_data["title"].lower())
     main_data = json.loads(request.data)['message']
+    print(main_data["title"].lower())
     if "cloudflare" in main_data["title"].lower() or "just a moment" in main_data["title"].lower():
         return "Got Captcha"
     else:
         try:
-            print(main_data["title"].lower())
+            # print(main_data["title"].lower())
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
                 json.dump(main_data, f)
         except Exception as e:

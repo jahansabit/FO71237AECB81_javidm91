@@ -111,7 +111,7 @@ def check_product_and_send():
         LOG_SENT_MSG_DATA += "- 2ND_2ND_CHILD (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) : " + str((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) + "\n\n"
         LOG_SENT_MSG_DATA += "- 2ND_3RD_CHILD (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) : " + str(last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) + "\n\n"
         bot.sendMessage(DEBUG_CHAT_ID, LOG_SENT_MSG_DATA, disable_web_page_preview=True, disable_notification=True)
-
+        time.sleep(2)
 
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
             # current_datetime_obj = datetime.datetime.now()
