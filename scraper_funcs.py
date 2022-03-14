@@ -65,6 +65,7 @@ def get_from_pccomponentes(URL):
                         retry_scraping = True
                         break
                 else:
+                    time.sleep(2)
                     break
             
             if retry_scraping == True:
@@ -72,8 +73,9 @@ def get_from_pccomponentes(URL):
                 try:
                     r = requests.get("http://127.0.0.1:5699/shutdown")
                     print(r.text)
-                except:
-                    traceback.print_exc()
+                except Exception as e:
+                    print(e)
+                    # traceback.print_exc()
                 try:
                     time.sleep(1)
                     # server.terminate()
@@ -87,7 +89,8 @@ def get_from_pccomponentes(URL):
                 r = requests.get("http://127.0.0.1:5699/shutdown")
                 print(r.text)
             except:
-                traceback.print_exc()
+                print(e)
+                # traceback.print_exc()
 
             try:
                 time.sleep(1)
@@ -96,6 +99,7 @@ def get_from_pccomponentes(URL):
             except:
                 traceback.print_exc()
             
+            time.sleep(1)
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
                 data = json.load(f)
             
