@@ -26,6 +26,12 @@ DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
 FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
+
+######### REPORTS #########
+SCRAPPED_PRODUCTS_REPORT_FILE_PATH = os.path.join(DATA_DIR, "scrapped_products_report.json")
+CURRENT_PRODUCTS_REPORT_FILE_PATH = os.path.join(DATA_DIR, "current_products_report.json")
+######### REPORTS #########
+
 TIME_TO_CHECK_PRODUCTS = 60
 CHECK_FOR_PRODUCTS_EVERY_X_MINUTES = 5
 MAX_BROWSER_TABS = 5

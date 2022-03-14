@@ -62,6 +62,16 @@ def save_sent_msg_to_json(data):
     with open(SENT_MSG_DATA_JSON_FILE_PATH, 'w') as f: 
         json.dump(data, f, indent=4, sort_keys=True)
 
+def save_and_send_scrapped_products_report_file(bot, products_data):
+    with open(SCRAPPED_PRODUCTS_REPORT_FILE_PATH, 'w') as f: 
+        json.dump(products_data, f, indent=4, sort_keys=True)
+    bot.sendDocument(DEBUG_CHAT_ID, open(SCRAPPED_PRODUCTS_REPORT_FILE_PATH, 'rb'), caption="Scrapped Products Report", disable_notification=True)
+
+def save_and_send_current_products_report_file(bot, products_data):
+    with open(CURRENT_PRODUCTS_REPORT_FILE_PATH, 'w') as f: 
+        json.dump(products_data, f, indent=4, sort_keys=True)
+    bot.sendDocument(DEBUG_CHAT_ID, open(CURRENT_PRODUCTS_REPORT_FILE_PATH, 'rb'), caption="Current Products Report", disable_notification=True)
+
 def add_product_to_file(text):
     try:
         text = text.replace("/add", "").strip()

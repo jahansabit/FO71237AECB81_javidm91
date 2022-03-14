@@ -41,6 +41,7 @@ def check_product_and_send():
             result = get_from_pccomponentes(product['link'])
             browser_tabs += 1
             if browser_tabs > MAX_BROWSER_TABS:
+                browser_tabs = 0
                 print("[*] Reached max browser tabs. Closing Chrome...")
                 kill_chrome()
                 time.sleep(1)
@@ -81,6 +82,9 @@ def check_product_and_send():
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
     
+    save_and_send_scrapped_products_report_file(bot, SCRAPPED_PRODUCTS)
+    save_and_send_current_products_report_file(bot, PRODUCTS)
+
     kill_chrome()
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
         scrapped_product['product_price'] = ''.join(i for i in scrapped_product['product_price'] if (i.isdigit() or i == "."))
@@ -95,10 +99,23 @@ def check_product_and_send():
         except:
             scrapped_product['product_availability'] = "InStock"
         
+        current_datetime_obj = datetime.datetime.now()
+        last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
+
+        LOG_SENT_MSG_DATA = ""
+        LOG_SENT_MSG_DATA += "- Scrapped Product: \n" + str(scrapped_product) + "\n\n"
+        LOG_SENT_MSG_DATA += "- Current Product: \n" + str(PRODUCTS[i]) + "\n\n"
+        LOG_SENT_MSG_DATA += "- PARENT_LOGIC (float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) : " + str(float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 1ST_CHILD (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) : " + str(float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 2ND_1ST_CHILD (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) : " + str(PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 2ND_2ND_CHILD (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) : " + str((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 2ND_3RD_CHILD (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) : " + str(last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) + "\n\n"
+        bot.sendMessage(DEBUG_CHAT_ID, LOG_SENT_MSG_DATA, disable_web_page_preview=True, disable_notification=True)
+
 
         if float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price']):
-            current_datetime_obj = datetime.datetime.now()
-            last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
+            # current_datetime_obj = datetime.datetime.now()
+            # last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
             if (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) or\
                 ((PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) and (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
                 if "https:" not in scrapped_product['product_img_link']:

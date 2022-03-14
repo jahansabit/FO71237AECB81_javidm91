@@ -16,8 +16,9 @@ def shutdown_server():
 @app.route('/', methods=['POST'])
 def main():
     print(time.strftime('%X %x %Z'))
+    print(main_data["title"].lower())
     main_data = json.loads(request.data)['message']
-    if "cloudflare" in main_data["title"].lower():
+    if "cloudflare" in main_data["title"].lower() or "just a moment" in main_data["title"].lower():
         return "Got Captcha"
     else:
         try:
