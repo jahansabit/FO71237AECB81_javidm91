@@ -117,7 +117,8 @@ def check_product_and_send():
             # current_datetime_obj = datetime.datetime.now()
             # last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCTS[i]['last_in_stock']))
             if (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) and\
-                ((PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) and (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
+                ((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
+                # ((PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) and (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
