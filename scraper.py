@@ -107,9 +107,9 @@ def check_product_and_send():
         LOG_SENT_MSG_DATA += "- Current Product: \n" + str(PRODUCTS[i]) + "\n\n"
         LOG_SENT_MSG_DATA += "- PARENT_LOGIC (float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) : " + str(float(PRODUCTS[i]['price']) >= float(scrapped_product['product_price'])) + "\n\n"
         LOG_SENT_MSG_DATA += "- 1ST_CHILD (float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) : " + str(float(PRODUCTS[i]['last_sent_price']) != float(scrapped_product['product_price'])) + "\n\n"
-        LOG_SENT_MSG_DATA += "- 2ND_1ST_CHILD (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) : " + str(PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) + "\n\n"
-        LOG_SENT_MSG_DATA += "- 2ND_2ND_CHILD (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) : " + str((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) + "\n\n"
-        LOG_SENT_MSG_DATA += "- 2ND_3RD_CHILD (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) : " + str(last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) + "\n\n"
+        # LOG_SENT_MSG_DATA += "- 2ND_1ST_CHILD (PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) : " + str(PRODUCTS[i]['last_availability'] != scrapped_product['product_availability']) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 2ND_1ST_CHILD (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) : " + str((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) + "\n\n"
+        LOG_SENT_MSG_DATA += "- 2ND_2ND_CHILD (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) : " + str(last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS) + "\n\n"
         LOG_SENT_MSG_DATA += "======================================================================\n\n"
         # bot.sendMessage(DEBUG_CHAT_ID, LOG_SENT_MSG_DATA, disable_web_page_preview=True, disable_notification=True)
 
