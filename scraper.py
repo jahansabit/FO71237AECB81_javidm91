@@ -56,8 +56,9 @@ def check_product_and_send():
         elif website_name_provider(product['link']) == "Aussar":
             result = get_from_aussar(product['link'])
         
+        SCRAPPED_PRODUCTS.append(result)
         if result != None:
-            SCRAPPED_PRODUCTS.append(result)
+            # SCRAPPED_PRODUCTS.append(result)
             PRODUCTS[i]["current_price"] = result["product_price"]
             try:
                 last_sent_price = PRODUCTS[i]["last_sent_price"]
@@ -79,6 +80,7 @@ def check_product_and_send():
             except:
                 PRODUCTS[i]['last_in_stock'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")   # "1971-1-1 1:1"
         else:
+            # SCRAPPED_PRODUCTS.append(result)
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
     
@@ -88,6 +90,8 @@ def check_product_and_send():
     kill_chrome()
     LOG_SENT_MSG_DATA = ""
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
+        if scrapped_product == None:
+            continue
         scrapped_product['product_price'] = ''.join(i for i in scrapped_product['product_price'] if (i.isdigit() or i == "."))
         print(scrapped_product['product_price'], PRODUCTS[i]['price'])
         
