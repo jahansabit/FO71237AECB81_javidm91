@@ -104,9 +104,17 @@ def get_from_pccomponentes(URL):
             except:
                 traceback.print_exc()
             
-            time.sleep(1)            
-            with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
-                data = json.load(f)
+            time.sleep(1)
+            tries = 1
+            while tries <= 3:
+                try:            
+                    with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
+                        data = json.load(f)
+                    break
+                except Exception as e:
+                    print(str(e))
+                    time.sleep(1)
+                    tries += 1
             
             try:
                 os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
