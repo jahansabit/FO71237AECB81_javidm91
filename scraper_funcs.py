@@ -238,8 +238,11 @@ def get_from_amazon(URL):
 
             soup = BeautifulSoup(r.content, 'html.parser')
             
-            product_name = ' '.join([word for word in (soup.findAll(id="productTitle")[0].get_text()).split() if word != " "])
-            product_price = soup.findAll("span", {"data-a-color":"price"})[0].get_text()[:6]
+            product_name = str(soup.findAll(id="productTitle")[0].get_text()).strip()
+            try:
+                product_price = soup.findAll("span", {"data-a-color":"price"})[0].findAll("span", {"class":"a-offscreen"})[0].get_text()
+            except AttributeError:
+                product_price = "-1"
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
 
             return {
@@ -264,13 +267,16 @@ def get_from_coolmod(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            # with open("coolmod.html", "wb") as f:
-            #     f.write(r.content)
+            with open("coolmod.html", "wb") as f:
+                f.write(r.content)
             response_status = r.status_code
             print(response_status)
             soup = BeautifulSoup(r.content, 'html.parser')
             
-            product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
+            try:
+                product_name = soup.findAll("div", {"class": "productTitle"})[0].get_text()
+            except:
+                product_name = soup.findAll("h1", {"class": "productTitle"})[0].get_text()
             product_price = str(soup.findAll("span", {"id":"normalpricenumber"})[0].get_text()).replace(",", ".")
             if product_price.count(".") <= 2:
                 product_price = product_price.replace(".", "", product_price.count(".") - 1)
@@ -353,4 +359,4 @@ def get_from_aussar(URL):
 if __name__ == "__main__":
     # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
     # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
-    print(get_from_coolmod("https://www.coolmod.com/razer-blade-17-d17-7nt-i7-11800h-rtx-3070-16gb-1tb-17-3/"))
+    print(get_from_coolmod("https://www.coolmod.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-6gb-gddr6-tarjeta-grafica/"))
