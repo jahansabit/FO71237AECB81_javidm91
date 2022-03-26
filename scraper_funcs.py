@@ -27,10 +27,10 @@ def kill_chrome():
 def return_requests(URL):
     s = requests.Session()
     s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36'})
-    r = s.get(URL)
+    r = s.get(URL, allow_redirects=True)
     cookies = dict(r.cookies)
     # print("cookies -", cookies)
-    r = s.post(URL, verify=False, cookies=cookies)
+    r = s.post(r.url, allow_redirects=True, verify=False, cookies=cookies)
     return r
 
 def get_from_pccomponentes(URL):
@@ -130,7 +130,7 @@ def get_from_pccomponentes(URL):
                 product_name = soup.h1.strong.get_text()
             except:
                 product_name = str(soup.find('title').get_text()).replace("| PcComponentes.com", "").strip()
-            product_price = soup.findAll(id="precio-main")[0].get("data-price")
+            product_price = soup.findAll(id="precio-main")[0].get("data-price")  # Price here already in international format
             product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
             if "https:" not in product_img_link:
                 product_img_link = "https:" + product_img_link
@@ -181,12 +181,14 @@ def get_from_neobyte(URL):
             product_name = soup.title.get_text()
             product_price = soup.findAll(itemprop="price")[0].get('content')
             product_img_link = soup.findAll('div',{"class":"easyzoom easyzoom-product"})[0].a.get("href")
+            availability = str(soup.findAll('link', {"itemprop":"availability"})[0].get("href")).replace("https", "http").replace("http://schema.org/", "")
 
             return {
                 "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link": product_img_link
+                "product_img_link": product_img_link,
+                "product_availability": availability
             }
         except Exception as e:
             print("\n\nError in get_from_neobyte \n\n")
@@ -233,23 +235,54 @@ def get_from_amazon(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            # with open("neobyte.html", "wb") as f:
+            # with open("amazon.html", "wb") as f:
             #     f.write(r.content)
 
             soup = BeautifulSoup(r.content, 'html.parser')
             
             product_name = str(soup.findAll(id="productTitle")[0].get_text()).strip()
             try:
-                product_price = soup.findAll("span", {"data-a-color":"price"})[0].findAll("span", {"class":"a-offscreen"})[0].get_text()
-            except AttributeError:
-                product_price = "-1"
+                product_price = str(soup.findAll("span", {"data-a-color":"price"})[0].findAll("span", {"class":"a-offscreen"})[0].get_text()).replace("€", "").strip()
+                availability = "InStock"
+            except:
+                try:
+                    ul = soup.findAll("div", {"id":"variation_style_name"})[0].findAll("ul")[0].findAll("li")
+                    product_prices = []
+                    exception_chars = ["€", ",", ".", " "]
+                    price_not_found = True
+                    for li in ul:
+                        product_price_text = str(li.findAll("div", {"class":"twisterSlotDiv"})[0].get_text())
+                        product_price_text = product_price_text.replace(" ", "")  # invisible character
+                        price_str = ""
+                        if "€" in product_price_text:
+                            price_not_found = False
+                            # print(product_price_text[::-1])
+                            for char in product_price_text[::-1]:
+                                # print("char", char)
+                                if char not in exception_chars and char.isdigit()==False:
+                                    break
+                                else:
+                                    price_str = char + price_str
+                            price_str = price_str.replace("€", "").replace(",", "comma").replace(".", "dot")
+                            price_str = price_str.replace("comma", ".").replace("dot", "")
+                            product_price = str(float(price_str)) # float for validaiton
+                            availability = "InStock"
+                        else:
+                            pass
+                    if price_not_found == True: 
+                        raise Exception("Product price not found")
+                except:
+                    traceback.print_exc()
+                    product_price = "-1"
+                    availability = "OutOfStock"
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
 
             return {
                 "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link": product_img_link
+                "product_img_link": product_img_link,
+                "product_availability": availability
             }
         except Exception as e:
             print("\n\nError in get_from_amazon \n\n")
@@ -359,4 +392,5 @@ def get_from_aussar(URL):
 if __name__ == "__main__":
     # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
     # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
-    print(get_from_coolmod("https://www.coolmod.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-6gb-gddr6-tarjeta-grafica/"))
+    print(get_from_neobyte("https://www.neobyte.es/asus-um425uaz-ki035t-portatil-14-ryzen-7-5700u-16gb-512ssd-10425.html"))
+
