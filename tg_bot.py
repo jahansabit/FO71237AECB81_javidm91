@@ -186,8 +186,8 @@ print("\n\n")
 print('Listening ...')
 
 # Keep scraper thread running.
-scraper_thread = threading.Thread(target=periodic_task_thread)
-scraper_thread.start()
+# scraper_thread = threading.Thread(target=periodic_task_thread)
+# scraper_thread.start()
 
 bot.sendMessage(DEBUG_CHAT_ID, "Bot started!")
 while 1:
