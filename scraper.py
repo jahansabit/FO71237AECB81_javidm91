@@ -198,6 +198,8 @@ def periodic_task_thread():
             traceback.print_exc()
             bot.sendMessage(DEBUG_CHAT_ID, "Error occurred. \n" + str(traceback.format_exc()))
         print("[*] Product checking is finished... | " + str(time.ctime()))
+        if DEBUG:
+            break
         os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
         time.sleep(CHECK_FOR_PRODUCTS_EVERY_X_MINUTES * 60)
         # time.sleep(60)

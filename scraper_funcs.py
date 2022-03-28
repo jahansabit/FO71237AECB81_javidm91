@@ -179,7 +179,7 @@ def get_from_neobyte(URL):
             soup = BeautifulSoup(r.content, 'html.parser')
 
             product_name = soup.title.get_text()
-            product_price = soup.findAll(itemprop="price")[0].get('content')
+            product_price = soup.findAll(itemprop="price")[0].get('content')  # price already in international format
             product_img_link = soup.findAll('div',{"class":"easyzoom easyzoom-product"})[0].a.get("href")
             availability = str(soup.findAll('link', {"itemprop":"availability"})[0].get("href")).replace("https", "http").replace("http://schema.org/", "")
 
@@ -213,12 +213,13 @@ def get_from_casemod(URL):
             product_name = soup.title.get_text()
             product_price = soup.findAll(itemprop="price")[0].get('content')
             product_img_link = soup.find("div", {"id": "product-images-large"}).img.get('content')
-
+            availability = soup.findAll(itemprop="availability")[0].get('href').replace("https", "http").replace("http://schema.org/", "")
             return {
                 "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link": product_img_link
+                "product_img_link": product_img_link,
+                "product_availability": availability
             }
         except Exception as e:
             print("\n\nError in get_from_casemod \n\n")
@@ -375,12 +376,14 @@ def get_from_aussar(URL):
             product_name = soup.findAll("h1", {"class": "product-detail-name"})[0].get_text()
             product_price = str(soup.findAll("div", {"class":"current-price"})[0].span.get("content"))
             product_img_link = soup.find("img", {"class":"product-cover-modal"}).get('src')
+            availability = str(json.loads(soup.findAll("script", {"type":"application/ld+json"})[3].get_text())["offers"]["availability"]).replace("https", "http").replace("http://schema.org/", "")
 
             return {
                 "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
-                "product_img_link": product_img_link
+                "product_img_link": product_img_link,
+                "product_availability": availability
             }
         except Exception as e:
             print("\n\nError in get_from_aussar \n\n")
@@ -391,6 +394,6 @@ def get_from_aussar(URL):
 
 if __name__ == "__main__":
     # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
-    # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
-    print(get_from_neobyte("https://www.neobyte.es/asus-um425uaz-ki035t-portatil-14-ryzen-7-5700u-16gb-512ssd-10425.html"))
+    print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
+    # print(get_from_aussar("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html"))
 
