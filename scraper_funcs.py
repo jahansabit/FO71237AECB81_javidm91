@@ -301,8 +301,8 @@ def get_from_coolmod(URL):
         try:
             r = return_requests(URL)
             # r = requests.get(URL)
-            with open("coolmod.html", "wb") as f:
-                f.write(r.content)
+            # with open("coolmod.html", "wb") as f:
+            #     f.write(r.content)
             response_status = r.status_code
             print(response_status)
             soup = BeautifulSoup(r.content, 'html.parser')
