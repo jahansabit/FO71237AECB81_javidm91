@@ -22,7 +22,7 @@ def kill_chrome():
     try:
         os.system("pkill chrome")
     except:
-        traceback.print_exc()
+        print(traceback.format_exc())
 
 def return_requests(URL):
     s = requests.Session()
@@ -37,7 +37,8 @@ def get_from_pccomponentes(URL):
     try:
         os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
     except Exception as e:
-        print(str(e))
+        # print(str(e))
+        pass
 
     RETRY_COUNT = -1
     while 1:
@@ -70,7 +71,7 @@ def get_from_pccomponentes(URL):
                         retry_scraping = True
                         break
                 else:
-                    time.sleep(2)
+                    time.sleep(7)
                     break
             
             if retry_scraping == True:
@@ -80,31 +81,31 @@ def get_from_pccomponentes(URL):
                     print(r.text)
                 except Exception as e:
                     print(str(e))
-                    # traceback.print_exc()
+                    # print(traceback.format_exc())
                 try:
                     time.sleep(1)
                     # server.terminate()
                     server.join()
                 except:
-                    traceback.print_exc()
+                    print(traceback.format_exc())
                     time.sleep(1)
-                    continue
+                    # continue
             
             try:
                 r = requests.get("http://127.0.0.1:5699/shutdown")
                 print(r.text)
             except Exception as e:
                 print(str(e))
-                # traceback.print_exc()
+                # print(traceback.format_exc())
 
             try:
                 time.sleep(1)
                 # server.terminate()
                 server.join()
             except:
-                traceback.print_exc()
+                print(traceback.format_exc())
             
-            time.sleep(1)
+            time.sleep(7)
             tries = 1
             while tries <= 3:
                 try:            
@@ -144,7 +145,7 @@ def get_from_pccomponentes(URL):
             try:
                 product_category = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
             except:
-                traceback.print_exc()
+                print(traceback.format_exc())
                 product_category = ""
 
             return {
@@ -157,7 +158,7 @@ def get_from_pccomponentes(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_pccomponentes()\n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print("\n\n")
             print(str(e))
             kill_chrome()
@@ -192,7 +193,7 @@ def get_from_neobyte(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_neobyte \n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(e))
             time.sleep(3)
 
@@ -223,7 +224,7 @@ def get_from_casemod(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_casemod \n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(e))
             time.sleep(3)
 
@@ -273,7 +274,7 @@ def get_from_amazon(URL):
                     if price_not_found == True: 
                         raise Exception("Product price not found")
                 except:
-                    traceback.print_exc()
+                    print(traceback.format_exc())
                     product_price = "-1"
                     availability = "OutOfStock"
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
@@ -287,7 +288,7 @@ def get_from_amazon(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_amazon \n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(e))
             time.sleep(3)
 
@@ -350,7 +351,7 @@ def get_from_coolmod(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_coolmod \n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(e))
             time.sleep(3)
             print(f"Response Status: {response_status}")
@@ -387,7 +388,7 @@ def get_from_aussar(URL):
             }
         except Exception as e:
             print("\n\nError in get_from_aussar \n\n")
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(e))
             time.sleep(3)
 
