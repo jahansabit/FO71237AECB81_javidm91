@@ -71,7 +71,7 @@ def get_from_pccomponentes(URL):
                         retry_scraping = True
                         break
                 else:
-                    time.sleep(7)
+                    time.sleep(2)
                     break
             
             if retry_scraping == True:
@@ -105,7 +105,7 @@ def get_from_pccomponentes(URL):
             except:
                 print(traceback.format_exc())
             
-            time.sleep(7)
+            time.sleep(2)
             tries = 1
             while tries <= 3:
                 try:            
@@ -163,7 +163,7 @@ def get_from_pccomponentes(URL):
             print(str(e))
             kill_chrome()
             time.sleep(3)
-            return None
+            # return None
 
 def get_from_neobyte(URL):
     RETRY_COUNT = -1
