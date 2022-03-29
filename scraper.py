@@ -80,7 +80,7 @@ def check_product_and_send():
             except:
                 PRODUCTS[i]['last_in_stock'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")   # "1971-1-1 1:1"
         else:
-            # SCRAPPED_PRODUCTS.append(result)
+            SCRAPPED_PRODUCTS.append(result)
             print("[*] Product can't be scraped. Skipping...")
             bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
     
@@ -198,8 +198,8 @@ def periodic_task_thread():
             traceback.print_exc()
             bot.sendMessage(DEBUG_CHAT_ID, "Error occurred. \n" + str(traceback.format_exc()))
         print("[*] Product checking is finished... | " + str(time.ctime()))
-        if DEBUG:
-            break
+        # if DEBUG:
+        #     break
         os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
         time.sleep(CHECK_FOR_PRODUCTS_EVERY_X_MINUTES * 60)
         # time.sleep(60)
