@@ -27,11 +27,14 @@ def main():
             with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
                 json.dump(main_data, f)
             print("[*] Finished writing scrapped html to file...")
+            with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
+                f.write("True")
+            time.sleep(5)
+            shutdown_server()
+            return "Received"
         except Exception as e:
             print(e)
-        with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
-            f.write("True")
-        return "Received"
+            return "NOT Received"
 
 @app.get('/shutdown')
 def shutdown():
@@ -40,3 +43,5 @@ def shutdown():
 
 def start_server():
     app.run(host="127.0.0.1", port=int(5699))
+
+# start_server()
