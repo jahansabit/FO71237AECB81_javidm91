@@ -40,7 +40,7 @@ def check_product_and_send():
         if website_name_provider(product['link']) == "PcComponentes":
             result = get_from_pccomponentes(product['link'])
             browser_tabs += 1
-            if browser_tabs > MAX_BROWSER_TABS:
+            if browser_tabs >= MAX_BROWSER_TABS:
                 browser_tabs = 0
                 print("[*] Reached max browser tabs. Closing Chrome...")
                 kill_chrome()
