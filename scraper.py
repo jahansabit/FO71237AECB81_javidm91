@@ -144,7 +144,7 @@ def check_product_and_send():
                                     scrapped_product['product_price'], 
                                     PRODUCTS[i]['price'],
                                     category=category), 
-                                parse_mode="html")
+                                    parse_mode="html")
                     time.sleep(5)
                 print(website_name_provider(PRODUCTS[i]['link']) == "PcComponentes")
                 # if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
