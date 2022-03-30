@@ -10,7 +10,7 @@ def create_folders(path):
 def joinpath(path="", *args):
     return os.path.join(PROJECT_DIR, path, *args)
 
-DEBUG = False
+DEBUG = True
 
 ########## TOKENS ##########
 BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
