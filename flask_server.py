@@ -30,7 +30,7 @@ def main():
             with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
                 f.write("True")
             time.sleep(5)
-            shutdown_server()
+            # shutdown_server()
             return "Received"
         except Exception as e:
             print(e)
