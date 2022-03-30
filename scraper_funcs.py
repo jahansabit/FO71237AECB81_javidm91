@@ -89,7 +89,7 @@ def get_from_pccomponentes(URL):
                 except:
                     print(traceback.format_exc())
                     time.sleep(1)
-                    # continue
+                    continue
             
             try:
                 r = requests.get("http://127.0.0.1:5699/shutdown")
