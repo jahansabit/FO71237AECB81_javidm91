@@ -160,10 +160,11 @@ def check_product_and_send():
                                                 scrapped_product['product_price'], 
                                                 PRODUCTS[i]['price'],
                                                 category=category)
-                        result = bot.sendPhoto(channel['name'],
-                                                scrapped_product['product_img_link'],
-                                                caption=caption, 
-                                                parse_mode="html")
+                        if not DEBUG:
+                            result = bot.sendPhoto(channel['name'],
+                                                    scrapped_product['product_img_link'],
+                                                    caption=caption, 
+                                                    parse_mode="html")
                         temp_dict = {}
                         temp_dict["product_from"] = website_name_provider(PRODUCTS[i]['link'])
                         temp_dict["message_data"] = result
