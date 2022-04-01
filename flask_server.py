@@ -29,8 +29,8 @@ def main():
             print("[*] Finished writing scrapped html to file...")
             with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
                 f.write("True")
-            time.sleep(5)
-            # shutdown_server()
+            time.sleep(3)
+            shutdown_server()
             return "Received"
         except Exception as e:
             print(e)

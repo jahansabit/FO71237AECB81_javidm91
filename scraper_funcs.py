@@ -51,8 +51,9 @@ def get_from_pccomponentes(URL):
             except:
                 pass
 
-            server = Process(target=start_server)
-            server.start()
+            # server = Process(target=start_server)
+            # server.start()
+            start_server()
             time.sleep(1)
             # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
             # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
@@ -85,11 +86,11 @@ def get_from_pccomponentes(URL):
                 try:
                     time.sleep(1)
                     # server.terminate()
-                    server.join()
+                    # server.join()
                 except:
                     print(traceback.format_exc())
                     time.sleep(1)
-                    continue
+                    # continue
             
             try:
                 r = requests.get("http://127.0.0.1:5699/shutdown")
@@ -101,7 +102,7 @@ def get_from_pccomponentes(URL):
             try:
                 time.sleep(1)
                 # server.terminate()
-                server.join()
+                # server.join()
             except:
                 print(traceback.format_exc())
             
