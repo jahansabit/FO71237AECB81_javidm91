@@ -137,15 +137,19 @@ def check_product_and_send():
                     category = ""
                 for chat_id in CHAT_IDS:
                     # SEND Customized message to each user, will be customized later
-                    bot.sendPhoto(int(chat_id),
-                                scrapped_product['product_img_link'],
-                                caption=message_template(scrapped_product["product_name"], 
-                                    scrapped_product["product_link"],
-                                    website_name_provider(scrapped_product['product_link']),
-                                    scrapped_product['product_price'], 
-                                    PRODUCTS[i]['price'],
-                                    category=category), 
-                                    parse_mode="html")
+                    try:
+                        bot.sendPhoto(int(chat_id),
+                                    scrapped_product['product_img_link'],
+                                    caption=message_template(scrapped_product["product_name"], 
+                                        scrapped_product["product_link"],
+                                        website_name_provider(scrapped_product['product_link']),
+                                        scrapped_product['product_price'], 
+                                        PRODUCTS[i]['price'],
+                                        category=category), 
+                                        parse_mode="html")
+                    except:
+                        bot.sendMessage(DEBUG_CHAT_ID, "Can't send message to " + str(chat_id))
+                        print(str(traceback.format_exc()))
                     time.sleep(5)
                 print(website_name_provider(PRODUCTS[i]['link']) == "PcComponentes")
                 # if website_name_provider(PRODUCTS[i]['link']) == "PcComponentes":
@@ -162,10 +166,15 @@ def check_product_and_send():
                                                 PRODUCTS[i]['price'],
                                                 category=category)
                         if not DEBUG:
-                            result = bot.sendPhoto(channel['name'],
-                                                    scrapped_product['product_img_link'],
-                                                    caption=caption, 
-                                                    parse_mode="html")
+                            try:
+                                result = bot.sendPhoto(channel['name'],
+                                                        scrapped_product['product_img_link'],
+                                                        caption=caption, 
+                                                        parse_mode="html")
+                            except:
+                                bot.sendMessage(DEBUG_CHAT_ID, "Can't send message to " + str(channel['name']))
+                                print(str(traceback.format_exc()))
+                            time.sleep(3)
                         temp_dict = {}
                         temp_dict["product_from"] = website_name_provider(PRODUCTS[i]['link'])
                         temp_dict["message_data"] = result
