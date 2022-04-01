@@ -25,8 +25,8 @@ def main():
         try:
             # print(main_data["title"].lower())
             print("[*] Writing scrapped html to file...")
-            with open(SCRAPPED_DATA_HTML_FILE_PATH, 'w') as f:
-                json.dump(main_data['html'], f)
+            with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
+                json.dump(main_data, f)
             print("[*] Finished writing scrapped html to file...")
             with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:
                 f.write("True")

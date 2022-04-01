@@ -47,7 +47,7 @@ def get_from_pccomponentes(URL):
             return None
         try:
             try:
-                os.remove(SCRAPPED_DATA_HTML_FILE_PATH)
+                os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             except:
                 pass
 
@@ -64,7 +64,7 @@ def get_from_pccomponentes(URL):
             seconds_spent = 0
             retry_scraping = False
             while 1:
-                print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_HTML_FILE_PATH), "\n\n")
+                print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
                 if os.path.isfile(SCRAPING_BY_CHROME_DONE_FILE_PATH) == False:
                     time.sleep(3)
                     seconds_spent += 3
@@ -108,10 +108,11 @@ def get_from_pccomponentes(URL):
             
             time.sleep(2)
             tries = 1
+            data = {}
             while tries <= 3:
                 try:            
-                    with open(SCRAPPED_DATA_HTML_FILE_PATH, 'r') as f:
-                        data = f.read()
+                    with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
+                        data = json.load(f)
                     break
                 except Exception as e:
                     print(str(e))
@@ -123,9 +124,8 @@ def get_from_pccomponentes(URL):
             except Exception as e:
                 print(str(e))
 
-            # os.remove(SCRAPPED_DATA_HTML_FILE_PATH)
-            # html_data = data['html']
-            html_data = data
+            # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
+            html_data = data['html']
 
             soup = BeautifulSoup(html_data, 'html.parser')
 
@@ -151,7 +151,7 @@ def get_from_pccomponentes(URL):
                 product_category = ""
 
             try:
-                os.remove(SCRAPPED_DATA_HTML_FILE_PATH)
+                os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             except Exception as e:
                 print(str(e))
 
