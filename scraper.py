@@ -38,7 +38,7 @@ def check_product_and_send():
 
     i = -1
     retry = 0
-    while i < len(PRODUCTS):
+    while i+1 < len(PRODUCTS):
         #for i, product in enumerate(PRODUCTS):
         i += 1
         product = PRODUCTS[i]
