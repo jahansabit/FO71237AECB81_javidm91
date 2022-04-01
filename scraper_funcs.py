@@ -54,7 +54,7 @@ def get_from_pccomponentes(URL):
             server = Process(target=start_server)
             server.start()
             # start_server(URL)
-            time.sleep(1)
+            time.sleep(3)
             # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
             # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
             
@@ -101,8 +101,8 @@ def get_from_pccomponentes(URL):
 
             try:
                 time.sleep(1)
-                # server.terminate()
-                # server.join()
+                server.terminate()
+                server.join()
             except:
                 print(traceback.format_exc())
             
