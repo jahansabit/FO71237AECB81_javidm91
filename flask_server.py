@@ -50,4 +50,4 @@ def start_server(URL=None):
         # time.sleep(2)
     # print("Server started")
 
-start_server("https://facecom.herokuapp.com/")
+# start_server("https://facecom.herokuapp.com/")
