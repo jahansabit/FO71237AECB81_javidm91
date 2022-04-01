@@ -45,12 +45,12 @@ def check_product_and_send():
         print(product['link'])
         if website_name_provider(product['link']) == "PcComponentes":
             result = get_from_pccomponentes(product['link'])
-            # browser_tabs += 1
-            # if browser_tabs >= MAX_BROWSER_TABS:
-            #     browser_tabs = 0
-            #     print("[*] Reached max browser tabs. Closing Chrome...")
-            #     kill_chrome()
-            #     time.sleep(1)
+            browser_tabs += 1
+            if browser_tabs >= MAX_BROWSER_TABS:
+                browser_tabs = 0
+                print("[*] Reached max browser tabs. Closing Chrome...")
+                kill_chrome()
+                time.sleep(1)
         elif website_name_provider(product['link']) == "Neobyte":
             result = get_from_neobyte(product['link'])
         elif website_name_provider(product['link']) == "Casemod":
