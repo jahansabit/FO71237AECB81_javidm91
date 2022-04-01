@@ -43,8 +43,11 @@ def shutdown():
     return 'Server shutting down...'
 
 def start_server(URL=None):
-    if URL != None:
-        subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
     app.run(host="127.0.0.1", port=int(5699))
+    # if URL != None:
+    #     # subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
+    #     subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
+        # time.sleep(2)
+    # print("Server started")
 
-# start_server()
+start_server("https://facecom.herokuapp.com/")
