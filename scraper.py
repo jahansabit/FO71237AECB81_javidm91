@@ -2,6 +2,7 @@
 import traceback
 import datetime
 from dateutil.parser import *
+from urllib3 import Retry
 from scraper_funcs import *
 from bot_helpers import *
 from bot_vars import *
@@ -35,16 +36,21 @@ def check_product_and_send():
 
     browser_tabs = 0
 
-    for i, product in enumerate(PRODUCTS):
+    i = -1
+    retry = 0
+    while i < len(PRODUCTS):
+        #for i, product in enumerate(PRODUCTS):
+        i += 1
+        product = PRODUCTS[i]
         print(product['link'])
         if website_name_provider(product['link']) == "PcComponentes":
             result = get_from_pccomponentes(product['link'])
-            browser_tabs += 1
-            if browser_tabs >= MAX_BROWSER_TABS:
-                browser_tabs = 0
-                print("[*] Reached max browser tabs. Closing Chrome...")
-                kill_chrome()
-                time.sleep(1)
+            # browser_tabs += 1
+            # if browser_tabs >= MAX_BROWSER_TABS:
+            #     browser_tabs = 0
+            #     print("[*] Reached max browser tabs. Closing Chrome...")
+            #     kill_chrome()
+            #     time.sleep(1)
         elif website_name_provider(product['link']) == "Neobyte":
             result = get_from_neobyte(product['link'])
         elif website_name_provider(product['link']) == "Casemod":
@@ -56,8 +62,9 @@ def check_product_and_send():
         elif website_name_provider(product['link']) == "Aussar":
             result = get_from_aussar(product['link'])
         
-        SCRAPPED_PRODUCTS.append(result)
+        
         if result != None:
+            retry = 0
             # SCRAPPED_PRODUCTS.append(result)
             PRODUCTS[i]["current_price"] = result["product_price"]
             try:
@@ -80,8 +87,18 @@ def check_product_and_send():
             except:
                 PRODUCTS[i]['last_in_stock'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")   # "1971-1-1 1:1"
         else:
-            print("[*] Product can't be scraped. Skipping...")
-            bot.sendMessage(DEBUG_CHAT_ID, "Unable to scrape: " + product['link'])
+            if retry >= 3:
+                retry = 0
+                print("[*] Retry limit reached. Skipping...")
+                bot.sendMessage(DEBUG_CHAT_ID, "[!] Unable to scrape: " + product['link'])
+            else:
+                retry += 1
+                i -= 1
+                print("[*] Product can't be scraped. Retrying...")
+                bot.sendMessage(DEBUG_CHAT_ID, f"[{retry}] Unable to scrape: " + product['link'])
+                
+        
+        SCRAPPED_PRODUCTS.append(result)
     
     save_and_send_scrapped_products_report_file(bot, SCRAPPED_PRODUCTS)
     save_and_send_current_products_report_file(bot, PRODUCTS)

@@ -170,7 +170,7 @@ def get_from_pccomponentes(URL):
             print(str(e))
             kill_chrome()
             time.sleep(3)
-            # return None
+            return None
 
 def get_from_neobyte(URL):
     RETRY_COUNT = -1
