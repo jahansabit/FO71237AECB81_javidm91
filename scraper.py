@@ -235,6 +235,9 @@ def periodic_task_thread():
         print("[*] Product checking is finished... | " + str(time.ctime()))
         # if DEBUG:
         #     break
-        os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+        try:
+            os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+        except:
+            pass
         time.sleep(CHECK_FOR_PRODUCTS_EVERY_X_MINUTES * 60)
         # time.sleep(60)
