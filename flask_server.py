@@ -4,6 +4,7 @@ import datetime
 from flask import Flask, request
 from pprint import pprint
 from bot_vars import *
+import subprocess
 
 app = Flask('TEST')
 
@@ -41,7 +42,9 @@ def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
-def start_server():
+def start_server(URL=None):
+    if URL != None:
+        subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
     app.run(host="127.0.0.1", port=int(5699))
 
 # start_server()
