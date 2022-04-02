@@ -10,7 +10,7 @@ def create_folders(path):
 def joinpath(path="", *args):
     return os.path.join(PROJECT_DIR, path, *args)
 
-DEBUG = False
+DEBUG = True
 
 ########## TOKENS ##########
 BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
@@ -24,9 +24,10 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.normpath(os.path.join(PROJECT_DIR, "../tg_bot_data"))
 DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
-SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.html")
+SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
 FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
 SCRAPING_BY_CHROME_DONE_FILE_PATH = os.path.join(DATA_DIR, "scraping_by_chrome_done.txt")
+RUNTIME_URLS_FILE_PATH = os.path.join(DATA_DIR, "runtime_urls.txt")
 
 ######### REPORTS #########
 SCRAPPED_PRODUCTS_REPORT_FILE_PATH = os.path.join(DATA_DIR, "scrapped_products_report.json")

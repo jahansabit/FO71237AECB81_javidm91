@@ -2,10 +2,11 @@
 import traceback
 import datetime
 from dateutil.parser import *
-from urllib3 import Retry
+# from urllib3 import Retry
 from scraper_funcs import *
 from bot_helpers import *
 from bot_vars import *
+# from bot_vars import RUNTIME_URLS_FILE_PATH
 
 import os
 import json
@@ -23,6 +24,10 @@ def check_product_and_send():
     PRODUCTS = JSON_DATA["products"]
     CHANNELS = JSON_DATA["channels"]
     SENT_MSG_DATA = load_sent_msg_from_json()
+    RUs = []
+    with open(RUNTIME_URLS_FILE_PATH, "w") as f:
+        json.dump(RUs, f)
+
 
     try:
         SHAREABLE_WEBSITES = JSON_DATA["shareable_websites"]
