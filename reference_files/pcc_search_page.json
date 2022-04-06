@@ -1,0 +1,730 @@
+{
+    "articles": [
+        {
+            "id": "406782",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/40/406782/179-ek-quantum-vector-trinity-rtx-3080-3090-active-backplate-d-rgb-plexi-bloque-de-refrigeracion-liquida.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/40/406782/179-ek-quantum-vector-trinity-rtx-3080-3090-active-backplate-d-rgb-plexi-bloque-de-refrigeracion-liquida.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/40/406782/179-ek-quantum-vector-trinity-rtx-3080-3090-active-backplate-d-rgb-plexi-bloque-de-refrigeracion-liquida.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "EKWB EK-Quantum Vector Trinity RTX 3080/3090 Active Backplate D-RGB Plexi Bloque de Refrigeración Líquida",
+            "locale": "es_ES",
+            "offerId": "42896226",
+            "originalPrice": 170.99,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 2,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-13T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-20T07:14:01+02:00"
+            },
+            "activationDate": "2021-05-18",
+            "ratingCount": 2,
+            "ratingAvg": 5,
+            "relevance": 177,
+            "slug": "ekwb-ek-quantum-vector-trinity-rtx-3080-3090-active-backplate-d-rgb-plexi-bloque-de-refrigeracion-liquida",
+            "brandName": "EKWB",
+            "flags": [],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "406782"
+        },
+        {
+            "id": "602405",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/60/602405/1256-alphacool-aurora-plexi-gpx-n-water-block-para-rtx-3080-fe.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/60/602405/1256-alphacool-aurora-plexi-gpx-n-water-block-para-rtx-3080-fe.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/60/602405/1256-alphacool-aurora-plexi-gpx-n-water-block-para-rtx-3080-fe.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "Alphacool Aurora Plexi GPX-N Water Block para GeForce RTX 3080 FE",
+            "locale": "es_ES",
+            "offerId": "42893836",
+            "originalPrice": 188.5,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 2,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-13T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-20T07:14:01+02:00"
+            },
+            "activationDate": "2021-10-26",
+            "ratingCount": 0,
+            "ratingAvg": 0,
+            "relevance": 1,
+            "slug": "alphacool-aurora-plexi-gpx-n-water-block-para-geforce-rtx-3080-fe",
+            "brandName": "Alphacool",
+            "flags": [],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "602405"
+        },
+        {
+            "id": "10170896",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1017/10170896/1620-ekwb-ek-quantum-vector-xc3-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1017/10170896/1620-ekwb-ek-quantum-vector-xc3-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1017/10170896/1620-ekwb-ek-quantum-vector-xc3-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "EKWB EK-Quantum Vector XC3 RTX 3080/3090 Active Backplate D-RGB Plexi",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 207.84,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 0,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 3,
+                "minDeliveryDate": "2022-04-21T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-22T07:14:01+02:00"
+            },
+            "activationDate": "2022-03-01",
+            "ratingCount": 0,
+            "ratingAvg": 0,
+            "relevance": 1,
+            "slug": "ekwb-ek-quantum-vector-xc3-rtx-3080-3090-active-backplate-d-rgb-plexi",
+            "brandName": "EKWB",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10170896"
+        },
+        {
+            "id": "576573",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/57/576573/199-ekwb-ek-quantum-vector-tuf-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/57/576573/199-ekwb-ek-quantum-vector-tuf-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/57/576573/199-ekwb-ek-quantum-vector-tuf-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "EKWB EK-Quantum Vector TUF RTX 3080/3090 Active Backplate D-RGB Plexi",
+            "locale": "es_ES",
+            "offerId": "47641274",
+            "originalPrice": 209.99,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 2,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-11T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-13T07:14:01+02:00"
+            },
+            "activationDate": "2021-09-10",
+            "ratingCount": 0,
+            "ratingAvg": 0,
+            "relevance": 1,
+            "slug": "ekwb-ek-quantum-vector-tuf-rtx-3080-3090-active-backplate-d-rgb-plexi",
+            "brandName": "EKWB",
+            "flags": [],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "576573"
+        },
+        {
+            "id": "748615",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/74/748615/1207-ekwb-ek-quantum-vector-strix-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/74/748615/1207-ekwb-ek-quantum-vector-strix-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/74/748615/1207-ekwb-ek-quantum-vector-strix-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "EKWB EK-Quantum Vector Strix RTX 3080/3090 Active Backplate D-RGB Plexi",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 213.79,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 1,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-07T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-07T07:14:01+02:00"
+            },
+            "activationDate": "2021-11-15",
+            "ratingCount": 1,
+            "ratingAvg": 5,
+            "relevance": 101,
+            "slug": "ekwb-ek-quantum-vector-strix-rtx-3080-3090-active-backplate-d-rgb-plexi",
+            "brandName": "EKWB",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "748615"
+        },
+        {
+            "id": "624770",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/62/624770/1731-ekwb-ek-quantum-vector-trio-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/62/624770/1731-ekwb-ek-quantum-vector-trio-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/62/624770/1731-ekwb-ek-quantum-vector-trio-rtx-3080-3090-active-backplate-d-rgb-plexi.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "EKWB EK-Quantum Vector TRIO RTX 3080/3090 Active Backplate D-RGB Plexi",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 213.79,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 1,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-07T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-07T07:14:01+02:00"
+            },
+            "activationDate": "2021-10-26",
+            "ratingCount": 1,
+            "ratingAvg": 5,
+            "relevance": 101,
+            "slug": "ekwb-ek-quantum-vector-trio-rtx-3080-3090-active-backplate-d-rgb-plexi",
+            "brandName": "EKWB",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Refrigeración Líquida",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "624770"
+        },
+        {
+            "id": "10252835",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1025/10252835/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1025/10252835/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1025/10252835/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "MSI GeForce RTX 3050 VENTUS 2X OC 8GB GDDR6 Reacondicionado",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 339.35,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 0,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 2,
+                "minDeliveryDate": "2022-04-08T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-11T07:14:01+02:00"
+            },
+            "activationDate": "2022-03-27",
+            "ratingCount": 2,
+            "ratingAvg": 4.8,
+            "relevance": 0,
+            "slug": "msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6-reacondicionado",
+            "brandName": "MSI",
+            "flags": [
+                "refurbished",
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10252835"
+        },
+        {
+            "id": "10031010",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1003/10031010/1334-zotac-gaming-geforce-rtx-3050-twin-edge-oc-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1003/10031010/1334-zotac-gaming-geforce-rtx-3050-twin-edge-oc-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1003/10031010/1334-zotac-gaming-geforce-rtx-3050-twin-edge-oc-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "Zotac Gaming GeForce RTX 3050 Twin Edge OC 8GB GDDR6",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 375.78,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": -1,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 2,
+                "minDeliveryDate": "2022-04-29T07:14:01+02:00",
+                "maxDeliveryDate": "2022-05-02T07:14:01+02:00"
+            },
+            "activationDate": "2022-01-21",
+            "ratingCount": 34,
+            "ratingAvg": 4.7,
+            "relevance": 9662,
+            "slug": "zotac-gaming-geforce-rtx-3050-twin-edge-oc-8gb-gddr6",
+            "brandName": "Zotac",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10031010"
+        },
+        {
+            "id": "10068107",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1006/10068107/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1006/10068107/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1006/10068107/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "Gigabyte GeForce RTX 3050 EAGLE OC 8GB GDDR6",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 409.9,
+            "promotionalPrice": 379.89,
+            "discount": 7,
+            "discountInCart": 0,
+            "initialStock": 198,
+            "stock": 5,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-07T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-07T07:14:01+02:00"
+            },
+            "activationDate": "2022-02-14",
+            "ratingCount": 27,
+            "ratingAvg": 4.8,
+            "relevance": 18809,
+            "slug": "gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6",
+            "brandName": "Gigabyte",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10068107"
+        },
+        {
+            "id": "10041629",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1004/10041629/167-gainward-geforce-rtx-3050-pegasus-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1004/10041629/167-gainward-geforce-rtx-3050-pegasus-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1004/10041629/167-gainward-geforce-rtx-3050-pegasus-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "Gainward GeForce RTX 3050 PEGASUS 8GB GDDR6",
+            "locale": "es_ES",
+            "offerId": "47055415",
+            "originalPrice": 385.38,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 2,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-11T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-13T07:14:01+02:00"
+            },
+            "activationDate": "2022-01-27",
+            "ratingCount": 12,
+            "ratingAvg": 3.5,
+            "relevance": 1,
+            "slug": "gainward-geforce-rtx-3050-pegasus-8gb-gddr6",
+            "brandName": "Gainward",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10041629"
+        },
+        {
+            "id": "10191246",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1019/10191246/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1019/10191246/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1019/10191246/1272-gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "Gigabyte GeForce RTX 3050 EAGLE OC 8GB GDDR6 Reacondicionado",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 393.8,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": 2,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 1,
+                "minDeliveryDate": "2022-04-07T07:14:01+02:00",
+                "maxDeliveryDate": "2022-04-07T07:14:01+02:00"
+            },
+            "activationDate": "2022-03-02",
+            "ratingCount": 13,
+            "ratingAvg": 4.7,
+            "relevance": 436,
+            "slug": "gigabyte-geforce-rtx-3050-eagle-oc-8gb-gddr6-reacondicionado",
+            "brandName": "Gigabyte",
+            "flags": [
+                "refurbished",
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10191246"
+        },
+        {
+            "id": "10023695",
+            "productId": null,
+            "images": {
+                "small": {
+                    "path": "https://thumb.pccomponentes.com/w-85-85/articles/1002/10023695/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 85,
+                    "height": 85
+                },
+                "medium": {
+                    "path": "https://thumb.pccomponentes.com/w-140-140/articles/1002/10023695/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 140,
+                    "height": 140
+                },
+                "large": {
+                    "path": "https://thumb.pccomponentes.com/w-300-300/articles/1002/10023695/1569-msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6.jpg",
+                    "width": 300,
+                    "height": 300
+                }
+            },
+            "name": "MSI GeForce RTX 3050 VENTUS 2X OC 8GB GDDR6",
+            "locale": "es_ES",
+            "offerId": null,
+            "originalPrice": 399.28,
+            "promotionalPrice": null,
+            "discount": 0,
+            "discountInCart": 0,
+            "initialStock": null,
+            "stock": -1,
+            "delivery": {
+                "type": "PHYSICAL",
+                "availabilityCode": 2,
+                "minDeliveryDate": "2022-05-03T07:14:01+02:00",
+                "maxDeliveryDate": "2022-05-04T07:14:01+02:00"
+            },
+            "activationDate": "2022-01-27",
+            "ratingCount": 2,
+            "ratingAvg": 4.8,
+            "relevance": 7566,
+            "slug": "msi-geforce-rtx-3050-ventus-2x-oc-8gb-gddr6",
+            "brandName": "MSI",
+            "flags": [
+                "freeShipping"
+            ],
+            "familyName": "Tarjetas Gráficas",
+            "hideStockBar": false,
+            "isPcCom": false,
+            "isPCC": false,
+            "mainCategory": [],
+            "variants": null,
+            "objectId": "10023695"
+        }
+    ],
+    "banners": [],
+    "total": 12,
+    "totalPages": 1,
+    "page": 1,
+    "pageSize": 40,
+    "sort": "price_asc",
+    "sortingKeys": [
+        "relevance",
+        "price_asc",
+        "price_desc",
+        "activation_date",
+        "sales",
+        "discount",
+        "top_rated"
+    ],
+    "filters": {
+        "price": {
+            "order": 0,
+            "key": "price",
+            "type": "range",
+            "name": "Precio",
+            "rel": "",
+            "range": {
+                "min": 170.99,
+                "max": 5649.99
+            }
+        },
+        "families": {
+            "order": 2,
+            "key": "families",
+            "type": "enum",
+            "name": "Familias",
+            "rel": "",
+            "values": [
+                {
+                    "id": "155",
+                    "name": "Refrigeración Líquida",
+                    "slug": "",
+                    "count": 6
+                },
+                {
+                    "id": "6",
+                    "name": "Tarjetas Gráficas",
+                    "slug": "",
+                    "count": 6
+                }
+            ]
+        },
+        "brands": {
+            "order": 1,
+            "key": "brands",
+            "type": "enum",
+            "name": "Marcas",
+            "rel": "",
+            "values": [
+                {
+                    "id": "320",
+                    "name": "Alphacool",
+                    "slug": "",
+                    "count": 1
+                },
+                {
+                    "id": "944",
+                    "name": "EKWB",
+                    "slug": "",
+                    "count": 5
+                },
+                {
+                    "id": "462",
+                    "name": "Gainward",
+                    "slug": "",
+                    "count": 1
+                },
+                {
+                    "id": "23",
+                    "name": "Gigabyte",
+                    "slug": "",
+                    "count": 2
+                },
+                {
+                    "id": "31",
+                    "name": "MSI",
+                    "slug": "",
+                    "count": 2
+                },
+                {
+                    "id": "491",
+                    "name": "Zotac",
+                    "slug": "",
+                    "count": 1
+                }
+            ]
+        }
+    },
+    "category": {
+        "name": "",
+        "slug": ""
+    },
+    "queryId": "09145c1062eb06b8eb77b9154bb1d95d",
+    "selectedFilters": {
+        "query": "rtx 3060",
+        "price_from": null,
+        "price_to": 400
+    },
+    "selectedFiltersSlugs": [],
+    "categoriesPromotion": []
+}

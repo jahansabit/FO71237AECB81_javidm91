@@ -6,6 +6,8 @@ from flask import Flask, request
 from pprint import pprint
 from bot_vars import *
 import subprocess
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 
 app = Flask('TEST')
 
@@ -14,6 +16,47 @@ def shutdown_server():
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
+
+
+def remove_current_url(URL):
+    try:
+        with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'r') as f:
+            data = json.load(f)
+    except:
+        data = []
+    
+    for i in data:
+        if i["url"] == URL:
+            data.remove(i)
+            break
+    with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'w') as f: 
+        json.dump(data, f, indent=4, sort_keys=True)
+
+
+def find_current_url(URL):
+    try:
+        with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'r') as f:
+            data = json.load(f)
+    except:
+        data = []
+    
+    for i in data:
+        if i["url"] == URL:
+            return i["file_name"]
+    return None
+
+
+def write_current_url(URL, file_name):
+    try:
+        with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'r') as f:
+            data = json.load(f)
+    except:
+        data = []
+    
+    data.append({"url": URL, "file_name": file_name})
+    with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'w') as f: 
+        json.dump(data, f, indent=4, sort_keys=True)
+
 
 def read_runtime_urls():
     try:
@@ -44,8 +87,17 @@ def main():
             if main_data['url'] not in RUNTIME_URLS:
                 RUNTIME_URLS.append(main_data['url'])
                 # print(main_data["title"].lower())
+                print(main_data["url"])
+
+                file_name = find_current_url(main_data["url"])
+                if file_name == None:
+                    raise Exception("File name not found") 
+                else:
+                    remove_current_url(main_data["url"])
+                    
+                print(file_name)
                 print("[*] Writing scrapped html to file...")
-                with open(SCRAPPED_DATA_JSON_FILE_PATH, 'w') as f:
+                with open(os.path.join(SCRAPPED_DATA_FILES_PATH, file_name), 'w') as f:
                     json.dump(main_data, f)
                 print("[*] Finished writing scrapped html to file...")
                 with open(SCRAPING_BY_CHROME_DONE_FILE_PATH, 'w') as f:

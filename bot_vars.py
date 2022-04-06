@@ -25,6 +25,8 @@ DATA_DIR = os.path.normpath(os.path.join(PROJECT_DIR, "../tg_bot_data"))
 DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
+SCRAPPED_DATA_FILES_PATH = os.path.join(DATA_DIR, "scrapped_data")
+CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH = os.path.join(SCRAPPED_DATA_FILES_PATH, "current_scraping_file_names.json")
 FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
 SCRAPING_BY_CHROME_DONE_FILE_PATH = os.path.join(DATA_DIR, "scraping_by_chrome_done.txt")
 RUNTIME_URLS_FILE_PATH = os.path.join(DATA_DIR, "runtime_urls.txt")
@@ -47,6 +49,8 @@ TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
 OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
 z24_HOURS_IN_SECONDS = 60*60*24
 z12_HOURS_IN_SECONDS = 60*60*12
+
+create_folders(SCRAPPED_DATA_FILES_PATH)
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
     print("message_template")
