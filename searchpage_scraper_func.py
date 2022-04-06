@@ -19,6 +19,7 @@ import traceback
 from multiprocessing import Process
 from random import randint
 from urllib.parse import quote
+import json
 
 def return_requests(URL):
     s = requests.Session()
@@ -141,15 +142,17 @@ def return_pccomponentes_page(URL):
 
 def scrape_pccomponentes_search_page(query, max_price):
     # Ordering by price (lower to upper)
+    # URL = f"https://www.pccomponentes.com/buscar/?query={query}&price_to={max_price}&or-price_asc"
+    
     URL = f"https://www.pccomponentes.com/api-v1/products/search?query={query}&sort=price_asc&channel=es&page=1&pageSize=40&price_to={max_price}"
-    URL = f"https://www.pccomponentes.com/buscar/?query={query}&price_to={max_price}&or-price_asc"
 
     html_data = return_pccomponentes_page(URL)
     soup = BeautifulSoup(html_data, 'html.parser')
-    all_product_data = soup.findAll('a',{"data-price": True})
+    json_chunk = json.loads(str(soup.findAll('pre')[0].text))['articles']
+
     all_product_data_json = []
 
-    for item in all_product_data:
+    for item in json_chunk:
         data = {
                 "product_link": "N/A",
                 "product_name": "N/A",
@@ -158,12 +161,26 @@ def scrape_pccomponentes_search_page(query, max_price):
                 "product_category": "N/A",
                 "product_availability": "N/A"
             }
-        data['product_link'] = item.get("href")
-        data['product_name'] = item.get("data-name")
-        data['product_price'] = item.get("data-price")
-        data['product_img_link'] = item.findAll("img")[0].get("src")
-        data['product_category'] = item.get("data-category")
-        data['product_availability'] = item.get("data-availability")
+        data['product_link'] = "https://www.pccomponentes.com/" + item["slug"]
+        data['product_name'] = item["name"]
+        data['product_price'] = item["originalPrice"]
+        try:
+            data['product_img_link'] = item["images"]["large"]["path"]
+        except:
+            try:
+                data['product_img_link'] = item["images"]["medium"]["path"]
+            except:
+                try:
+                    data['product_img_link'] = item["images"]["small"]["path"]
+                except:
+                    data['product_img_link'] = TEMP_IMG_LINK
+
+        data['product_category'] = item["familyName"]
+        if str(item['delivery']['availabilityCode']) in ['1', '2', '3']:
+            data['product_availability'] = "InStock"
+        else:
+            data['product_availability'] = "OutOfStock"
+       
         all_product_data_json.append(data)
     
     return all_product_data_json
