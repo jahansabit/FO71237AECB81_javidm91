@@ -135,19 +135,19 @@ def return_pccomponentes_page(URL):
 
             # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             html_data = data['html']
+            soup = BeautifulSoup(html_data, 'html.parser')
 
-            return html_data
+            return soup
         except:
             pass
 
-def scrape_pccomponentes_search_page(query, max_price):
+def scrape_pccomponentes_search_page(query):
     # Ordering by price (lower to upper)
     # URL = f"https://www.pccomponentes.com/buscar/?query={query}&price_to={max_price}&or-price_asc"
     
     URL = f"https://www.pccomponentes.com/api-v1/products/search?query={query}&sort=price_asc&channel=es&page=1&pageSize=40&price_to={max_price}"
 
-    html_data = return_pccomponentes_page(URL)
-    soup = BeautifulSoup(html_data, 'html.parser')
+    soup = return_pccomponentes_page(URL)
     json_chunk = json.loads(str(soup.findAll('pre')[0].text))['articles']
 
     all_product_data_json = []
@@ -185,10 +185,112 @@ def scrape_pccomponentes_search_page(query, max_price):
     
     return all_product_data_json
 
+def scrape_pccomponentes_category_page(URL):
+    soup = return_pccomponentes_page(URL)
+    all_product_data = soup.findAll('a',{"data-price": True})
+    all_product_data_json = []
+
+    for item in all_product_data:
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        data['product_link'] = item.get("href")
+        data['product_name'] = item.get("data-name")
+        data['product_price'] = item.get("data-price")
+        data['product_img_link'] = item.findAll("img")[0].get("src")
+        data['product_category'] = item.get("data-category")
+        data['product_availability'] = item.get("data-availability")
+        all_product_data_json.append(data)
+    
+    return all_product_data_json
+
+def scrape_neobyte_search_page(URL):
+    request_data = return_requests(URL)
+    soup = BeautifulSoup(request_data.text, 'html.parser')
+    all_product_data = soup.findAll('div',{"class": "js-product-miniature-wrapper"})
+    all_product_data_json = []
+    # product_category = soup.findAll('nav',{"class": "breadcrumb"})[0].findAll('li')[-1].get_text()
+
+    for item in all_product_data:
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        data['product_link'] = item.findAll("a", {"class": "product-thumbnail"})[0].get("href")
+        try:
+            data['product_name'] = item.findAll("span", {"class": "product-title"})[0].get_text().strip()
+        except:
+            data['product_name'] = item.findAll("h3", {"class": "product-title"})[0].get_text().strip()
+        data['product_price'] = item.findAll("span",{"class": "product-price"})[0].get("content").strip()
+        data['product_img_link'] = item.findAll("img",{"class": "product-thumbnail-first"})[0].get("data-src")
+        data['product_category'] = soup.findAll("div",{"class": "product-category-name"})[0].get_text().strip()
+        availability = item.findAll("div",{"class": "product-availability"})[0]
+        try:
+            availability = availability.findAll("span", {"class":"product-available"})[0]
+            data['product_availability'] = "InStock"
+        except:
+            availability = availability.findAll("span", {"class":"product-unavailable"})[0]
+            data['product_availability'] = "OutOfStock"
+
+        all_product_data_json.append(data)
+    
+    return all_product_data_json
+
+def scrape_casemod_search_page(URL):
+    request_data = return_requests(URL)
+    soup = BeautifulSoup(request_data.text, 'html.parser')
+    all_product_data = soup.findAll('div',{"class": "js-product-miniature-wrapper"})
+    all_product_data_json = []
+    # product_category = soup.findAll('nav',{"class": "breadcrumb"})[0].findAll('li')[-1].get_text()
+
+    for item in all_product_data:
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        data['product_link'] = item.findAll("a", {"class": "product-thumbnail"})[0].get("href")
+        try:
+            data['product_name'] = item.findAll("span", {"class": "product-title"})[0].get_text().strip()
+        except:
+            data['product_name'] = item.findAll("h3", {"class": "product-title"})[0].get_text().strip()
+        print(data['product_name'])
+        data['product_price'] = item.findAll("span",{"class": "product-price"})[0].get("content").strip()
+        data['product_img_link'] = item.findAll("img",{"class": "product-thumbnail-first"})[0].get("data-src")
+        data['product_category'] = soup.findAll("div",{"class": "product-category-name"})[0].get_text().strip()
+        availability = item.findAll("div",{"class": "product-availability"})[0]
+        try:
+            availability = availability.findAll("span", {"class":"product-available"})[0]
+            data['product_availability'] = "InStock"
+        except:
+            try:
+                availability = availability.findAll("span", {"class":"product-unavailable"})[0]
+                data['product_availability'] = "OutOfStock"
+            except:
+                availability = availability.findAll("span", {"class":"product-last-items"})[0]
+                data['product_availability'] = "InStock"
+
+        all_product_data_json.append(data)
+    
+    return all_product_data_json
 
         
 if __name__ == "__main__":
     RUs = []
     with open(RUNTIME_URLS_FILE_PATH, "w") as f:
         json.dump(RUs, f)
-    print(scrape_pccomponentes_search_page("rtx 3060", 400))
+    # print(scrape_pccomponentes_search_page("rtx 3060", 400))
+    # print(scrape_neobyte_search_page("https://www.neobyte.es/tarjetas-graficas-111"))
+    print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))

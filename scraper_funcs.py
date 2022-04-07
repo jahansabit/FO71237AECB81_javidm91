@@ -281,10 +281,29 @@ def get_from_amazon(URL):
                     if price_not_found == True: 
                         raise Exception("Product price not found")
                 except:
-                    print(traceback.format_exc())
-                    product_price = "-1"
-                    availability = "OutOfStock"
+                    try:
+                        price_not_found = True
+                        product_prices = soup.findAll("span", {"data-action": "show-all-offers-display"})
+                        for item in product_prices:
+                            try:
+                                product_price = item.findAll("span", {"class": "a-color-price"})[0].get_text().strip()
+                                product_price = product_price.replace("€", "").replace(",", "comma").replace(".", "dot")
+                                product_price = product_price.replace("comma", ".").replace("dot", "")
+                                price_not_found = False
+                                availability = "InStock"
+                                break
+                            except:
+                                pass
+                        if price_not_found == True: 
+                            raise Exception("Product price not found")
+                    except:
+                        print(traceback.format_exc())
+                        product_price = "-1"
+                        availability = "OutOfStock"
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
+
+            if product_price != "-1":
+                product_price = str(product_price).replace("€", "").replace("€", "").strip()
 
             return {
                 "product_link": URL,
@@ -402,6 +421,6 @@ def get_from_aussar(URL):
 
 if __name__ == "__main__":
     # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
-    print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
+    # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
     # print(get_from_aussar("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html"))
-
+    print(get_from_amazon("https://www.amazon.es/Gigabyte-Technology-GV-N306TGAMING-OC-8GD-V2/dp/B09968R87B/ref=sr_1_5?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=33XOP0XZMAP5J&keywords=3060+ti&qid=1649297637&s=amazon-devices&sprefix=3060+ti%2Camazon-devices%2C241&sr=1-5"))
