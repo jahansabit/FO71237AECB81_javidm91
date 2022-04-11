@@ -296,8 +296,9 @@ def get_from_amazon(URL):
                                 pass
                         if price_not_found == True: 
                             raise Exception("Product price not found")
-                    except:
-                        print(traceback.format_exc())
+                    except Exception as e:
+                        # print(traceback.format_exc())
+                        print(str(e))
                         product_price = "-1"
                         availability = "OutOfStock"
             product_img_link = soup.find("div", {"id":"imgTagWrapperId"}).img.get('src')
@@ -319,6 +320,7 @@ def get_from_amazon(URL):
             time.sleep(3)
 
 def get_from_coolmod(URL):
+    print("Scraping:", URL)
     RETRY_COUNT = -1
     while 1:
         RETRY_COUNT += 1
@@ -342,6 +344,13 @@ def get_from_coolmod(URL):
             if product_price.count(".") <= 2:
                 product_price = product_price.replace(".", "", product_price.count(".") - 1)
             product_img_link = soup.find("img", {"id":"productmainimageitem"}).get('src')
+            try:
+                breadcumbs = soup.findAll("a", {"class":"coolbreadcrumb"})
+                print(len(breadcumbs))
+                product_category = breadcumbs[-1].get_text().strip()
+            except:
+                product_category = "N/A"
+            
             # availability = soup.findAll("span", {"id":"messageStock"})[0].get_text() # usable for selenium
 
             # Avalability Checker
@@ -373,6 +382,7 @@ def get_from_coolmod(URL):
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link,
+                "product_category": product_category,
                 "product_availability": availability
             }
         except Exception as e:
@@ -387,6 +397,7 @@ def get_from_coolmod(URL):
                 return None
 
 def get_from_aussar(URL):
+    print("Scraping:", URL)
     RETRY_COUNT = -1
     while 1:
         RETRY_COUNT += 1
@@ -404,12 +415,19 @@ def get_from_aussar(URL):
             product_price = str(soup.findAll("div", {"class":"current-price"})[0].span.get("content"))
             product_img_link = soup.find("img", {"class":"product-cover-modal"}).get('src')
             availability = str(json.loads(soup.findAll("script", {"type":"application/ld+json"})[3].get_text())["offers"]["availability"]).replace("https", "http").replace("http://schema.org/", "")
-
+            try:
+                navbar = soup.find("nav", {"class":"breadcrumb"})
+                product_category = navbar.findAll("li")[-2].get_text().strip()
+            except:
+                print(traceback.format_exc())
+                product_category = "N/A"
+            
             return {
                 "product_link": URL,
                 "product_name": product_name,
                 "product_price": product_price,
                 "product_img_link": product_img_link,
+                "product_category": product_category,
                 "product_availability": availability
             }
         except Exception as e:
@@ -422,5 +440,6 @@ def get_from_aussar(URL):
 if __name__ == "__main__":
     # print(get_from_pccomponentes("https://www.pccomponentes.com/gigabyte-radeon-rx-6700-xt-eagle-oc-12gb-gddr6-reacondicionado"))
     # print(get_from_pccomponentes("https://www.pccomponentes.com/asus-tuf-gaming-geforce-gtx-1660-super-oc-edition-6gb-gddr6"))
-    # print(get_from_aussar("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html"))
-    print(get_from_amazon("https://www.amazon.es/Gigabyte-Technology-GV-N306TGAMING-OC-8GD-V2/dp/B09968R87B/ref=sr_1_5?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=33XOP0XZMAP5J&keywords=3060+ti&qid=1649297637&s=amazon-devices&sprefix=3060+ti%2Camazon-devices%2C241&sr=1-5"))
+    print(get_from_aussar("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html"))
+    # print(get_from_amazon("https://www.amazon.es/Gigabyte-Technology-GV-N306TGAMING-OC-8GD-V2/dp/B09968R87B/ref=sr_1_5?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=33XOP0XZMAP5J&keywords=3060+ti&qid=1649297637&s=amazon-devices&sprefix=3060+ti%2Camazon-devices%2C241&sr=1-5"))
+    # print(get_from_coolmod("https://www.coolmod.com/asus-dual-geforce-rtx-3060-ti-oc-lhr-v2-8gb-gddr6-tarjeta-grafica/"))

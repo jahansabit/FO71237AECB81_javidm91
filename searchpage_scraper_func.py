@@ -1,6 +1,9 @@
+from zoneinfo import available_timezones
 import requests
 from flask_server import *
 from bot_vars import *
+from scraper_funcs import *
+from selenium_functions import *
 
 import datetime
 from inspect import trace
@@ -19,11 +22,14 @@ import traceback
 from multiprocessing import Process
 from random import randint
 from urllib.parse import quote
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+
 import json
 
 def return_requests(URL):
     s = requests.Session()
-    s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36'})
+    s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36', "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
     r = s.get(URL, allow_redirects=True)
     cookies = dict(r.cookies)
     # print("cookies -", cookies)
@@ -286,11 +292,198 @@ def scrape_casemod_search_page(URL):
     
     return all_product_data_json
 
+def scrape_amazon_search_page(URL):
+    request_data = return_requests(URL)
+    with open("amazon_search_page.html", "w") as f:
+        f.write(request_data.text)
+    soup = BeautifulSoup(request_data.text, 'html.parser')
+    search_results = soup.findAll('div',{"data-asin": True})
+    temp_search_results = search_results
+    
+    for i, search_result in enumerate(temp_search_results):
+        if str(search_result.get("data-asin")).strip() == "":
+            search_results.pop(i)
+    
+    all_product_data_json = []
+
+    for item in search_results:
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        try:
+            print("\n")
+            data["product_link"] = "https://www.amazon.es/dp/" + item.get("data-asin")
+            print(data["product_link"])
+            data["product_name"] = item.findAll("span", {"class": "a-size-base-plus a-color-base a-text-normal"})[0].get_text().strip()
+            print(data["product_name"])
+            try:
+                price_str = item.findAll("span", {"class": "a-price-whole"})[0].get_text().strip()
+                price_str = price_str.replace("€", "").replace(",", "comma").replace(".", "dot")
+                price_str = price_str.replace("comma", ".").replace("dot", "")
+                data["product_price"] = price_str
+                data["product_availability"] = "N/A"
+            except:
+                result = get_from_amazon(data["product_link"])
+                data["product_price"] = result["product_price"]
+                data["product_availability"] = result["product_availability"]
+            
+            data["product_img_link"] = item.findAll("img", {"class": "s-image"})[0].get("src")
+            data["product_category"] = "N/A"
+        except Exception as e:
+            print(str(e))
+            continue
         
+        all_product_data_json.append(data)
+        time.sleep(3)
+        
+    return all_product_data_json
+
+
+def scrape_coolmod_search_page(URL, query):
+    # url = 'https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and'
+    parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
+    captured_value = parse_qs(parsed_url.query)['query'][0]
+    print(parsed_url)
+    print(captured_value)
+
+    coolmod_homepage = "https://www.coolmod.com/"
+
+    browser = get_browser(headless=True)
+    browser.get(coolmod_homepage)
+
+    search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'seek')))
+    search_bar.click()
+    
+    time.sleep(1)
+    search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'df-searchbox__dffullscreen')))
+    search_bar.send_keys(query)
+    time.sleep(4)
+    
+    search_instock_only = True
+
+    try:
+        browser.find_element(by=By.XPATH, value='//div[@data-value="Disponible"]').click() # InStock Filter
+        time.sleep(4)
+    except:
+        search_instock_only = False
+        print("Disponible", "Item not found")
+    
+    search_results = browser.find_elements(by=By.CLASS_NAME, value='df-card')
+    all_product_data_json = []
+
+    for i, item in enumerate(search_results):
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        
+        data["product_link"] = item.find_element(by=By.TAG_NAME, value='a').get_attribute('href')
+        data["product_name"] = item.find_element(by=By.CLASS_NAME, value='df-card__title').text.strip()
+        price_str = item.find_element(by=By.CLASS_NAME, value='df-card__price').text.strip()
+        price_str = price_str.replace("€", "").replace(",", "comma").replace(".", "dot")
+        price_str = price_str.replace("comma", ".").replace("dot", "")
+        data["product_price"] = price_str
+        data["product_img_link"] = item.find_element(by=By.TAG_NAME, value='img').get_attribute('src')
+        
+        product = get_from_coolmod(data["product_link"])
+        if available_only == True:
+            data["product_availability"] = "InStock"
+        else:
+            pass
+
+        if product != None:
+            data["product_availability"] = product["product_availability"]
+            data["product_category"] = product["product_category"]
+            data["product_img_link"] = product["product_img_link"]
+
+        all_product_data_json.append(data)
+        time.sleep(3)
+
+    browser.close()
+    return all_product_data_json
+
+def scrape_aussar_search_page(URL, query):
+    # url = 'https://www.aussar.es/#/dfclassic/query=dfg&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=fuzzy'
+    parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
+    print(parsed_url)
+    captured_value = parse_qs(parsed_url.query)['query'][0]
+    print(captured_value)
+
+    coolmod_homepage = "https://www.aussar.es/"
+
+    browser = get_browser(headless=True)
+    browser.get(coolmod_homepage)
+
+    search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'leo_search_query_top')))
+    search_bar.click()
+    time.sleep(1)
+    search_bar.send_keys(query)
+    time.sleep(4)
+    
+    search_instock_only = True
+
+    try:
+        browser.find_element(by=By.XPATH, value='//div[@data-value="in stock"]').click()
+        time.sleep(4)
+    except:
+        search_instock_only = False
+        print("Disponible", "Item not found")
+    
+    search_results = browser.find_elements(by=By.CLASS_NAME, value='df-card')
+    all_product_data_json = []
+
+    for i, item in enumerate(search_results):
+        data = {
+                "product_link": "N/A",
+                "product_name": "N/A",
+                "product_price": "N/A",
+                "product_img_link": "N/A",
+                "product_category": "N/A",
+                "product_availability": "N/A"
+            }
+        
+        data["product_link"] = item.find_element(by=By.TAG_NAME, value='a').get_attribute('href')
+        data["product_name"] = item.find_element(by=By.CLASS_NAME, value='df-card__title').text.strip()
+        price_str = item.find_element(by=By.CLASS_NAME, value='df-card__pricing').text.strip()
+        price_str = price_str.replace("€", "").replace(",", "comma").replace(".", "dot")
+        price_str = price_str.replace("comma", ".").replace("dot", "")
+        data["product_price"] = price_str
+        data["product_img_link"] = item.find_element(by=By.TAG_NAME, value='img').get_attribute('src')
+        
+        product = get_from_aussar(data["product_link"])
+        if search_instock_only == True:
+            data["product_availability"] = "InStock"
+        else:
+            pass
+
+        if product != None:
+            data["product_availability"] = product["product_availability"]
+            data["product_category"] = product["product_category"]
+            data["product_img_link"] = product["product_img_link"]
+
+        all_product_data_json.append(data)
+        time.sleep(3)
+
+    browser.close()
+    return all_product_data_json
+
 if __name__ == "__main__":
     RUs = []
     with open(RUNTIME_URLS_FILE_PATH, "w") as f:
         json.dump(RUs, f)
     # print(scrape_pccomponentes_search_page("rtx 3060", 400))
     # print(scrape_neobyte_search_page("https://www.neobyte.es/tarjetas-graficas-111"))
-    print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
+    # print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
+    # print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti"))
+    # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and", query="3060 ti"))
+    print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and", query="3060 ti")) 
+    
