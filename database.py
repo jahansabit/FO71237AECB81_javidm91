@@ -56,9 +56,9 @@ class DataBase:
         return all_data
 
     def delete_link(self, index):
+        all_data = self.get_links()
         self.con = sqlite3.connect(self.name)
         cur = self.con.cursor()
-        all_data = self.get_links()
         id = all_data[index][0]
         print(id)
         cur.execute("DELETE FROM search_page_links WHERE id = ?", (id,))
