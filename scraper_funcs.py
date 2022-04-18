@@ -17,6 +17,7 @@ import traceback
 from multiprocessing import Process
 from flask_server import *
 from bot_vars import *
+from searchpage_scraper_func import *
 
 def kill_chrome():
     try:
@@ -33,144 +34,58 @@ def return_requests(URL):
     r = s.post(r.url, allow_redirects=True, verify=False, cookies=cookies)
     return r
 
-def get_from_pccomponentes(URL):
+def get_from_pccomponentes(URL): # NOW used only for affiliate link correction
     try:
         os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
     except Exception as e:
         # print(str(e))
         pass
 
-    RETRY_COUNT = -1
-    while 1:
-        RETRY_COUNT += 1
-        if RETRY_COUNT > SCRAPING_MAX_RETRIES:
-            return None
+    try:
+        soup = return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_AFFILIATE_PORT)
+
         try:
-            try:
-                os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
-            except:
-                pass
+            product_name = soup.h1.strong.get_text()
+        except:
+            product_name = str(soup.find('title').get_text()).replace("| PcComponentes.com", "").strip()
+        product_price = soup.findAll(id="precio-main")[0].get("data-price")  # Price here already in international format
+        product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
+        if "https:" not in product_img_link:
+            product_img_link = "https:" + product_img_link
+        product_micro_data = json.loads(str(soup.findAll('script',{"id":"microdata-product-script"})[0].get_text()))
+        # pprint(product_micro_data)
+        try:
+            availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")
+        except:
+            availability = str(product_micro_data['offers']['offers']['availability']).replace("http://schema.org/", "")
 
-            server = Process(target=start_server)
-            server.start()
-            # start_server(URL)
-            time.sleep(3)
-            # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
-            # os.system("google-chrome-stable --no-sandbox '" + URL + "'")
-            
-            subprocess.Popen(str("google-chrome-stable --no-sandbox " + URL).split(" "))
-            time.sleep(1)
-
-            seconds_spent = 0
-            retry_scraping = False
-            while 1:
-                print("\n\nIf file exits:", os.path.isfile(SCRAPPED_DATA_JSON_FILE_PATH), "\n\n")
-                if os.path.isfile(SCRAPING_BY_CHROME_DONE_FILE_PATH) == False:
-                    time.sleep(3)
-                    seconds_spent += 3
-                    if seconds_spent > SCRAPPING_MAX_TIMEOUT:
-                        retry_scraping = True
-                        break
-                else:
-                    time.sleep(2)
-                    break
-            
-            if retry_scraping == True:
-                kill_chrome()
-                try:
-                    r = requests.get("http://127.0.0.1:5699/shutdown")
-                    print(r.text)
-                except Exception as e:
-                    print(str(e))
-                    # print(traceback.format_exc())
-                try:
-                    time.sleep(1)
-                    server.terminate()
-                    server.join()
-                except:
-                    print(traceback.format_exc())
-                    time.sleep(1)
-                    # continue
-            
-            try:
-                r = requests.get("http://127.0.0.1:5699/shutdown")
-                print(r.text)
-            except Exception as e:
-                print(str(e))
-                # print(traceback.format_exc())
-
-            try:
-                time.sleep(1)
-                server.terminate()
-                server.join()
-            except:
-                print(traceback.format_exc())
-            
-            time.sleep(2)
-            tries = 1
-            data = {}
-            while tries <= 3:
-                try:            
-                    with open(SCRAPPED_DATA_JSON_FILE_PATH, 'r') as f:
-                        data = json.load(f)
-                    break
-                except Exception as e:
-                    print(str(e))
-                    time.sleep(1)
-                    tries += 1
-            
-            try:
-                os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
-            except Exception as e:
-                print(str(e))
-
-            # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
-            html_data = data['html']
-
-            soup = BeautifulSoup(html_data, 'html.parser')
-
-            try:
-                product_name = soup.h1.strong.get_text()
-            except:
-                product_name = str(soup.find('title').get_text()).replace("| PcComponentes.com", "").strip()
-            product_price = soup.findAll(id="precio-main")[0].get("data-price")  # Price here already in international format
-            product_img_link = soup.findAll('div',{"class":"item badgets-layer"})[0].a.get("href")
-            if "https:" not in product_img_link:
-                product_img_link = "https:" + product_img_link
-            product_micro_data = json.loads(str(soup.findAll('script',{"id":"microdata-product-script"})[0].get_text()))
-            # pprint(product_micro_data)
-            try:
-                availability = str(product_micro_data['offers']['availability']).replace("http://schema.org/", "")
-            except:
-                availability = str(product_micro_data['offers']['offers']['availability']).replace("http://schema.org/", "")
-
-            try:
-                product_category = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
-            except:
-                print(traceback.format_exc())
-                product_category = ""
-
-            try:
-                os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
-            except Exception as e:
-                print(str(e))
-
-            return {
-                "product_link": URL,
-                "product_name": product_name,
-                "product_price": product_price,
-                "product_img_link": product_img_link,
-                "product_category": product_category,
-                "product_availability": availability
-            }
-        except Exception as e:
-            print("\n\nError in get_from_pccomponentes()\n\n")
+        try:
+            product_category = soup.findAll('a',{"class":"GTM-breadcumb"})[2].get_text()
+        except:
             print(traceback.format_exc())
-            print("\n\n")
+            product_category = ""
+
+        try:
+            os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
+        except Exception as e:
             print(str(e))
-            kill_chrome()
-            time.sleep(3)
-            return None
+
+        return {
+            "product_link": URL,
+            "product_name": product_name,
+            "product_price": product_price,
+            "product_img_link": product_img_link,
+            "product_category": product_category,
+            "product_availability": availability
+        }
+    except Exception as e:
+        print("\n\nError in get_from_pccomponentes()\n\n")
+        print(traceback.format_exc())
+        print("\n\n")
+        print(str(e))
+        kill_chrome()
+        time.sleep(3)
+        return None
 
 def get_from_neobyte(URL):
     RETRY_COUNT = -1

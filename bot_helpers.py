@@ -9,7 +9,8 @@ import re
 
 from bot_vars import *
 from scraper_funcs import *
-
+from database import DataBase
+db = DataBase()
 
 def debug_print(msg):
     if DEBUG:
@@ -77,13 +78,22 @@ def save_and_send_string_logs(bot, text):
         f.write(text + "\n")
     bot.sendDocument(DEBUG_CHAT_ID, open(LOGS_FILE_PATH, 'rb'), caption="Text Logs", disable_notification=True)
 
-def add_product_to_file(text):
+def add_search_page_link_to_db(msg_text):
     try:
-        text = text.replace("/add", "").strip()
-        text = text.replace("  ", " ") # remove double spaces
-        stripped = text.split(" ")
+        msg_text = msg_text.replace("/add", "").strip() # /add link price channel
+        msg_text = msg_text.replace("  ", " ") # remove double spaces
+        stripped = msg_text.split(" ") # link price channel
+        link = None
+        price = None
+        channel = None
         try:
-            link, price = stripped
+            if len(stripped) == 2:
+                link, price = stripped
+            elif len(stripped) == 3:
+                link, price, channel = stripped
+                channel = channel.strip()
+            link = link.strip()
+            price = price.strip()
             price = ''.join(i for i in price if (i.isdigit() or i == ','))
             price = str(price).replace(",", ".")
         except ValueError:
@@ -94,49 +104,32 @@ def add_product_to_file(text):
         if price == '' or link == '':
             return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
 
-        JSON_DATA = load_from_json()
-        PRODUCTS_DATA = JSON_DATA["products"]
-        NEXT_ID = len(PRODUCTS_DATA) + 1
+        all_search_pages = db.get_links()
+        all_search_pages_links = [search_page[1] for search_page in all_search_pages]
 
-        for product in PRODUCTS_DATA:
-            if product["link"] in link or link in product["link"]:
+
+        for search_page_link in all_search_pages_links:
+            if search_page_link in link or link in search_page_link:
                 return "Product already in list."
 
-        PRODUCTS_DATA.append(
-            {
-                "id": NEXT_ID,
-                "link": link,
-                "price": price
-            }
-        )
-        JSON_DATA["products"] = PRODUCTS_DATA
-            
-        save_to_json(JSON_DATA)
+        db.add_link(link, price, channel)
         return True
     except Exception as e:
         print(e)
         return str(e)
 
-def delete_product_from_file(text):
+def delete_search_page_link_from_db(msg_text):
     try:
-        text = text.replace("/delete", "").strip()
-        PRODUCT_ID_TO_DELETE = text
+        msg_text = msg_text.replace("/delete", "").strip()
+        SEARCH_PAGE_ID_TO_DELETE = msg_text
 
-        if PRODUCT_ID_TO_DELETE == '':
+        if SEARCH_PAGE_ID_TO_DELETE == '':
             return "Wrong input format. Example: /delete 1"
 
-        JSON_DATA = load_from_json()
-        PRODUCTS_DATA = JSON_DATA["products"]
-
         product_found = False
-        # for product in PRODUCTS_DATA:
-        #     if str(product["id"]) == PRODUCT_ID_TO_DELETE:
-        #         PRODUCTS_DATA.remove(product)
-        #         product_found = True
-        #         break
         
         try:
-            PRODUCTS_DATA.pop(int(PRODUCT_ID_TO_DELETE)-1)
+            db.delete_link(int(SEARCH_PAGE_ID_TO_DELETE)-1)
             product_found = True
         except:
             print(traceback.format_exc())
@@ -144,203 +137,31 @@ def delete_product_from_file(text):
         if product_found == False:
             return "Product not found"
         
-        JSON_DATA["products"] = PRODUCTS_DATA
-        save_to_json(JSON_DATA)
         return True
     except Exception as e:
         print(e)
         return str(e)
 
-def show_products_from_file():
-    JSON_DATA = load_from_json()
-    PRODUCTS_DATA = JSON_DATA["products"]
+def show_search_page_links_from_db():
+    PRODUCTS_DATA = db.get_links()
     result_array = []
     if len(PRODUCTS_DATA) != 0:
         # PRODUCTS_DATA = "Products:\n" + "\n".join(map(lambda x: str(x["id"]) + ": " + str(x["link"]) + ", " + str(x["price"]), PRODUCTS_DATA))
-        i = 0
-        upper_limit = 0
-        while 1:
-            PRODUCTS_DATA_STRING = ""
-            i = upper_limit
-            upper_limit = i + MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE
-            if upper_limit > len(PRODUCTS_DATA):
-                upper_limit = len(PRODUCTS_DATA)
-            # print(i, upper_limit, len(PRODUCTS_DATA))
+        
+        PRODUCTS_DATA_STRING = "Products:\nID\tLink\tPrice\tChannel\n"
 
+        for i, entry in enumerate(PRODUCTS_DATA):
+            temp = "\n\n" + str(i+1).strip() + " : " + str(entry[1]).strip() + " , " + str(entry[2]).strip() + " , " + str(entry[3]).strip()
             if i == 0:
-                PRODUCTS_DATA_STRING += "Products:\nID\tLink\tPrice\n"
-
-            for i in range(i, upper_limit):
-                # print(str(PRODUCTS_DATA[i]["id"]).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip())
-                PRODUCTS_DATA_STRING += "\n\n" + str(i+1).strip() + " : " + str(PRODUCTS_DATA[i]["link"]).strip() + " , " + str(PRODUCTS_DATA[i]["price"]).strip()
+                PRODUCTS_DATA_STRING += temp
+            else:
+                PRODUCTS_DATA_STRING = temp
             result_array.append(PRODUCTS_DATA_STRING)
-            if upper_limit == len(PRODUCTS_DATA):
-                break
         # print(len(result_array))
         return result_array   
     else:
-        PRODUCTS_DATA = ["No products has been added yet!"]
+        PRODUCTS_DATA = ["No Search_Page_links has been added yet!"]
         return PRODUCTS_DATA
-
-def add_channel_to_file(text):
-    try:
-        text = text.replace("/add_channel", "").strip()
-        CHANNEL_NAME = text
-
-        if CHANNEL_NAME == '':
-            return "Wrong input format. Example: /add_channel @channel_name\nor,   /add_channel https://t.me/channel_name"
-
-        CHANNEL_NAME = CHANNEL_NAME.replace("https://t.me/", "")
-        CHANNEL_NAME = "@" + CHANNEL_NAME.replace("@", "")
-
-        JSON_DATA = load_from_json()
-        CHANNELS_DATA = JSON_DATA["channels"]
-        NEXT_ID = len(CHANNELS_DATA) + 1
-
-        for channel in CHANNELS_DATA:
-            if channel["name"] in CHANNEL_NAME or CHANNEL_NAME in channel["name"]:
-                return "Channel already in list."
-
-        CHANNELS_DATA.append(
-            {
-                "id": NEXT_ID,
-                "name": CHANNEL_NAME
-            }
-        )
-        JSON_DATA["channels"] = CHANNELS_DATA
-            
-        save_to_json(JSON_DATA)
-        return True
-    except Exception as e:
-        print(e)
-        return str(e)
-
-def remove_channel_from_file(text):
-    try:
-        text = text.replace("/remove_channel", "").strip()
-        CHANNEL_NAME_TO_DELETE = text
-        
-        if CHANNEL_NAME_TO_DELETE == '':
-            return "Wrong input format. Example: /remove_channel @channel_name\nor,  /remove_channel https://t.me/channel_name"
-
-        CHANNEL_NAME_TO_DELETE = CHANNEL_NAME_TO_DELETE.replace("https://t.me/", "")
-        CHANNEL_NAME_TO_DELETE = "@" + CHANNEL_NAME_TO_DELETE.replace("@", "")
-
-        JSON_DATA = load_from_json()
-        CHANNELS_DATA = JSON_DATA["channels"]
-
-        channel_found = False
-        for channel in CHANNELS_DATA:
-            if str(channel["name"]) == CHANNEL_NAME_TO_DELETE or str(channel["name"]) in CHANNEL_NAME_TO_DELETE:
-                CHANNELS_DATA.remove(channel)
-                channel_found = True
-                break
-        
-        if channel_found == False:
-            return "Channel not found"
-        
-        JSON_DATA["channels"] = CHANNELS_DATA
-        save_to_json(JSON_DATA)
-        return True
-    except Exception as e:
-        print(e)
-        return str(e)
-
-def show_channels_from_file():
-    JSON_DATA = load_from_json()
-    CHANNELS_DATA = JSON_DATA["channels"]
-    if len(CHANNELS_DATA) != 0:
-        CHANNELS_DATA = "Channels:\n" + "\n".join(map(lambda x: str(x["name"]), CHANNELS_DATA))
-    else:
-        CHANNELS_DATA = "No channels has been added yet!"
-    return CHANNELS_DATA
-
-def add_website_to_file(text):
-    try:
-        text = text.replace("/add_website", "").strip()
-        WEBSITE_NAME = text
-
-        if WEBSITE_NAME == '':
-            return "Wrong input format. Example: /add_website https://website.com"
-
-        JSON_DATA = load_from_json()
-        WEBSITES_DATA = JSON_DATA["shareable_websites"]
-        # NEXT_ID = len(WEBSITES_DATA) + 1
-
-        WEBSITE_NAME = hostname_provider(WEBSITE_NAME)
-
-        for website in WEBSITES_DATA:
-            if website in WEBSITE_NAME or WEBSITE_NAME in website:
-                return "Website already in list."
-
-        WEBSITES_DATA.append(WEBSITE_NAME)
-        JSON_DATA["shareable_websites"] = WEBSITES_DATA
-            
-        save_to_json(JSON_DATA)
-        return True
-    except Exception as e:
-        traceback.print_exc()
-        print(e)
-        return str(e)
-
-def remove_website_from_file(text):
-    try:
-        text = text.replace("/remove_website", "").strip()
-        print("text", text)
-        WEBSITE_NAME_TO_DELETE = text
-        print("WEBSITE_NAME_TO_DELETE", WEBSITE_NAME_TO_DELETE)
-        
-        if WEBSITE_NAME_TO_DELETE == '':
-            return "Wrong input format. Example: /remove_website website.com"
-
-        JSON_DATA = load_from_json()
-        WEBSITES_DATA = JSON_DATA["shareable_websites"]
-
-        WEBSITE_NAME_TO_DELETE = hostname_provider(WEBSITE_NAME_TO_DELETE)
-
-        website_found = False
-        for website in WEBSITES_DATA:
-            print(WEBSITE_NAME_TO_DELETE, website)
-            if WEBSITE_NAME_TO_DELETE in website or website in WEBSITE_NAME_TO_DELETE:
-                WEBSITES_DATA.remove(website)
-                website_found = True
-                break
-        
-        if website_found == False:
-            return "Website not found"
-        
-        JSON_DATA["shareable_websites"] = WEBSITES_DATA
-        save_to_json(JSON_DATA)
-        return True
-    except Exception as e:
-        print(e)
-        return str(e)
-
-def show_websites_from_file():
-    JSON_DATA = load_from_json()
-    WEBSITES_DATA = JSON_DATA["shareable_websites"]
-    if len(WEBSITES_DATA) != 0:
-        WEBSITES_DATA = "Websites:\n" + "\n".join(WEBSITES_DATA)
-    else:
-        WEBSITES_DATA = "No websites has been added yet!"
-    return WEBSITES_DATA
-
-def delete_pccomponentes_messages(bot):
-    sent_messages = load_sent_msg_from_json()
-    for message in sent_messages["sent_messages"]:
-        if message["product_from"] == "PcComponentes":
-            msg_identifier = telepot.message_identifier(message["message_data"])
-            try:
-                bot.deleteMessage(msg_identifier)
-            except Exception as e:
-                print(e)
-                print("msg_identifier:", msg_identifier)
-            time.sleep(1)
-            bot.sendPhoto(message["message_data"]['chat']['id'],
-                        message['image_link'],
-                        caption=message['message_text'], 
-                        parse_mode="markdown")
-        time.sleep(5)
 
 def editMessageMedia(BOT_TOKEN, MSG_IDENTIFIER, MEDIA_URL):
     media = json.dumps({
@@ -419,3 +240,6 @@ def remove_and_send_affiliate_link(bot, msg, links):
                 time.sleep(1)
     os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
 # pprint(get_url_from_string("asiufs8dfhse https://www.youtube.com/watch?v=dQw4w9WgXcQ sdvxcfsxscv"))
+
+if __name__ == "__main__":
+    print(show_search_page_links_from_db())

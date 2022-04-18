@@ -42,7 +42,7 @@ def kill_chrome():
     except:
         print(traceback.format_exc())
 
-def return_pccomponentes_page(URL):
+def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
     actual_URL = URL
     try:
         os.remove(SCRAPING_BY_CHROME_DONE_FILE_PATH)
@@ -60,9 +60,10 @@ def return_pccomponentes_page(URL):
                 os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             except:
                 pass
-
-            server = Process(target=start_server)
+            
+            server = Process(target=start_server, args=(flask_server_port,))
             server.start()
+
             # start_server(URL)
             time.sleep(3)
             # webbrowser.get('/usr/bin/google-chrome %s %U --no-sandbox').open(URL)
@@ -93,7 +94,7 @@ def return_pccomponentes_page(URL):
             if retry_scraping == True:
                 kill_chrome()
                 try:
-                    r = requests.get("http://127.0.0.1:5699/shutdown")
+                    r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
                     print(r.text)
                 except Exception as e:
                     print(str(e))
@@ -108,7 +109,7 @@ def return_pccomponentes_page(URL):
                     # continue
 
             try:
-                r = requests.get("http://127.0.0.1:5699/shutdown")
+                r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
                 print(r.text)
             except Exception as e:
                 print(str(e))

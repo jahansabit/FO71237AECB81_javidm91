@@ -51,7 +51,7 @@ class DataBase:
         cur.execute("SELECT * FROM `search_page_links`")
         all_data = cur.fetchall()
         self.con.commit()
-        print(all_data)
+        # print(all_data)
         cur.close()
         return all_data
 
@@ -110,7 +110,14 @@ if __name__ == "__main__":
     # db.save_summary("here 34234'it is 23423", 2)
     # print(db.get_summary(2))
 
-    # db.add_link("https://google", 500, channel_id="@2342we", last_scraped="2020-03-42")
-    db.delete_link(1)
+    db.add_link("https://google", 500)
+    db.add_link("https://fb", 234)
+    db.add_link("https://amazon", 280)
+
+    # # db.delete_link(1)
     db.get_links()
+    # all_search_pages = db.get_links()
+    # all_search_pages_links = [search_page[1] for search_page in all_search_pages]
+    # print(all_search_pages_links)
+    # db.delete_link(0)
     

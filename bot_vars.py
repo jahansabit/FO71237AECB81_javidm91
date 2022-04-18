@@ -19,12 +19,15 @@ if DEBUG:
 USER_CHAT_ID = 718057913
 DEBUG_CHAT_ID = -744965364
 ########## TOKENS ##########
-
+FLASK_SERVER_SCRAPER_PORT = 5699
+FLASK_SERVER_AFFILIATE_PORT = 5690
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.normpath(os.path.join(PROJECT_DIR, "../tg_bot_data"))
 DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 DATA_SEARCH_PAGE_JSON_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 DB_FILE_PATH = os.path.join(DATA_DIR, "db.sqlite3")
+if DEBUG:
+    DB_FILE_PATH = "test.db"
 SENT_MSG_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "sent_msg_data.json")
 SCRAPPED_DATA_JSON_FILE_PATH = os.path.join(DATA_DIR, "scrapped_data.json")
 SCRAPPED_DATA_FILES_PATH = os.path.join(DATA_DIR, "scrapped_data")
