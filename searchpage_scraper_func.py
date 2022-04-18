@@ -148,7 +148,7 @@ def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
         except:
             pass
 
-def scrape_pccomponentes_search_page(query):
+def scrape_pccomponentes_search_page(query, max_price):
     # Ordering by price (lower to upper)
     # URL = f"https://www.pccomponentes.com/buscar/?query={query}&price_to={max_price}&or-price_asc"
     
@@ -251,6 +251,13 @@ def scrape_neobyte_search_page(URL):
         all_product_data_json.append(data)
     
     return all_product_data_json
+
+### TO_BE_DONE
+def pccomponentes_page_handler(URL):
+    if "search" in URL:
+        return scrape_pccomponentes_search_page(URL)
+    else:
+        return scrape_pccomponentes_category_page(URL)
 
 def scrape_casemod_search_page(URL):
     request_data = return_requests(URL)
@@ -396,7 +403,7 @@ def scrape_coolmod_search_page(URL, query):
         data["product_img_link"] = item.find_element(by=By.TAG_NAME, value='img').get_attribute('src')
         
         product = get_from_coolmod(data["product_link"])
-        if available_only == True:
+        if search_instock_only == True:
             data["product_availability"] = "InStock"
         else:
             pass

@@ -13,12 +13,7 @@ import json
 import telepot
 bot = telepot.Bot(BOT_TOKEN)
 
-def check_product_and_send():
-    if os.path.isfile(SENT_MSG_DATA_JSON_FILE_PATH) == False:
-        main_dict = {}
-        main_dict["sent_messages"] = []
-        save_sent_msg_to_json(main_dict)
-
+def check_search_links_and_send():
     JSON_DATA = load_from_json()
     CHAT_IDS = JSON_DATA["chat_ids"]
     PRODUCTS = JSON_DATA["products"]
@@ -232,7 +227,7 @@ def periodic_task_thread():
             f.write("True")
         print("[*] Checking for products... | " + str(time.ctime()))
         try:
-            check_product_and_send()
+            check_search_links_and_send()
         except:
             print("\n\n[*] Error occurred. Skipping...\n\n")
             traceback.print_exc()
