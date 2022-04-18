@@ -12,11 +12,18 @@ def joinpath(path="", *args):
 
 DEBUG = True
 
+CHAT_IDS = []
+
 ########## TOKENS ##########
 BOT_TOKEN = "5229280387:AAE4SFcTLiDuspR01GydekNgjiLpSSF5qdY"
 if DEBUG:
     BOT_TOKEN = "5155024321:AAHchDoEvXcBn-w18nDEHzfq787ckOv1QEc"
 USER_CHAT_ID = 718057913
+CLIENT_CHAT_ID = 528470695
+CHAT_IDS.append(USER_CHAT_ID)
+if not DEBUG:
+    CHAT_IDS.append(CLIENT_CHAT_ID)
+
 DEBUG_CHAT_ID = -744965364
 ########## TOKENS ##########
 FLASK_SERVER_SCRAPER_PORT = 5699
@@ -50,6 +57,7 @@ SCRAPPING_MAX_TIMEOUT = 30                  # in seconds
 FLASK_SERVER_MAX_WAITING_TIME = 60*3          # in seconds
 MAX_PRODUCT_IN_SHOW_PRODUCTS_MESSAGE = 7
 PCCOMPONENTES_AFFILIATE_LINK = "https://www.awin1.com/cread.php?awinmid=20982&awinaffid=870275&ued="
+AMAZON_AFFILIATE_LINK = "/ref=cm_sw_r_as_gl_api_glt_i_7TQ40PYDZM7TKS8ESCE8?linkCode=ml1&tag=objetivogam0b-21"
 TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
 OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
 z24_HOURS_IN_SECONDS = 60*60*24
@@ -69,8 +77,10 @@ def message_template(title, link, website_name, current_price, prev_price, categ
         percentage = prev_price - current_price
         percentage = 100 / prev_price * percentage
     original_link = link
-    if "pccomponentes" in link:
+    if "pccomponentes" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
         link = PCCOMPONENTES_AFFILIATE_LINK + link
+    elif "amazon" in link and AMAZON_AFFILIATE_LINK not in link:
+        link = link + AMAZON_AFFILIATE_LINK
     
     if category == None or category == "":
         category = ""

@@ -23,7 +23,7 @@ def get_url_from_string(text):
 
 
 def website_name_provider(link):
-    if link.find("amazon.com") != -1:
+    if link.find("amazon.es") != -1 or link.find("amazon.com") != -1:
         return "Amazon"
     elif link.find("pccomponentes.com") != -1:
         return "PcComponentes"
@@ -35,6 +35,8 @@ def website_name_provider(link):
         return "Coolmod"
     elif link.find("aussar.es") != -1:
         return "Aussar"
+    else:
+        return "Unknown"
 
 def hostname_provider(link):
     parsed_uri = urlparse(link)
@@ -180,6 +182,56 @@ def editMessageMedia(BOT_TOKEN, MSG_IDENTIFIER, MEDIA_URL):
         print(result)
         return result
 
+def process_removing_affiliate_link(bot, msg, link): # link with affiliate id and tags
+    try:
+        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=link, reply_to_message_id=msg['message_id'])
+    except Exception as e:
+        print(str(e))
+        time.sleep(1)
+        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=link)
+    
+    time.sleep(1)
+    try:
+        bot.deleteMessage(telepot.message_identifier(msg))
+    except Exception as e:
+        print(str(e))
+    time.sleep(1)
+    
+    if website_name_provider(link) == "PcComponentes":
+        scrapped_product = get_from_pccomponentes(link)
+    elif website_name_provider(link) == "Amazon":
+        scrapped_product = get_from_amazon(link)
+
+    try:
+        category = scrapped_product['product_category']
+    except:
+        category = ""
+    
+    while(type(scrapped_product) != dict):
+        time.sleep(1)
+
+    print(scrapped_product)
+    print("\n")
+
+    print(scrapped_product["product_name"], 
+                                link,
+                                website_name_provider(link),
+                                scrapped_product['product_price'], 
+                                None,
+                                category)
+
+    caption = message_template(scrapped_product["product_name"], 
+                                link,
+                                website_name_provider(link),
+                                scrapped_product['product_price'], 
+                                None,
+                                category=category)
+    editMessageMedia(BOT_TOKEN, telepot.message_identifier(editable_message), scrapped_product['product_img_link'])
+    time.sleep(1)
+    bot.editMessageCaption(telepot.message_identifier(editable_message), caption=caption, parse_mode="html")
+    time.sleep(1)
+
+
 def remove_and_send_affiliate_link(bot, msg, links):
     flask_server_waiting = 0
     while os.path.isfile(FLASK_SERVER_RUNNING_FILE_PATH):
@@ -195,51 +247,16 @@ def remove_and_send_affiliate_link(bot, msg, links):
     if type(links) == list:
         for link in links:
             if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
-                try:
-                    editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=PCCOMPONENTES_AFFILIATE_LINK + link, reply_to_message_id=msg['message_id'])
-                except Exception as e:
-                    print(str(e))
-                    time.sleep(1)
-                    editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=PCCOMPONENTES_AFFILIATE_LINK + link)
-                
-                time.sleep(1)
-                try:
-                    bot.deleteMessage(telepot.message_identifier(msg))
-                except Exception as e:
-                    print(str(e))
-                time.sleep(1)
+                process_removing_affiliate_link(bot, msg, PCCOMPONENTES_AFFILIATE_LINK+link)
+            elif "amazon.es" in link and AMAZON_AFFILIATE_LINK not in link:
+                link_arr = link.split("/")
+                if "linkCode" in link_arr[-1] or "tag=" in link_arr[-1]:
+                    link_arr.pop()
+                link = "/".join(link_arr)
+                process_removing_affiliate_link(bot, msg, link+AMAZON_AFFILIATE_LINK)
 
-                scrapped_product = get_from_pccomponentes(link)
-                try:
-                    category = scrapped_product['product_category']
-                except:
-                    category = ""
-                
-                while(type(scrapped_product) != dict):
-                    time.sleep(1)
 
-                print(scrapped_product)
-                print("\n")
-
-                print(scrapped_product["product_name"], 
-                                            link,
-                                            website_name_provider(link),
-                                            scrapped_product['product_price'], 
-                                            None,
-                                            category)
-
-                caption = message_template(scrapped_product["product_name"], 
-                                            link,
-                                            website_name_provider(link),
-                                            scrapped_product['product_price'], 
-                                            None,
-                                            category=category)
-                editMessageMedia(BOT_TOKEN, telepot.message_identifier(editable_message), scrapped_product['product_img_link'])
-                time.sleep(1)
-                bot.editMessageCaption(telepot.message_identifier(editable_message), caption=caption, parse_mode="html")
-                time.sleep(1)
     os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
-# pprint(get_url_from_string("asiufs8dfhse https://www.youtube.com/watch?v=dQw4w9WgXcQ sdvxcfsxscv"))
 
 if __name__ == "__main__":
     print(show_search_page_links_from_db())
