@@ -106,8 +106,8 @@ def add_search_page_link_to_db(msg_text):
         if price == '' or link == '':
             return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
 
-        all_search_pages = db.get_links()
-        all_search_pages_links = [search_page[1] for search_page in all_search_pages]
+        all_search_pages = db.get_links_json()
+        all_search_pages_links = [search_page['link'] for search_page in all_search_pages]
 
 
         for search_page_link in all_search_pages_links:
@@ -145,25 +145,25 @@ def delete_search_page_link_from_db(msg_text):
         return str(e)
 
 def show_search_page_links_from_db():
-    PRODUCTS_DATA = db.get_links()
+    SEARCH_PAGES_DATA = db.get_links_json()
     result_array = []
-    if len(PRODUCTS_DATA) != 0:
-        # PRODUCTS_DATA = "Products:\n" + "\n".join(map(lambda x: str(x["id"]) + ": " + str(x["link"]) + ", " + str(x["price"]), PRODUCTS_DATA))
+    if len(SEARCH_PAGES_DATA) != 0:
+        # SEARCH_PAGES_DATA = "Products:\n" + "\n".join(map(lambda x: str(x["id"]) + ": " + str(x["link"]) + ", " + str(x["price"]), SEARCH_PAGES_DATA))
         
-        PRODUCTS_DATA_STRING = "Products:\nID\tLink\tPrice\tChannel\n"
+        SEARCH_PAGES_DATA_STRING = "Products:\nID\tLink\tPrice\tChannel\n"
 
-        for i, entry in enumerate(PRODUCTS_DATA):
-            temp = "\n\n" + str(i+1).strip() + " : " + str(entry[1]).strip() + " , " + str(entry[2]).strip() + " , " + str(entry[3]).strip()
+        for i, entry in enumerate(SEARCH_PAGES_DATA):
+            temp = "\n\n" + str(i+1).strip() + " : " + str(entry['link']).strip() + " , " + str(entry['price_limit']).strip() + " , " + str(entry['channel_id']).strip()
             if i == 0:
-                PRODUCTS_DATA_STRING += temp
+                SEARCH_PAGES_DATA_STRING += temp
             else:
-                PRODUCTS_DATA_STRING = temp
-            result_array.append(PRODUCTS_DATA_STRING)
+                SEARCH_PAGES_DATA_STRING = temp
+            result_array.append(SEARCH_PAGES_DATA_STRING)
         # print(len(result_array))
         return result_array   
     else:
-        PRODUCTS_DATA = ["No Search_Page_links has been added yet!"]
-        return PRODUCTS_DATA
+        SEARCH_PAGES_DATA = ["No Search_Page_links has been added yet!"]
+        return SEARCH_PAGES_DATA
 
 def editMessageMedia(BOT_TOKEN, MSG_IDENTIFIER, MEDIA_URL):
     media = json.dumps({

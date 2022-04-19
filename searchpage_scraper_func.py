@@ -216,6 +216,13 @@ def scrape_pccomponentes_category_page(URL):
     
     return all_product_data_json
 
+### TO_BE_DONE
+def pccomponentes_page_handler(URL):
+    if "search" in URL:
+        return scrape_pccomponentes_search_page(URL)
+    else:
+        return scrape_pccomponentes_category_page(URL)
+
 def scrape_neobyte_search_page(URL):
     request_data = return_requests(URL)
     soup = BeautifulSoup(request_data.text, 'html.parser')
@@ -251,13 +258,6 @@ def scrape_neobyte_search_page(URL):
         all_product_data_json.append(data)
     
     return all_product_data_json
-
-### TO_BE_DONE
-def pccomponentes_page_handler(URL):
-    if "search" in URL:
-        return scrape_pccomponentes_search_page(URL)
-    else:
-        return scrape_pccomponentes_category_page(URL)
 
 def scrape_casemod_search_page(URL):
     request_data = return_requests(URL)
