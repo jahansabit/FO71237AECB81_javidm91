@@ -121,7 +121,7 @@ def check_search_links_and_send():
                 retry = 0
                 print("[*] Retry limit reached. Skipping...")
                 bot.sendMessage(DEBUG_CHAT_ID, "[!] Unable to scrape: " + page_link)
-                SCRAPPED_PRODUCTS.extend(result)
+                # SCRAPPED_PRODUCTS.extend(result)
             else:
                 retry += 1
                 i -= 1
