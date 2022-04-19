@@ -1,4 +1,3 @@
-from zoneinfo import available_timezones
 import requests
 from flask_server import *
 from bot_vars import *
