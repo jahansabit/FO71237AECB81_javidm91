@@ -26,3 +26,5 @@ telepota
 urllib3
 Werkzeug
 yarl
+selenium
+webdriver_manager
