@@ -83,6 +83,7 @@ def check_search_links_and_send():
         page = SEARCH_PAGES[i]
         page_link = page['link']
         print(page_link)
+        result = None
         if website_name_provider(page_link) == "PcComponentes":
             result = pccomponentes_page_handler(page_link)
             # browser_tabs += 1
