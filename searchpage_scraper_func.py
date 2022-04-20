@@ -134,24 +134,37 @@ def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
                     time.sleep(1)
                     tries += 1
 
-            # try:
-            #     os.remove(SCRAPPED_FILE_PATH)
-            # except Exception as e:
-            #     print(str(e))
+            try:
+                os.remove(SCRAPPED_FILE_PATH)
+            except Exception as e:
+                print(str(e))
 
             # os.remove(SCRAPPED_DATA_JSON_FILE_PATH)
             html_data = data['html']
+            # with open("pcc.html", "w") as f:
+            #     f.write(html_data)
             soup = BeautifulSoup(html_data, 'html.parser')
 
             return soup
         except:
+            traceback.print_exc()
             pass
 
-def scrape_pccomponentes_search_page(query, max_price):
+def scrape_pccomponentes_search_page(URL, price_limit):
     # Ordering by price (lower to upper)
     # URL = f"https://www.pccomponentes.com/buscar/?query={query}&price_to={max_price}&or-price_asc"
-    
-    URL = f"https://www.pccomponentes.com/api-v1/products/search?query={query}&sort=price_asc&channel=es&page=1&pageSize=40&price_to={max_price}"
+
+    parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
+    query = parse_qs(parsed_url.query)['query'][0]
+    # if price_limit == None:
+    # try:
+    #     max_price = parse_qs(parsed_url.query)['price_to'][0]
+    # except Exception as e:
+    #     traceback.print_exc()
+    #     pass
+
+    URL = f"https://www.pccomponentes.com/api-v1/products/search?query={query}&sort=price_asc&channel=es&page=1&pageSize=40&price_to={price_limit}"
+
 
     soup = return_pccomponentes_page(URL)
     json_chunk = json.loads(str(soup.findAll('pre')[0].text))['articles']
@@ -193,8 +206,10 @@ def scrape_pccomponentes_search_page(query, max_price):
 
 def scrape_pccomponentes_category_page(URL):
     soup = return_pccomponentes_page(URL)
-    all_product_data = soup.findAll('a',{"data-price": True})
+    all_product_data = soup.findAll('article',{"data-price": True})
     all_product_data_json = []
+
+    homepage = "https://www.pccomponentes.com"
 
     for item in all_product_data:
         data = {
@@ -205,24 +220,44 @@ def scrape_pccomponentes_category_page(URL):
                 "product_category": "N/A",
                 "product_availability": "N/A"
             }
+        actual_item = item
+        item = item.find('a')
         data['product_link'] = item.get("href")
+        if data['product_link'].startswith("/"):
+            data['product_link'] = homepage + data['product_link']
         data['product_name'] = item.get("data-name")
         data['product_price'] = item.get("data-price")
-        data['product_img_link'] = item.findAll("img")[0].get("src")
+        try:
+            data['product_img_link'] = actual_item.findAll("img")[0].get("src")
+            if data['product_img_link'].startswith("//"):
+                data['product_img_link'] = "https:" + data['product_img_link']
+            elif data['product_img_link'].startswith("/"):
+                data['product_img_link'] = homepage + data['product_img_link']
+            data['product_img_link'] = data['product_img_link'].replace("thumb.", "img.").replace("w-220-220/", "")
+        except:
+            print("can't find pccomponentes product img")
+            pass
         data['product_category'] = item.get("data-category")
-        data['product_availability'] = item.get("data-availability")
+        data['product_availability'] = item.get("data-stock-web")
+        
+        if str(data['product_availability']) in ['1', '2', '3']:
+            data['product_availability'] = "InStock"
+        else:
+            data['product_availability'] = "OutOfStock"
         all_product_data_json.append(data)
     
     return all_product_data_json
 
 ### TO_BE_DONE
-def pccomponentes_page_handler(URL):
-    if "search" in URL:
-        return scrape_pccomponentes_search_page(URL)
+def pccomponentes_page_handler(URL, price_limit):
+    if "query" in URL:
+        return scrape_pccomponentes_search_page(URL, price_limit)
     else:
         return scrape_pccomponentes_category_page(URL)
 
 def scrape_neobyte_search_page(URL):
+    if "order=product.name.asc" not in URL:
+        URL = URL + "&order=product.name.asc"
     request_data = return_requests(URL)
     soup = BeautifulSoup(request_data.text, 'html.parser')
     all_product_data = soup.findAll('div',{"class": "js-product-miniature-wrapper"})
@@ -259,6 +294,8 @@ def scrape_neobyte_search_page(URL):
     return all_product_data_json
 
 def scrape_casemod_search_page(URL):
+    if "order=product.name.asc" not in URL:
+        URL = URL + "&order=product.name.asc"
     request_data = return_requests(URL)
     soup = BeautifulSoup(request_data.text, 'html.parser')
     all_product_data = soup.findAll('div',{"class": "js-product-miniature-wrapper"})
@@ -333,14 +370,13 @@ def scrape_amazon_search_page(URL):
                 price_str = price_str.replace("€", "").replace(",", "comma").replace(".", "dot")
                 price_str = price_str.replace("comma", ".").replace("dot", "")
                 data["product_price"] = price_str
-                data["product_availability"] = "N/A"
+                data["product_availability"] = "InStock" # price scraped, that means it is in stock
             except:
                 result = get_from_amazon(data["product_link"])
                 data["product_price"] = result["product_price"]
                 data["product_availability"] = result["product_availability"]
             
             data["product_img_link"] = item.findAll("img", {"class": "s-image"})[0].get("src")
-            data["product_category"] = "N/A"
         except Exception as e:
             print(str(e))
             continue
@@ -351,12 +387,14 @@ def scrape_amazon_search_page(URL):
     return all_product_data_json
 
 
-def scrape_coolmod_search_page(URL, query):
+def scrape_coolmod_search_page(URL):
     # url = 'https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and'
     parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
     captured_value = parse_qs(parsed_url.query)['query'][0]
     print(parsed_url)
     print(captured_value)
+
+    query = captured_value.replace(" ", "+")
 
     coolmod_homepage = "https://www.coolmod.com/"
 
@@ -418,12 +456,14 @@ def scrape_coolmod_search_page(URL, query):
     browser.close()
     return all_product_data_json
 
-def scrape_aussar_search_page(URL, query):
+def scrape_aussar_search_page(URL):
     # url = 'https://www.aussar.es/#/dfclassic/query=dfg&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=fuzzy'
     parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
     print(parsed_url)
     captured_value = parse_qs(parsed_url.query)['query'][0]
     print(captured_value)
+
+    query = captured_value.replace(" ", "+")
 
     coolmod_homepage = "https://www.aussar.es/"
 
@@ -489,8 +529,10 @@ if __name__ == "__main__":
         json.dump(RUs, f)
     # print(scrape_pccomponentes_search_page("rtx 3060", 400))
     # print(scrape_neobyte_search_page("https://www.neobyte.es/tarjetas-graficas-111"))
+    # print(scrape_neobyte_search_page("https://www.neobyte.es/buscador?s=3060+ti"))
     # print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
     # print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti"))
-    # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and", query="3060 ti"))
-    print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and", query="3060 ti")) 
-    
+    # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and"))
+    # print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
+    # print(pccomponentes_page_handler("https://pccomponentes.com/tarjetas-graficas", 500))
+    # print(pccomponentes_page_handler("https://www.pccomponentes.com/buscar/?query=rtx%203080%20ti&price_to=400&or-price_asc", 500))

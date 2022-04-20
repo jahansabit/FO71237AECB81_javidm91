@@ -6,7 +6,7 @@ import json
 import telepot
 from dateutil.parser import *
 # from urllib3 import Retry
-from scraper_funcs import *
+# from scraper_funcs import *
 from searchpage_scraper_func import *
 from bot_helpers import *
 from bot_vars import *
@@ -82,10 +82,11 @@ def check_search_links_and_send():
         i += 1
         page = SEARCH_PAGES[i]
         page_link = page['link']
+        price_limit = page['price_limit']
         print(page_link)
         result = None
         if website_name_provider(page_link) == "PcComponentes":
-            result = pccomponentes_page_handler(page_link)
+            result = pccomponentes_page_handler(page_link, price_limit)
             # browser_tabs += 1
             # if browser_tabs >= MAX_BROWSER_TABS:
             #     browser_tabs = 0
@@ -132,25 +133,29 @@ def check_search_links_and_send():
     save_and_send_scrapped_products_report_file(bot, SCRAPPED_PRODUCTS)
     save_and_send_current_products_report_file(bot, SEARCH_PAGES)
 
-    # kill_chrome()
+    kill_chrome()
     LOG_SENT_MSG_DATA = ""
     for i, scrapped_product in enumerate(SCRAPPED_PRODUCTS):
         if scrapped_product == None:
             continue
-        scrapped_product['product_price'] = ''.join(i for i in scrapped_product['product_price'] if (i.isdigit() or i == "."))
+        scrapped_product['product_price'] = ''.join(i for i in str(scrapped_product['product_price']) if (i.isdigit() or i == "."))
         print(scrapped_product['product_price'])
         
         
         # current_datetime_obj = datetime.datetime.now()
         # last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCT['last_sent_time']))
-        
-        if float(scrapped_product['price_limit']) >= float(scrapped_product['price']):
+        print("\nERROR POINT")
+        print(scrapped_product['price_limit'], scrapped_product['product_price'])
+        print("ERROR POINT\n")
+        if float(scrapped_product['price_limit']) >= float(scrapped_product['product_price']):
             search_result = db.search_product_json(scrapped_product['product_name'], scrapped_product['product_link'])
             
             found_product_in_db = False
             send_product_info = False
             PRODUCT = None
             if len(search_result) > 0:
+                print("Product already in DB")
+                print(search_result)
                 PRODUCT = search_result[0]
                 found_product_in_db = True
 
@@ -158,7 +163,10 @@ def check_search_links_and_send():
                 send_product_info = True
             else:
                 current_datetime_obj = datetime.datetime.now()
-                last_in_stock_datetime_difference = current_datetime_obj - parse(str(PRODUCT['last_sent_time']))
+                last_sent_time = PRODUCT['last_sent_time']
+                if last_sent_time == None:
+                    last_sent_time = "1971-1-1 1:1:1"
+                last_in_stock_datetime_difference = current_datetime_obj - parse(str(last_sent_time))
                 if ((float(PRODUCT['last_sent_price']) != float(scrapped_product['product_price'])) and (scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY)) or\
                     ((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
                     print("\n\n")
@@ -193,11 +201,16 @@ def check_search_links_and_send():
 
                 # send product info to channels
                 send_product_message_to_channels(scrapped_product, PRODUCT, category)
+
+                # Product is none when it's not found in DB
+                scrapped_product['last_sent_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                scrapped_product["last_sent_price"] = float(scrapped_product['product_price'])
                 if PRODUCT == None:
                     db.add_product_json(scrapped_product)
                 else:
+                    scrapped_product['id'] = PRODUCT['id']
                     db.update_product_json(scrapped_product)
-                # PRODUCT['last_sent_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                # PRODUCT['last_sent_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 # PRODUCT["last_sent_price"] = float(scrapped_product['product_price'])
 
 

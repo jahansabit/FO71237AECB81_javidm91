@@ -103,9 +103,9 @@ class DataBase:
         self.con = sqlite3.connect(self.name)
         cur = self.con.cursor()
         cur.execute(textwrap.dedent('''
-            INSERT INTO `products` (link, name, price, img_link, category, availability, search_page_links_id) VALUES(?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO `products` (link, name, price, img_link, category, availability, search_page_links_id, last_sent_price, last_sent_time) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
             '''
-        ), (product['link'], product['name'], product['price'], product['img_link'], product['category'], product['availability'], product['search_page_links_id']))
+        ), (product['product_link'], product['product_name'], product['product_price'], product['product_img_link'], product['product_category'], product['product_availability'], product['search_page_id'], product['last_sent_price'], product['last_sent_time']))
         self.con.commit()
         cur.close()
     
@@ -113,9 +113,9 @@ class DataBase:
         self.con = sqlite3.connect(self.name)
         cur = self.con.cursor()
         cur.execute(textwrap.dedent('''
-            UPDATE products SET link = ?, name = ?, price = ?, img_link = ?, category = ?, availability = ?, search_page_links_id = ? WHERE id = ?
+            UPDATE products SET link = ?, name = ?, price = ?, img_link = ?, category = ?, availability = ?, search_page_links_id = ?, last_sent_price = ?, last_sent_time = ? WHERE id = ?
             '''
-        ), (product['link'], product['name'], product['price'], product['img_link'], product['category'], product['availability'], product['search_page_links_id'], product['id']))
+        ), (product['product_link'], product['product_name'], product['product_price'], product['product_img_link'], product['product_category'], product['product_availability'], product['search_page_id'], product['last_sent_price'], product['last_sent_time'], product['id']))
         self.con.commit()
         cur.close()
     
@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # all_search_pages = db.get_links()
     # all_search_pages_links = [search_page[1] for search_page in all_search_pages]
     # print(all_search_pages_links)
-    # db.delete_link(0)
+    # db.delete_product(0)
     # db.add_product("https://google.com", "test234234", "234", "https://google.com", "test", "test", 1)
     # db.add_product("https://google.com", "testing_salt234234", "234", "https://google.com", "test", "test", 1)
     # db.delete_product(2)
@@ -193,6 +193,10 @@ if __name__ == "__main__":
     # print(db.search_product("test234234"))
     # print(db.get_products())
     res = db.get_links_json()
+    print(res)
+    print(type(res))
+    print("\n")
+    res = db.get_products_json()
     print(res)
     print(type(res))
     

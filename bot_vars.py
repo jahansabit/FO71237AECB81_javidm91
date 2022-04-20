@@ -65,6 +65,11 @@ z24_HOURS_IN_SECONDS = 60*60*24
 z12_HOURS_IN_SECONDS = 60*60*12
 
 create_folders(SCRAPPED_DATA_FILES_PATH)
+try:
+    with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, "w") as f:
+        f.write("[]")
+except:
+    pass
 
 def message_template(title, link, website_name, current_price, prev_price, category=None):
     print("message_template")

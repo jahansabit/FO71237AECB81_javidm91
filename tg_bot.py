@@ -48,7 +48,7 @@ def on_chat_message(msg):
         print(content_type, chat_type, chat_id)
     
     if content_type == 'text':
-        if str(chat_id) in CHAT_IDS:
+        if str(chat_id) in CHAT_IDS or int(chat_id) in CHAT_IDS:
             if "help" in msg["text"]:
                 keyboard = InlineKeyboardMarkup(inline_keyboard=[
                     [InlineKeyboardButton(text='➕ Add Search Link', callback_data='add_')],
@@ -64,16 +64,16 @@ def on_chat_message(msg):
             elif "/add" in msg["text"]:
                 response = add_search_page_link_to_db(msg["text"])
                 if response == True:
-                    bot.sendMessage(chat_id, "Product added successfully")
+                    bot.sendMessage(chat_id, "Search page added successfully")
                 else:
-                    bot.sendMessage(chat_id, "Error adding product!\n" + response)
+                    bot.sendMessage(chat_id, "Error adding Search page!\n" + response)
             
             elif "/delete" in msg["text"]:
                 response = delete_search_page_link_from_db(msg["text"])
                 if response == True:
-                    bot.sendMessage(chat_id, "Product deleted successfully")
+                    bot.sendMessage(chat_id, "Search page deleted successfully")
                 else:
-                    bot.sendMessage(chat_id, "Error deleting product!\n" + response)
+                    bot.sendMessage(chat_id, "Error deleting Search page!\n" + response)
             
             elif "/show" in msg["text"]:
                 response = show_search_page_links_from_db()
@@ -118,17 +118,17 @@ def on_callback_query(msg):
     print('Callback Query:', query_id, from_id, query_data)
 
     # bot.answerCallbackQuery(query_id, text='Got it')
-    if str(from_id) in CHAT_IDS:
+    if str(from_id) in CHAT_IDS or int(from_id) in CHAT_IDS:
         if query_data == "add_":
-            bot.sendMessage(from_id, "To add a product, send me the product name and price like this:\n\n/add product_link, price\n\nExample:\n\n/add https://www.amazon.com/product_name, price")
+            bot.sendMessage(from_id, "To add a search page link, send me the search page link, price limit and channel id/username (optional) like this:\n\n/add search_page_link price channel_id\n\nExample:\n\n/add https://www.amazon.es/***/*** price channel_id")
         elif query_data == "show_":
-            bot.sendMessage(from_id, "Sending you list of products:")
+            bot.sendMessage(from_id, "Sending you list of search page links:")
             response = show_search_page_links_from_db()
             ## Send Product List
             for msg in response:
                 bot.sendMessage(from_id, msg)
         elif query_data == "del_":
-            bot.sendMessage(from_id, "To delete a product, send me the product name like this:\n\n/delete product_id\n\nExample:\n\n/delete 10\n\nTo know the product id, check the product list first: /show")
+            bot.sendMessage(from_id, "To delete a search page link, send me the search page id like this:\n\n/delete search_page_id\n\nExample:\n\n/delete 10\n\nTo know the search page id, check the search page list first: /show")
         else:
             response = "Sorry, I don't understand you.\n\nUse /help to see the list of commands"
             bot.sendMessage(from_id, response)

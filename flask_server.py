@@ -6,8 +6,7 @@ from flask import Flask, request
 from pprint import pprint
 from bot_vars import *
 import subprocess
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from difflib import SequenceMatcher
 
 app = Flask('TEST')
 
@@ -26,7 +25,8 @@ def remove_current_url(URL):
         data = []
     
     for i in data:
-        if i["url"] == URL:
+        match_percentage = SequenceMatcher(None, i["url"], URL).ratio() * 100
+        if match_percentage > 94:
             data.remove(i)
             break
     with open(CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH, 'w') as f: 
@@ -41,7 +41,8 @@ def find_current_url(URL):
         data = []
     
     for i in data:
-        if i["url"] == URL:
+        match_percentage = SequenceMatcher(None, i["url"], URL).ratio() * 100
+        if match_percentage > 94:
             return i["file_name"]
     return None
 
@@ -120,7 +121,8 @@ def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
-def start_server(URL=None, PORT=FLASK_SERVER_SCRAPER_PORT):   
+def start_server(URL=None, PORT=FLASK_SERVER_SCRAPER_PORT):
+    print("PORT", PORT)
     app.run(host="127.0.0.1", port=PORT)
     # if URL != None:
     #     # subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
