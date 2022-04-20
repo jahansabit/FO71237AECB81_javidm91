@@ -1,9 +1,3 @@
-import requests
-from flask_server import *
-from bot_vars import *
-from scraper_funcs import *
-from selenium_functions import *
-
 import datetime
 from inspect import trace
 import pytz
@@ -23,17 +17,28 @@ from random import randint
 from urllib.parse import quote
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
-
 import json
+from requests.exceptions import ConnectionError
+
+from flask_server import *
+from bot_vars import *
+from scraper_funcs import *
+from selenium_functions import *
 
 def return_requests(URL):
-    s = requests.Session()
-    s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36', "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
-    r = s.get(URL, allow_redirects=True)
-    cookies = dict(r.cookies)
-    # print("cookies -", cookies)
-    r = s.post(r.url, allow_redirects=True, verify=False, cookies=cookies)
-    return r
+    try:
+        s = requests.Session()
+        s.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36', "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
+        r = s.get(URL, allow_redirects=True)
+        cookies = dict(r.cookies)
+        # print("cookies -", cookies)
+        r = s.post(r.url, allow_redirects=True, verify=False, cookies=cookies)
+        return r
+    except ConnectionError:
+        return None
+    except:
+        traceback.print_exc()
+        return None
 
 def kill_chrome():
     try:
@@ -531,7 +536,7 @@ if __name__ == "__main__":
     # print(scrape_neobyte_search_page("https://www.neobyte.es/tarjetas-graficas-111"))
     # print(scrape_neobyte_search_page("https://www.neobyte.es/buscador?s=3060+ti"))
     # print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
-    # print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti"))
+    print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VXYYABCEXROE&sprefix=3060+ti%2Caps%2C256&ref=nb_sb_noss_1"))
     # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and"))
     # print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
     # print(pccomponentes_page_handler("https://pccomponentes.com/tarjetas-graficas", 500))

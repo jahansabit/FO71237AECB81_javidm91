@@ -85,25 +85,29 @@ def check_search_links_and_send():
         price_limit = page['price_limit']
         print(page_link)
         result = None
-        if website_name_provider(page_link) == "PcComponentes":
-            result = pccomponentes_page_handler(page_link, price_limit)
-            # browser_tabs += 1
-            # if browser_tabs >= MAX_BROWSER_TABS:
-            #     browser_tabs = 0
-            #     print("[*] Reached max browser tabs. Closing Chrome...")
-            #     kill_chrome()
-            #     time.sleep(1)
-        elif website_name_provider(page_link) == "Neobyte":
-            result = scrape_neobyte_search_page(page_link)
-        elif website_name_provider(page_link) == "Casemod":
-            result = scrape_casemod_search_page(page_link)
-        elif website_name_provider(page_link) == "Amazon":
-            result = scrape_amazon_search_page(page_link)
-        elif website_name_provider(page_link) == "Coolmod":
-            result = scrape_coolmod_search_page(page_link)
-        elif website_name_provider(page_link) == "Aussar":
-            result = scrape_aussar_search_page(page_link)
-        
+        try:
+            if website_name_provider(page_link) == "PcComponentes":
+                result = pccomponentes_page_handler(page_link, price_limit)
+                # browser_tabs += 1
+                # if browser_tabs >= MAX_BROWSER_TABS:
+                #     browser_tabs = 0
+                #     print("[*] Reached max browser tabs. Closing Chrome...")
+                #     kill_chrome()
+                #     time.sleep(1)
+            elif website_name_provider(page_link) == "Neobyte":
+                result = scrape_neobyte_search_page(page_link)
+            elif website_name_provider(page_link) == "Casemod":
+                result = scrape_casemod_search_page(page_link)
+            elif website_name_provider(page_link) == "Amazon":
+                result = scrape_amazon_search_page(page_link)
+            elif website_name_provider(page_link) == "Coolmod":
+                result = scrape_coolmod_search_page(page_link)
+            elif website_name_provider(page_link) == "Aussar":
+                result = scrape_aussar_search_page(page_link)
+        except:
+            traceback.print_exc()
+            print("[*] Error in scraping " + page_link)
+            continue
         
         if result != None:
             retry = 0
