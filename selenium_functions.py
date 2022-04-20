@@ -18,6 +18,7 @@ def get_browser(headless=True):
     chrome_options = Options()
 
     try:
+        chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument("--start-maximized")
         chrome_options.add_argument("--window-size=1920,1080")
         chrome_options.add_argument("--disable-gpu")
