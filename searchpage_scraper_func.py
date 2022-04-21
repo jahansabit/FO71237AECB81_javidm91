@@ -484,7 +484,7 @@ def scrape_aussar_search_page(URL):
 
     search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'leo_search_query_top')))
     search_bar.click()
-    browser.execute_script(f"document.getElementById('df-searchbox__dffullscreen').value = '{query}'")
+    browser.execute_script(f"document.getElementById('leo_search_query_top').value = '{query}'")
     time.sleep(1)
     search_bar.send_keys("3")
     time.sleep(1)
