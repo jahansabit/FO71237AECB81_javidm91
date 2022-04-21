@@ -402,18 +402,23 @@ def scrape_coolmod_search_page(URL):
     print(captured_value)
 
     query = captured_value.replace("+", " ")
+    print("query:", query)
 
     coolmod_homepage = "https://www.coolmod.com/"
 
-    browser = get_browser(headless=True)
+    browser = get_browser(headless=False)
     browser.get(coolmod_homepage)
 
     search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'seek')))
     search_bar.click()
-    
     time.sleep(1)
     search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'df-searchbox__dffullscreen')))
-    search_bar.send_keys(query)
+    search_bar.click()
+    browser.execute_script(f"document.getElementById('df-searchbox__dffullscreen').value = '{query}'")
+    time.sleep(1)
+    search_bar.send_keys("3")
+    time.sleep(1)
+    search_bar.send_keys(Keys.BACKSPACE)
     time.sleep(4)
     
     search_instock_only = True
@@ -479,8 +484,11 @@ def scrape_aussar_search_page(URL):
 
     search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'leo_search_query_top')))
     search_bar.click()
+    browser.execute_script(f"document.getElementById('df-searchbox__dffullscreen').value = '{query}'")
     time.sleep(1)
-    search_bar.send_keys(query)
+    search_bar.send_keys("3")
+    time.sleep(1)
+    search_bar.send_keys(Keys.BACKSPACE)
     time.sleep(4)
     
     search_instock_only = True
