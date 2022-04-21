@@ -469,7 +469,7 @@ def scrape_coolmod_search_page(URL):
     return all_product_data_json
 
 def scrape_aussar_search_page(URL):
-    # url = 'https://www.aussar.es/#/dfclassic/query=dfg&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=fuzzy'
+    ## url = 'https://www.aussar.es/#/dfclassic/query=dfg&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=fuzzy'
     parsed_url = urlparse(URL.replace("/query=", "/?query=").replace("#/", ""))
     print(parsed_url)
     captured_value = parse_qs(parsed_url.query)['query'][0]
