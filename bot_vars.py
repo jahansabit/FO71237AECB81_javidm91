@@ -11,7 +11,7 @@ def create_folders(path):
 def joinpath(path="", *args):
     return os.path.join(PROJECT_DIR, path, *args)
 
-DEBUG = True
+DEBUG = False
 
 CHAT_IDS = []
 
@@ -26,8 +26,8 @@ if not DEBUG:
     CHAT_IDS.append(CLIENT_CHAT_ID)
 
 DEBUG_CHAT_ID = -744965364
-# GENERAL_CHANNEL_IDS = ["@Objetivo_Gaming"]
-GENERAL_CHANNEL_IDS = ["https://t.me/lll12358"]
+GENERAL_CHANNEL_IDS = ["@Objetivo_Gaming"]
+# GENERAL_CHANNEL_IDS = ["https://t.me/lll12358"]
 SHAREABLE_WEBSITES = ['www.pccomponentes.com', 'pccomponentes.com']
 ########## TOKENS ##########
 FLASK_SERVER_SCRAPER_PORT = 5699

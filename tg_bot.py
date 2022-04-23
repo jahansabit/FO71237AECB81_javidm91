@@ -40,7 +40,10 @@ except:
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    msg_id = msg['message_id']
+    try:
+        msg_id = msg['message_id']
+    except:
+        pass
     pprint(msg)
     try:
         print(content_type, chat_type, chat_id, msg["text"])
