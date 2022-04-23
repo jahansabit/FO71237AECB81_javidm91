@@ -67,8 +67,8 @@ def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
             except:
                 pass
             
-            server = Process(target=start_server, args=(flask_server_port,))
-            server.start()
+            # server = Process(target=start_server, args=(flask_server_port,))
+            # server.start()
 
             # start_server(URL)
             time.sleep(3)
@@ -78,9 +78,10 @@ def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
             file_name = str(time.ctime()).replace(" ", "_").replace(":", "-") + ".json"
             URL = quote(URL, safe=":/?=&")
             SCRAPPED_FILE_PATH = os.path.join(SCRAPPED_DATA_FILES_PATH, file_name)
+            remove_existing_runtime_url(URL)
             write_current_url(URL, file_name)
             print(URL)
-            subprocess.Popen(str("google-chrome-stable --no-sandbox " + URL + "").split(" "))
+            subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL + "").split(" "))
             time.sleep(1)
 
             seconds_spent = 0
@@ -99,34 +100,34 @@ def return_pccomponentes_page(URL, flask_server_port=FLASK_SERVER_SCRAPER_PORT):
 
             if retry_scraping == True:
                 kill_chrome()
-                try:
-                    r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
-                    print(r.text)
-                except Exception as e:
-                    print(str(e))
-                    # print(traceback.format_exc())
-                try:
-                    time.sleep(1)
-                    server.terminate()
-                    server.join()
-                except:
-                    print(traceback.format_exc())
-                    time.sleep(1)
-                    # continue
+                # try:
+                #     r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
+                #     print(r.text)
+                # except Exception as e:
+                #     print(str(e))
+                #     # print(traceback.format_exc())
+                # try:
+                #     time.sleep(1)
+                #     server.terminate()
+                #     server.join()
+                # except:
+                #     print(traceback.format_exc())
+                #     time.sleep(1)
+                #     # continue
 
-            try:
-                r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
-                print(r.text)
-            except Exception as e:
-                print(str(e))
-                # print(traceback.format_exc())
+            # try:
+            #     r = requests.get(f"http://127.0.0.1:{flask_server_port}/shutdown")
+            #     print(r.text)
+            # except Exception as e:
+            #     print(str(e))
+            #     # print(traceback.format_exc())
 
-            try:
-                time.sleep(1)
-                server.terminate()
-                server.join()
-            except:
-                print(traceback.format_exc())
+            # try:
+            #     time.sleep(1)
+            #     server.terminate()
+            #     server.join()
+            # except:
+            #     print(traceback.format_exc())
 
             time.sleep(2)
             tries = 1
@@ -479,7 +480,7 @@ def scrape_aussar_search_page(URL):
 
     coolmod_homepage = "https://www.aussar.es/"
 
-    browser = get_browser(headless=True)
+    browser = get_browser(headless=False)
     browser.get(coolmod_homepage)
 
     search_bar = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.ID, 'leo_search_query_top')))
@@ -547,7 +548,7 @@ if __name__ == "__main__":
     # print(scrape_neobyte_search_page("https://www.neobyte.es/buscador?s=3060+ti"))
     # print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
     # print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VXYYABCEXROE&sprefix=3060+ti%2Caps%2C256&ref=nb_sb_noss_1"))
-    print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and"))
-    # print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
+    # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and"))
+    print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
     # print(pccomponentes_page_handler("https://pccomponentes.com/tarjetas-graficas", 500))
     # print(pccomponentes_page_handler("https://www.pccomponentes.com/buscar/?query=rtx%203080%20ti&price_to=400&or-price_asc", 500))

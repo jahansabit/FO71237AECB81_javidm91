@@ -182,13 +182,14 @@ def editMessageMedia(BOT_TOKEN, MSG_IDENTIFIER, MEDIA_URL):
         print(result)
         return result
 
-def process_removing_affiliate_link(bot, msg, link): # link with affiliate id and tags
+def process_removing_affiliate_link(bot, msg, link, actual_link): # link with affiliate id and tags
     try:
-        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=link, reply_to_message_id=msg['message_id'])
+        reply_to_msg_id = int(msg['message_id'])
+        editable_message = bot.sendPhoto(int(msg['chat']['id']), TEMP_IMG_LINK, caption=link, reply_to_message_id=reply_to_msg_id)
     except Exception as e:
-        print(str(e))
+        traceback.print_exc()
         time.sleep(1)
-        editable_message = bot.sendPhoto(msg['chat']['id'], TEMP_IMG_LINK, caption=link)
+        # editable_message = bot.sendPhoto(int(msg['chat']['id']), TEMP_IMG_LINK, caption=link)
     
     time.sleep(1)
     try:
@@ -197,10 +198,10 @@ def process_removing_affiliate_link(bot, msg, link): # link with affiliate id an
         print(str(e))
     time.sleep(1)
     
-    if website_name_provider(link) == "PcComponentes":
-        scrapped_product = get_from_pccomponentes(link)
-    elif website_name_provider(link) == "Amazon":
-        scrapped_product = get_from_amazon(link)
+    if website_name_provider(actual_link) == "PcComponentes":
+        scrapped_product = get_from_pccomponentes(actual_link)
+    elif website_name_provider(actual_link) == "Amazon":
+        scrapped_product = get_from_amazon(actual_link)
 
     try:
         category = scrapped_product['product_category']
@@ -231,32 +232,58 @@ def process_removing_affiliate_link(bot, msg, link): # link with affiliate id an
     bot.editMessageCaption(telepot.message_identifier(editable_message), caption=caption, parse_mode="html")
     time.sleep(1)
 
+def read_affiliate_links_json_from_file():
+    try:
+        with open(SEND_AFFILIATE_URLS_FILE_PATH, 'r') as f:
+            data = json.load(f)
+        return data
+    except Exception as e:
+        print(e)
+        return []
+
+def write_affiliate_links_json_to_file(data):
+    try:
+        with open(SEND_AFFILIATE_URLS_FILE_PATH, 'w') as f:
+            json.dump(data, f)
+    except Exception as e:
+        print(e)
 
 def remove_and_send_affiliate_link(bot, msg, links):
-    flask_server_waiting = 0
-    while os.path.isfile(FLASK_SERVER_RUNNING_FILE_PATH):
-        print("FLASK_SERVER_RUNNING_FILE_PATH exists... waiting...")
-        time.sleep(3)
-        flask_server_waiting += 3
-        if flask_server_waiting > FLASK_SERVER_MAX_WAITING_TIME:
-            flask_server_waiting = 0
-            os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+
+    # flask_server_waiting = 0
+    # while os.path.isfile(FLASK_SERVER_RUNNING_FILE_PATH):
+    #     print("FLASK_SERVER_RUNNING_FILE_PATH exists... waiting...")
+    #     time.sleep(3)
+    #     flask_server_waiting += 3
+    #     if flask_server_waiting > FLASK_SERVER_MAX_WAITING_TIME:
+    #         flask_server_waiting = 0
+    #         os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
     
-    with open(FLASK_SERVER_RUNNING_FILE_PATH, "w") as f:
-        f.write("True")
+    # with open(FLASK_SERVER_RUNNING_FILE_PATH, "w") as f:
+    #     f.write("True")
     if type(links) == list:
         for link in links:
+            prev_affiliate_links = read_affiliate_links_json_from_file()
+            if any(link in s['link'] and s['message_id']==msg['message_id'] and s['chat_id']==msg['chat']['id']  for s in prev_affiliate_links):
+                print("Link already exists in the file")
+                continue
+            prev_affiliate_links.append({"link": link, "message_id": msg['message_id'], "chat_id": msg['chat']['id']})
+            write_affiliate_links_json_to_file(prev_affiliate_links)
+
             if "pccomponentes.com" in link and PCCOMPONENTES_AFFILIATE_LINK not in link:
-                process_removing_affiliate_link(bot, msg, PCCOMPONENTES_AFFILIATE_LINK+link)
+                process_removing_affiliate_link(bot, msg, PCCOMPONENTES_AFFILIATE_LINK+link, link)
             elif "amazon.es" in link and AMAZON_AFFILIATE_LINK not in link:
                 link_arr = link.split("/")
                 if "linkCode" in link_arr[-1] or "tag=" in link_arr[-1]:
                     link_arr.pop()
                 link = "/".join(link_arr)
-                process_removing_affiliate_link(bot, msg, link+AMAZON_AFFILIATE_LINK)
+                process_removing_affiliate_link(bot, msg, link+AMAZON_AFFILIATE_LINK, link)
 
-
-    os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+    try:
+        os.remove(FLASK_SERVER_RUNNING_FILE_PATH)
+    except:
+        pass
 
 if __name__ == "__main__":
-    print(show_search_page_links_from_db())
+    # print(show_search_page_links_from_db())
+    print(hostname_provider("https://pccomponentes.com/buscar/?query=rtx%203080%20ti&price_to=400&or-price_asc"))

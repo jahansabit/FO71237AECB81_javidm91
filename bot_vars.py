@@ -1,7 +1,8 @@
 import os
 import telepot
 from pprint import pprint
-import datetime
+import datetime, json
+
 
 def create_folders(path):
     if not os.path.exists(path):
@@ -25,7 +26,9 @@ if not DEBUG:
     CHAT_IDS.append(CLIENT_CHAT_ID)
 
 DEBUG_CHAT_ID = -744965364
-GENERAL_CHANNEL_IDS = ["@Objetivo_Gaming"]
+# GENERAL_CHANNEL_IDS = ["@Objetivo_Gaming"]
+GENERAL_CHANNEL_IDS = ["https://t.me/lll12358"]
+SHAREABLE_WEBSITES = ['www.pccomponentes.com', 'pccomponentes.com']
 ########## TOKENS ##########
 FLASK_SERVER_SCRAPER_PORT = 5699
 FLASK_SERVER_AFFILIATE_PORT = 5690
@@ -43,6 +46,7 @@ CURRENT_SCRAPING_FILE_NAMES_DATA_JSON_FILE_PATH = os.path.join(SCRAPPED_DATA_FIL
 FLASK_SERVER_RUNNING_FILE_PATH = os.path.join(DATA_DIR, "flask_server_running.txt")
 SCRAPING_BY_CHROME_DONE_FILE_PATH = os.path.join(DATA_DIR, "scraping_by_chrome_done.txt")
 RUNTIME_URLS_FILE_PATH = os.path.join(DATA_DIR, "runtime_urls.txt")
+SEND_AFFILIATE_URLS_FILE_PATH = os.path.join(DATA_DIR, "send_affiliate_urls.txt")
 
 ######### REPORTS #########
 SCRAPPED_PRODUCTS_REPORT_FILE_PATH = os.path.join(DATA_DIR, "scrapped_products_report.json")
@@ -63,6 +67,12 @@ TEMP_IMG_LINK = "https://telegram.org/img/t_logo.png"
 OUT_OF_STOCK_ARRAY = ["BackOrder", "Discontinued", "OutOfStock", "SoldOut"]
 z24_HOURS_IN_SECONDS = 60*60*24
 z12_HOURS_IN_SECONDS = 60*60*12
+
+RUs = []
+with open(RUNTIME_URLS_FILE_PATH, "w") as f:
+    json.dump(RUs, f)
+with open(SEND_AFFILIATE_URLS_FILE_PATH, "w") as f:
+    json.dump(RUs, f)
 
 create_folders(SCRAPPED_DATA_FILES_PATH)
 try:
@@ -88,7 +98,7 @@ def message_template(title, link, website_name, current_price, prev_price, categ
     elif "amazon" in link and AMAZON_AFFILIATE_LINK not in link:
         link = link + AMAZON_AFFILIATE_LINK
     
-    if category == None or category == "":
+    if category == None or category == "" or category == "N/A":
         category = ""
     else:
         category = "\n<i>#" + category.replace(" ", "_") + "</i>"

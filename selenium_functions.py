@@ -91,5 +91,18 @@ def get_html(URL):
     return None
 
 if __name__ == "__main__":
-    get_html("https://www.google.com")
-
+    # browser = get_browser(headless=False)
+    # browser.get("https://cryptorank.io/upcoming-ico")
+    # btn = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.CLASS_NAME, 'styled__ViewAllButton-sc-1hj7kic-4')))
+    # btn.click()
+    # time.sleep(1)
+    # html_body = WebDriverWait(browser, waiting_standard_seconds).until(EC.visibility_of_element_located((By.TAG_NAME, 'html')))
+    # html_body = html_body.get_attribute('outerHTML')
+    # with open("test.html", "w") as f:
+    #     f.write(html_body)
+    
+    # from bs4 import BeautifulSoup
+    # soup = BeautifulSoup(html_body, 'html.parser')
+    # tag = soup.find_all('div', class_='styled__StyledIcoCard-sc-u5bvc5-1')
+    # print(len(tag))
+    pass

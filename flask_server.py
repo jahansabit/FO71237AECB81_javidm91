@@ -5,7 +5,7 @@ import datetime
 from flask import Flask, request
 from pprint import pprint
 from bot_vars import *
-import subprocess
+from multiprocessing import Process
 from difflib import SequenceMatcher
 
 app = Flask('TEST')
@@ -41,6 +41,12 @@ def find_current_url(URL):
         data = []
     
     for i in data:
+        i['url'] = i['url'].replace("https://", "").replace("http://", "")
+        URL = URL.replace("https://", "").replace("http://", "")
+        i['url'] = i['url'].replace("www.", "")
+        URL = URL.replace("www.", "")
+        print("URL", URL)
+        print("i['url']", i['url'])
         match_percentage = SequenceMatcher(None, i["url"], URL).ratio() * 100
         if match_percentage > 94:
             return i["file_name"]
@@ -71,6 +77,12 @@ def read_runtime_urls():
 def write_runtime_urls(RUNTIME_URLS):
     with open(RUNTIME_URLS_FILE_PATH, "w") as f:
         json.dump(RUNTIME_URLS, f)
+
+def remove_existing_runtime_url(url):
+    RUNTIME_URLS = read_runtime_urls()
+    if url in RUNTIME_URLS:
+        RUNTIME_URLS.remove(url)
+    write_runtime_urls(RUNTIME_URLS)
 
 @app.route('/', methods=['POST'])
 def main():
@@ -132,5 +144,9 @@ def start_server(URL=None, PORT=FLASK_SERVER_SCRAPER_PORT):
 
 # start_server("https://facecom.herokuapp.com/")
 
+
 if __name__ == "__main__":
     start_server()
+else:
+    server = Process(target=start_server, args=(FLASK_SERVER_SCRAPER_PORT,))
+    server.start()

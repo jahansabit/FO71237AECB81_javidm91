@@ -91,7 +91,8 @@ def on_chat_message(msg):
             links = get_url_from_string(msg["text"])
             print(links)
             if type(links) == list:
-                task = multiprocessing.Process(target=remove_and_send_affiliate_link, args=(bot, msg, links,))
+                # test_remove_and_send_affiliate_link.py
+                task = threading.Thread(target=remove_and_send_affiliate_link, args=(bot, msg, links,))
                 task.start()
             
             # try:

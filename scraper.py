@@ -35,18 +35,19 @@ def send_product_message_to_channels(scrapped_product, PRODUCT, category):
 
 
     for channel in GENERAL_CHANNEL_IDS:
-        if not DEBUG:
-            try:
-                channel, caption = prepare_for_sending(channel, scrapped_product, category)
-                result = bot.sendPhoto(channel,
-                                        scrapped_product['product_img_link'],
-                                        caption=caption, 
-                                        parse_mode="html")
-            except:
-                bot.sendMessage(DEBUG_CHAT_ID, "Can't send message to " + str(channel))
-                print(str(traceback.format_exc()))
-            time.sleep(3)
-        time.sleep(5)
+        if hostname_provider(scrapped_product['product_link']) in SHAREABLE_WEBSITES:
+            if not DEBUG:
+                try:
+                    channel, caption = prepare_for_sending(channel, scrapped_product, category)
+                    result = bot.sendPhoto(channel,
+                                            scrapped_product['product_img_link'],
+                                            caption=caption, 
+                                            parse_mode="html")
+                except:
+                    bot.sendMessage(DEBUG_CHAT_ID, "Can't send message to " + str(channel))
+                    print(str(traceback.format_exc()))
+                time.sleep(3)
+            time.sleep(5)
     
     if scrapped_product['channel_id'] != "" or scrapped_product['channel_id'] != None:
         if not DEBUG:
