@@ -134,8 +134,11 @@ def shutdown():
     return 'Server shutting down...'
 
 def start_server(URL=None, PORT=FLASK_SERVER_SCRAPER_PORT):
-    print("PORT", PORT)
-    app.run(host="127.0.0.1", port=PORT)
+    try:
+        print("PORT", PORT)
+        app.run(host="127.0.0.1", port=PORT)
+    except:
+        pass
     # if URL != None:
     #     # subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
     #     subprocess.Popen(str("google-chrome-stable --no-sandbox --log-level=3 " + URL).split(" "))
