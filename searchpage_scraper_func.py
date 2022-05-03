@@ -241,7 +241,7 @@ def scrape_pccomponentes_category_page(URL):
                 data['product_img_link'] = "https:" + data['product_img_link']
             elif data['product_img_link'].startswith("/"):
                 data['product_img_link'] = homepage + data['product_img_link']
-            data['product_img_link'] = data['product_img_link'].replace("thumb.", "img.").replace("w-220-220/", "").replace("w-300-300/", "")
+            # data['product_img_link'] = data['product_img_link'].replace("thumb.", "img.").replace("w-220-220/", "").replace("w-300-300/", "")
 
         except:
             print("can't find pccomponentes product img")
