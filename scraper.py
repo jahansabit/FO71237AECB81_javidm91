@@ -117,11 +117,14 @@ def check_search_links_and_send():
             db.update_search_page_last_scraped(i, last_scrapped)
             # Add price limit in every product so that it can be filtered later
             for j, item in enumerate(result):
+                print(item['product_name'])
                 result[j]['price_limit'] = page['price_limit']
                 result[j]['search_page_id'] = page['id']
                 result[j]['channel_id'] = page['channel_id']
             
             SCRAPPED_PRODUCTS.extend(result)
+            print("\n\n[*] Scrapped " + str(len(result)) + " products from " + page_link)
+            print("\n")
         else:
             if retry >= 3:
                 retry = 0
