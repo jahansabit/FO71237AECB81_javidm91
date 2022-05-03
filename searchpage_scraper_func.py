@@ -214,7 +214,7 @@ def scrape_pccomponentes_search_page(URL, price_limit):
 
 def scrape_pccomponentes_category_page(URL):
     soup = return_pccomponentes_page(URL)
-    all_product_data = soup.findAll('article',{"data-price": True})
+    all_product_data = soup.findAll('a',{"data-price": True})
     all_product_data_json = []
 
     homepage = "https://www.pccomponentes.com"
@@ -229,7 +229,7 @@ def scrape_pccomponentes_category_page(URL):
                 "product_availability": "N/A"
             }
         actual_item = item
-        item = item.find('a')
+        # item = item.find('a')
         data['product_link'] = item.get("href")
         if data['product_link'].startswith("/"):
             data['product_link'] = homepage + data['product_link']
@@ -549,6 +549,7 @@ if __name__ == "__main__":
     # print(scrape_casemod_search_page("https://casemod.es/jolisearch?s=3060+ti"))
     # print(scrape_amazon_search_page("https://www.amazon.es/s?k=3060+ti&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VXYYABCEXROE&sprefix=3060+ti%2Caps%2C256&ref=nb_sb_noss_1"))
     # print(scrape_coolmod_search_page("https://www.coolmod.com/#/dffullscreen/query=3060%20ti&filter%5Bg%3Aquantity%5D%5B0%5D=Disponible&session_id=f45cff468c78f960d8571c903497b396&query_name=match_and"))
-    print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
+    # print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
     # print(pccomponentes_page_handler("https://pccomponentes.com/tarjetas-graficas", 500))
     # print(pccomponentes_page_handler("https://www.pccomponentes.com/buscar/?query=rtx%203080%20ti&price_to=400&or-price_asc", 500))
+    print(scrape_pccomponentes_category_page("https://www.pccomponentes.com/sobremesa/geforce-rtx-3060-series/sobremesa-gaming"))

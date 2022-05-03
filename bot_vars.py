@@ -27,7 +27,8 @@ if not DEBUG:
 
 DEBUG_CHAT_ID = -744965364
 GENERAL_CHANNEL_IDS = ["@Objetivo_Gaming"]
-# GENERAL_CHANNEL_IDS = ["https://t.me/lll12358"]
+if DEBUG:
+    GENERAL_CHANNEL_IDS = ["https://t.me/lll12358"]
 SHAREABLE_WEBSITES = ['www.pccomponentes.com', 'pccomponentes.com']
 ########## TOKENS ##########
 FLASK_SERVER_SCRAPER_PORT = 5699
