@@ -121,6 +121,8 @@ def check_search_links_and_send():
                 result[j]['price_limit'] = page['price_limit']
                 result[j]['search_page_id'] = page['id']
                 result[j]['channel_id'] = page['channel_id']
+                result[j]['plus_keywords'] = page['plus_keywords']
+                result[j]['minus_keywords'] = page['minus_keywords']
             
             SCRAPPED_PRODUCTS.extend(result)
             print("\n\n[*] Scrapped " + str(len(result)) + " products from " + page_link)
@@ -186,7 +188,9 @@ def check_search_links_and_send():
                         if (PRODUCT['plus_keywords'] != None or PRODUCT['plus_keywords'] != '' or PRODUCT['plus_keywords'] != 'None') and PRODUCT['plus_keywords'] not in scrapped_product['product_name']:
                             send_product_info = False
                             print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
-                    except KeyError:
+                    except KeyError as e:
+                        print(str(e))
+                        print("[!] KeyError", scrapped_product['product_name'])
                         pass
                     
                     try:
@@ -194,6 +198,8 @@ def check_search_links_and_send():
                             send_product_info = False
                             print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
                     except KeyError:
+                        print(str(e))
+                        print("[!] KeyError", scrapped_product['product_name'])
                         pass
 
                     
