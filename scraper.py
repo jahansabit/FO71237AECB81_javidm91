@@ -188,7 +188,7 @@ def check_search_links_and_send():
             if send_product_info == True:
                 
                 try:
-                    if (scrapped_product['plus_keywords'] != None or scrapped_product['plus_keywords'] != '' or scrapped_product['plus_keywords'] != 'None'):
+                    if (scrapped_product['plus_keywords'] != None and scrapped_product['plus_keywords'] != '' and scrapped_product['plus_keywords'] != 'None'):
                         if scrapped_product['plus_keywords'] not in scrapped_product['product_name']:
                             # send_product_info = False
                             print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
@@ -199,7 +199,7 @@ def check_search_links_and_send():
                     pass
                 
                 try:
-                    if (scrapped_product['minus_keywords'] != None or scrapped_product['minus_keywords'] != '' or scrapped_product['minus_keywords'] != 'None'):
+                    if (scrapped_product['minus_keywords'] != None and scrapped_product['minus_keywords'] != '' and scrapped_product['minus_keywords'] != 'None'):
                         if scrapped_product['minus_keywords'] in scrapped_product['product_name']:
                             # send_product_info = False
                             print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
