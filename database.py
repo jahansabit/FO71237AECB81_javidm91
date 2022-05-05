@@ -16,10 +16,35 @@ class DataBase:
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT,
                 `link` TEXT NOT NULL,
                 `price_limit` FLOAT,
+                `plus_keywords` TEXT DEFAULT NULL,
+                `minus_keywords` TEXT DEFAULT NULL,
                 `channel_id` TEXT,
                 `last_scraped` DATETIME DEFAULT NULL
             );'''
         ))
+        
+        ## patch for previous db
+        try:
+            cur.execute(textwrap.dedent(
+                '''SELECT `plus_keywords` FROM `search_page_links` LIMIT 1'''
+            ))
+        except:
+            cur.execute(textwrap.dedent(
+                '''ALTER TABLE `search_page_links`
+                    ADD COLUMN `plus_keywords` TEXT DEFAULT NULL; '''
+            ))
+        
+        try:
+            cur.execute(textwrap.dedent(
+                '''SELECT `minus_keywords` FROM `search_page_links` LIMIT 1'''
+            ))
+        except:
+            cur.execute(textwrap.dedent(
+                '''ALTER TABLE `search_page_links`
+                    ADD COLUMN `minus_keywords` TEXT DEFAULT NULL; '''
+            ))
+
+
         cur.execute(textwrap.dedent('''
             CREATE TABLE IF NOT EXISTS `products` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,13 +71,13 @@ class DataBase:
         cur.connection.close()
         return (r[0] if r else None) if one else r
 
-    def add_link(self, link, price_limit, channel_id=None, last_scraped=None):
+    def add_link(self, link, price_limit, plus_keywords=None, minus_keywords=None, channel_id=None, last_scraped=None):
         self.con = sqlite3.connect(self.name)
         cur = self.con.cursor()
         cur.execute(textwrap.dedent('''
-            INSERT INTO `search_page_links` (link, price_limit, channel_id, last_scraped) VALUES(?, ?, ?, ?)
+            INSERT INTO `search_page_links` (link, price_limit, plus_keywords, minus_keywords, channel_id, last_scraped) VALUES(?, ?, ?, ?, ?, ?)
             '''
-        ), (link, price_limit, channel_id, last_scraped))
+        ), (link, price_limit, plus_keywords, minus_keywords, channel_id, last_scraped))
         self.con.commit()
         cur.close()
     
@@ -74,7 +99,10 @@ class DataBase:
         all_data = self.get_links()
         self.con = sqlite3.connect(self.name)
         cur = self.con.cursor()
-        id = all_data[index][0]
+        try:
+            id = all_data[index][0]
+        except IndexError:
+            return False
         print(id)
         cur.execute("DELETE FROM search_page_links WHERE id = ?", (id,))
         self.con.commit()
@@ -199,4 +227,8 @@ if __name__ == "__main__":
     res = db.get_products_json()
     print(res)
     print(type(res))
-    
+
+    # db.add_link("https://getfb.com", 123.4, plus_keywords='None', minus_keywords='None', channel_id='None', last_scraped=None)
+    # db.delete_link(10)
+    # db.delete_link(9)
+    # db.delete_link(8)

@@ -80,31 +80,40 @@ def save_and_send_string_logs(bot, text):
         f.write(text + "\n")
     bot.sendDocument(DEBUG_CHAT_ID, open(LOGS_FILE_PATH, 'rb'), caption="Text Logs", disable_notification=True)
 
+def check_if_number(string):
+    try:
+        num = float(string)
+        return True
+    except:
+        return False
+
 def add_search_page_link_to_db(msg_text):
+    # /add link price +keywords -keywords channel
     try:
         msg_text = msg_text.replace("/add", "").strip() # /add link price channel
         msg_text = msg_text.replace("  ", " ") # remove double spaces
-        stripped = msg_text.split(" ") # link price channel
+        splitted = msg_text.split(" ") # link price +keywords -keywords channel
         link = None
         price = None
         channel = None
-        try:
-            if len(stripped) == 2:
-                link, price = stripped
-            elif len(stripped) == 3:
-                link, price, channel = stripped
-                channel = channel.strip()
-            link = link.strip()
-            price = price.strip()
-            price = ''.join(i for i in price if (i.isdigit() or i == ','))
-            price = str(price).replace(",", ".")
-        except ValueError:
-            return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
-        except Exception as e:
-            return str(e)
+        for phrase in splitted:
+            if "http" in phrase or "https" in phrase:
+                link = phrase
+            elif check_if_number(phrase)==True and '-' not in phrase:
+                price = phrase.strip()
+                price = ''.join(i for i in price if (i.isdigit() or i == ','))
+                price = str(price).replace(",", ".")
+            elif '+' in phrase:
+                plus_keywords = phrase.replace("+", " ")
+            elif phrase == splitted[len(splitted)-1] and '+' not in phrase and (phrase.startswith('@') or phrase.startswith('-')):
+                channel = phrase.strip()
+            elif '-' in phrase:
+                minus_keywords = phrase.replace("-", " ") # there is a reason why it is at the end. private channels can have '-' in their name
+        if link == None or price == None:
+            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10"
 
         if price == '' or link == '':
-            return "Wrong input format. Example: /add https://www.amazon.com/dp/B07JQVZQJF, 10"
+            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10"
 
         all_search_pages = db.get_links_json()
         all_search_pages_links = [search_page['link'] for search_page in all_search_pages]
@@ -114,7 +123,7 @@ def add_search_page_link_to_db(msg_text):
             if search_page_link in link or link in search_page_link:
                 return "Product already in list."
 
-        db.add_link(link, price, channel)
+        db.add_link(link, price, plus_keywords, minus_keywords, channel)
         return True
     except Exception as e:
         print(e)
