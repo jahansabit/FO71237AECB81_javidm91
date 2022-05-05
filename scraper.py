@@ -182,13 +182,19 @@ def check_search_links_and_send():
                     print("\n\n")
                     # ((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
                     send_product_info = True
-                    if (PRODUCT['plus_keywords'] != None or PRODUCT['plus_keywords'] != '' or PRODUCT['plus_keywords'] != 'None') and PRODUCT['plus_keywords'] not in scrapped_product['product_name']:
-                        send_product_info = False
-                        print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
+                    try:
+                        if (PRODUCT['plus_keywords'] != None or PRODUCT['plus_keywords'] != '' or PRODUCT['plus_keywords'] != 'None') and PRODUCT['plus_keywords'] not in scrapped_product['product_name']:
+                            send_product_info = False
+                            print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
+                    except KeyError:
+                        pass
                     
-                    if (PRODUCT['minus_keywords'] != None or PRODUCT['minus_keywords'] != '' or PRODUCT['minus_keywords'] != 'None') and PRODUCT['minus_keywords'] in scrapped_product['product_name']:
-                        send_product_info = False
-                        print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
+                    try:
+                        if (PRODUCT['minus_keywords'] != None or PRODUCT['minus_keywords'] != '' or PRODUCT['minus_keywords'] != 'None') and PRODUCT['minus_keywords'] in scrapped_product['product_name']:
+                            send_product_info = False
+                            print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
+                    except KeyError:
+                        pass
 
                     
             
