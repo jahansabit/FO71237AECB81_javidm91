@@ -49,7 +49,7 @@ def send_product_message_to_channels(scrapped_product, PRODUCT, category):
                 time.sleep(3)
             time.sleep(5)
     
-    if scrapped_product['channel_id'] != "" or scrapped_product['channel_id'] != None or scrapped_product['channel_id'] != "None":
+    if scrapped_product['channel_id'] != "" and scrapped_product['channel_id'] != None and scrapped_product['channel_id'] != "None":
         if not DEBUG:
             try:
                 channel, caption = prepare_for_sending(scrapped_product['channel_id'], scrapped_product, category)
