@@ -183,28 +183,30 @@ def check_search_links_and_send():
                     print("last_in_stock_datetime_difference", str(last_in_stock_datetime_difference))
                     print("\n\n")
                     # ((scrapped_product['product_availability'] not in OUT_OF_STOCK_ARRAY) and (last_in_stock_datetime_difference.total_seconds() > z24_HOURS_IN_SECONDS)):
-                    send_product_info = True
-                    try:
-                        if (PRODUCT['plus_keywords'] != None or PRODUCT['plus_keywords'] != '' or PRODUCT['plus_keywords'] != 'None') and PRODUCT['plus_keywords'] not in scrapped_product['product_name']:
-                            send_product_info = False
-                            print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
-                    except KeyError as e:
-                        print(str(e))
-                        print("[!] KeyError", scrapped_product['product_name'])
-                        pass
-                    
-                    try:
-                        if (PRODUCT['minus_keywords'] != None or PRODUCT['minus_keywords'] != '' or PRODUCT['minus_keywords'] != 'None') and PRODUCT['minus_keywords'] in scrapped_product['product_name']:
-                            send_product_info = False
-                            print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
-                    except KeyError:
-                        print(str(e))
-                        print("[!] KeyError", scrapped_product['product_name'])
-                        pass
-
-                    
+                    # send_product_info = True
             
             if send_product_info == True:
+                
+                try:
+                    if (scrapped_product['plus_keywords'] != None or scrapped_product['plus_keywords'] != '' or scrapped_product['plus_keywords'] != 'None') and scrapped_product['plus_keywords'] not in scrapped_product['product_name']:
+                        # send_product_info = False
+                        print("\n[+] Will not be sent as plus keywords are not in the", scrapped_product["product_name"])
+                        continue
+                except KeyError as e:
+                    print(str(e))
+                    print("[!] KeyError", scrapped_product['product_name'])
+                    pass
+                
+                try:
+                    if (scrapped_product['minus_keywords'] != None or scrapped_product['minus_keywords'] != '' or scrapped_product['minus_keywords'] != 'None') and scrapped_product['minus_keywords'] in scrapped_product['product_name']:
+                        # send_product_info = False
+                        print("\n[+] Will not be sent as minus keywords are in the", scrapped_product["product_name"])
+                        continue
+                except KeyError as e:
+                    print(str(e))
+                    print("[!] KeyError", scrapped_product['product_name'])
+                    pass
+
                 if "https:" not in scrapped_product['product_img_link']:
                     scrapped_product['product_img_link'] = "https:" + scrapped_product['product_img_link']
                 try:
