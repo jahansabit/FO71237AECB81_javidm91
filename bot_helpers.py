@@ -95,6 +95,8 @@ def add_search_page_link_to_db(msg_text):
         splitted = msg_text.split(" ") # link price +keywords -keywords channel
         link = None
         price = None
+        plus_keywords = None
+        minus_keywords = None
         channel = None
         for phrase in splitted:
             if "http" in phrase or "https" in phrase:
