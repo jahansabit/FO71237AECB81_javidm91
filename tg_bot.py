@@ -124,7 +124,7 @@ def on_callback_query(msg):
     # bot.answerCallbackQuery(query_id, text='Got it')
     if str(from_id) in CHAT_IDS or int(from_id) in CHAT_IDS:
         if query_data == "add_":
-            bot.sendMessage(from_id, "To add a search page link, send me the search page link, price limit and channel id/username (optional) like this:\n\n/add search_page_link price channel_id\n\nExample:\n\n/add https://www.amazon.es/***/*** price channel_id")
+            bot.sendMessage(from_id, "To add a search page link, send me the search page link, price limit and channel id/username (optional) like this:\n\n/add search_page_link price +keywords -keywords channel_id\n\nExample:\n\n/add https://www.amazon.es/***/*** price rtx+3060 ti- channel_id")
         elif query_data == "show_":
             bot.sendMessage(from_id, "Sending you list of search page links:")
             response = show_search_page_links_from_db()

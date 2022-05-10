@@ -112,10 +112,10 @@ def add_search_page_link_to_db(msg_text):
             elif '-' in phrase:
                 minus_keywords = phrase.replace("-", " ") # there is a reason why it is at the end. private channels can have '-' in their name
         if link == None or price == None:
-            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10"
+            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10\n/add https://www.amazon.es/***/**** 10 rtx+3060 ti- channel_id"
 
         if price == '' or link == '':
-            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10"
+            return "Wrong input format. Example: /add https://www.amazon.es/***/**** 10\n/add https://www.amazon.es/***/**** 10 rtx+3060 ti- channel_id"
 
         all_search_pages = db.get_links_json()
         all_search_pages_links = [search_page['link'] for search_page in all_search_pages]
