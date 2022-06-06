@@ -553,4 +553,5 @@ if __name__ == "__main__":
     # print(scrape_aussar_search_page("https://www.aussar.es/tarjetas-graficas/gigabyte-geforce-rtx-3090-gaming-oc-24g.html#/dfclassic/query=3060%20ti&session_id=7f5a58bd3b4a510b1fb708a043027f4d&query_name=match_and")) 
     # print(pccomponentes_page_handler("https://pccomponentes.com/tarjetas-graficas", 500))
     # print(pccomponentes_page_handler("https://www.pccomponentes.com/buscar/?query=rtx%203080%20ti&price_to=400&or-price_asc", 500))
-    print(scrape_pccomponentes_category_page("https://www.pccomponentes.com/sobremesa/geforce-rtx-3060-series/sobremesa-gaming"))
+    # print(scrape_pccomponentes_category_page("https://www.pccomponentes.com/sobremesa/geforce-rtx-3060-series/sobremesa-gaming"))
+    print(scrape_pccomponentes_category_page("https://www.pccomponentes.com/sobremesa/gtx-1650/sobremesa-gaming"))
