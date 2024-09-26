@@ -71,7 +71,7 @@ The Chrome extension enhances the bot's functionality:
 ### How it works
 
 * When an item needs to be scraped, the URL is opened automatically using `os.system` function via Chrome browser and a Flask server starts and waits for a request to be received.
-* Upon loading the URL, the Chrome extension grabs all the HTML and sends it back to the Flask server at localhost, and then it is further processed. In this way Cloudflare thinks that the request is coming from a legitimate browser and no webdrver is being used.
+* Upon loading the URL, the Chrome extension grabs all the HTML and sends it back to the Flask server at localhost, and then it is further processed. In this way, Cloudflare thinks that the request is coming from a legitimate browser and no webdriver is being used.
 
 
 ## Database
@@ -82,4 +82,4 @@ The bot uses a SQLite database to store:
 * Product information (name, price, image, category, availability, last sent price and time)
 
 # Note
-I also have projects where there was Cloudflare protection and other security measures that I had to prevent. If needed, I can also show them if needed.
+I also have projects where there was Cloudflare protection and other security measures that I had to prevent. If needed, I can also show them.
