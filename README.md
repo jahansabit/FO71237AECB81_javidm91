@@ -1,3 +1,5 @@
+Note: The obscure name for the repo is for finding out the repo from my repo list with the client's username or using a Fiverr order ID. I wasn't that aware of using GitHub properly. As a result, you may see different names in the commit history. As I was working for different clients at the time, some of the commits seemed to have names for those accounts but the fact is those commits were made from my account and git config (user.name and user.email) were differently set as I forgot to change them before committing. As the repo was private up until now, I didn't care about the commit history. Now that I've made the project public, I thought I needed to clear those things.
+
 # Product Scraper & Telegram Affiliate Link Remover Bot
 
 This Telegram bot automatically removes affiliate links from messages sent in a group chat and replaces them with clean links. The bot also scrapes product information from supported websites and presents it in a user-friendly format.
